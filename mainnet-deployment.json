@@ -1,0 +1,20 @@
+{
+  "chainId": 4663,
+  "owner": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+  "development": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+  "deploymentBlock": 73235881,
+  "launchTime": 1790442000,
+  "contracts": {
+    "position": "0x316a858567426Acd376E242b90CeD3742101A58b",
+    "foundry": "0x6A6657010862934AC701eDf1E1f246018250953e",
+    "vault8": "0x9F45B37540bCc401Ff5C0d0Da02d21E87bE6fAD7",
+    "vault28": "0xee0fcF6C7a7c50B281eF69A304ccF00903483a6B",
+    "vault88": "0x7ABFD5402fC7A0ec67a750990afe0Efb921FAA40",
+    "fuelBurner": "0x20c6D511Cb4862e30B2d28060DCAEfc86f2DC876",
+    "moreBurner": "0x5Df3D7abA3dA3F6a2d89a7bA689294F6312A85DF",
+    "pampBurner": "0x70FfdAf9277796711de29A5A4c82dDd5EACaB3d7",
+    "feeRouter": "0x60be7C8F85f3A67cF6321444CB960F6605EF9F62",
+    "feeForwarder": "0xd2A61229113Ec1e629d25b1EB6F3ec5708e12576",
+    "settlementBatcher": "0x5b11A4368C6ed843F0625284184286D0dd34F3C6"
+  }
+}
