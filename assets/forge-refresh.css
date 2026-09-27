@@ -34,3 +34,24 @@
 @media(max-width:760px){.forge-refresh :is(#pools,#rewards,#burns) .section-heading h2{font-size:27px}.forge-refresh .burn-overview{padding:0;gap:10px}.forge-refresh .market-reference-grid{gap:4px 14px}.forge-refresh .market-reference-grid>a{font-size:10px}}
 .forge-refresh .site-tabs{display:flex!important}.ff-tab-short{display:none}.forge-refresh #network-pill{display:inline-flex;align-items:center}
 @media(max-width:760px){.forge-refresh .site-tabs a{grid-column:auto!important;flex:1 1 0!important}.ff-tab-full{display:none}.ff-tab-short{display:inline}}
+
+/* Keep the signature F and orbital artwork visible at every screen size. */
+.ff-orbit{width:290px;height:290px;border-color:#b4e87435;z-index:1;pointer-events:none}
+.ff-orbit-two{width:390px;height:390px;border-color:#a4ce602b}
+.ff-orbit-three{width:490px;height:490px;border-color:#79c4a322}
+.ff-art img{position:relative}
+.ff-orbit-two:after{content:'';position:absolute;top:50%;left:-3px;width:5px;height:5px;border-radius:50%;background:#c4ff6a;box-shadow:0 0 12px #b4ff38aa}
+@media(max-width:760px){.ff-orbit{width:210px;height:210px}.ff-orbit-two{width:290px;height:290px}.ff-orbit-three{width:365px;height:365px}}
+@media(max-width:480px){
+  .forge-refresh .ff-hero{display:flex;flex-direction:column;align-items:stretch;padding-bottom:18px}
+  .ff-hero-copy>p:not(.eyebrow){max-width:none}
+  .ff-art{position:relative;right:auto;top:auto;width:100%;height:225px;margin-top:12px;opacity:1;pointer-events:none}
+  .ff-art img{width:185px;height:210px}
+  .ff-glow{width:220px;height:200px}
+  .ff-orbit{display:block;width:210px;height:210px}
+  .ff-orbit-two{width:290px;height:290px}
+  .ff-orbit-three{width:365px;height:365px}
+  .ff-token{display:block;padding:6px 10px;font-size:10px}
+  .ff-eth{left:3%;top:65%}.ff-btc{right:2%;top:21%}
+  .ff-caption{display:block;bottom:0;font-size:7px}
+}
