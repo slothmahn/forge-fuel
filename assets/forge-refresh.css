@@ -55,3 +55,8 @@
   .ff-eth{left:3%;top:65%}.ff-btc{right:2%;top:21%}
   .ff-caption{display:block;bottom:0;font-size:7px}
 }
+
+/* Fade only the decorative atmosphere; keep the mark and token labels crisp. */
+.ff-art{overflow:visible}
+.ff-atmosphere{position:absolute;inset:-12px 0;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 50% 50% at center,#000 48%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at center,#000 48%,transparent 100%)}
+.ff-glow{width:90%;height:90%;filter:none;background:radial-gradient(ellipse at center,#9dde342b 0%,#6d992314 38%,transparent 72%)}
