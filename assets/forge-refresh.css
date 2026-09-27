@@ -60,3 +60,6 @@
 .ff-art{overflow:visible}
 .ff-atmosphere{position:absolute;inset:-12px 0;display:flex;align-items:center;justify-content:center;overflow:hidden;pointer-events:none;-webkit-mask-image:radial-gradient(ellipse 50% 50% at center,#000 48%,transparent 100%);mask-image:radial-gradient(ellipse 50% 50% at center,#000 48%,transparent 100%)}
 .ff-glow{width:90%;height:90%;filter:none;background:radial-gradient(ellipse at center,#9dde342b 0%,#6d992314 38%,transparent 72%)}
+
+/* The per-pool cards already display the caller reward; omit the duplicate wallet note. */
+.forge-refresh #burns .burn-dev{display:none}
