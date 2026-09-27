@@ -1,6 +1,9 @@
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './mainnet-white-paper-v1.js';
+// Mobile browsers may restore the old position after the app's first scroll-to-top.
+// Run once after layout settles; tab changes continue to use the app's own scroll behavior.
+window.addEventListener('load', () => requestAnimationFrame(() => window.scrollTo(0, 0)), { once: true });
 const app = document.querySelector('#app');
 if (app) {
   app.classList.add('forge-refresh');
