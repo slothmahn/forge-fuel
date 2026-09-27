@@ -1,13 +1,33 @@
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './mainnet-white-paper-v1.js';
-// Mobile browsers may restore the old position after the app's first scroll-to-top.
-// Run once after layout settles; tab changes continue to use the app's own scroll behavior.
-window.addEventListener('load', () => requestAnimationFrame(() => window.scrollTo(0, 0)), { once: true });
+// Some mobile browsers apply a saved position or URL fragment after load.
+// Hold the initial view at the top until the visitor interacts, then release control.
+let initialScrollGuard = true;
+function releaseInitialScrollGuard() {
+  initialScrollGuard = false;
+  window.removeEventListener('scroll', keepInitialViewAtTop);
+}
+function keepInitialViewAtTop() {
+  if (initialScrollGuard && window.scrollY > 0) window.scrollTo(0, 0);
+}
+for (const eventName of ['pointerdown', 'touchstart', 'wheel', 'keydown']) {
+  window.addEventListener(eventName, releaseInitialScrollGuard, { once: true, passive: true });
+}
+window.addEventListener('scroll', keepInitialViewAtTop, { passive: true });
+window.addEventListener('pageshow', keepInitialViewAtTop);
+window.addEventListener('load', () => requestAnimationFrame(keepInitialViewAtTop), { once: true });
+keepInitialViewAtTop();
+window.setTimeout(releaseInitialScrollGuard, 4000);
 const app = document.querySelector('#app');
 if (app) {
   app.classList.add('forge-refresh');
   const nav = app.querySelector('.site-tabs');
+  const startAnchor = app.querySelector('#start');
+  if (startAnchor) {
+    startAnchor.id = 'wallet-start';
+    app.insertAdjacentHTML('afterbegin', '<span id="start" aria-hidden="true" style="display:block;height:0"></span>');
+  }
   const hero = document.createElement('section');
   hero.className = 'ff-hero';
   hero.setAttribute('aria-labelledby', 'ff-hero-title');
