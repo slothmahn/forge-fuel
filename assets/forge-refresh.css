@@ -63,3 +63,12 @@
 
 /* The per-pool cards already display the caller reward; omit the duplicate wallet note. */
 .forge-refresh #burns .burn-dev{display:none}
+
+/* Rotate the light points in each tilted orbital plane around the stationary F. */
+.ff-orbit{animation:ff-orbit-spin 28s linear infinite}
+.ff-orbit-two{animation-duration:40s;animation-direction:reverse;animation-delay:-12s}
+.ff-orbit-three{animation-duration:54s;animation-delay:-27s}
+.ff-orbit:after{content:'';position:absolute;top:50%;left:-3px;width:5px;height:5px;border-radius:50%;background:#c4ff6a;box-shadow:0 0 12px #b4ff38aa}
+.ff-orbit-three:after{width:4px;height:4px;background:#8ddbb2;box-shadow:0 0 10px #8ddbb280}
+@keyframes ff-orbit-spin{from{transform:rotate(-25deg) scaleY(.55) rotate(0deg)}to{transform:rotate(-25deg) scaleY(.55) rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.ff-orbit{animation:none!important}}
