@@ -31,8 +31,8 @@ if (app) {
   const hero = document.createElement('section');
   hero.className = 'ff-hero';
   hero.setAttribute('aria-labelledby', 'ff-hero-title');
-  hero.innerHTML = `<div class="ff-hero-copy"><p class="eyebrow">FUEL FORGE ON ROBINHOOD CHAIN</p><h1 id="ff-hero-title">Put your FUEL<br><em>to work.</em></h1><p>Forge a position. Follow ETH and cbBTC reward pools.<br>Keep the fire burning.</p><a class="ff-explore" href="#start">Explore the Forge <span aria-hidden="true">↗</span></a><span class="ff-hero-note">Your FUEL. Your position.</span></div><div class="ff-art" aria-hidden="true"><div class="ff-atmosphere"><div class="ff-orbit"></div><div class="ff-orbit ff-orbit-two"></div><div class="ff-orbit ff-orbit-three"></div><div class="ff-glow"></div></div><img src="./images/forge-f-isolated.png" alt="" width="420" height="480"><span class="ff-token ff-eth">◇ ETH</span><span class="ff-token ff-btc">₿ cbBTC</span><span class="ff-caption">BUILT AROUND FUEL.</span></div>`;
-  nav.before(hero);
+  hero.innerHTML = `<div class="ff-hero-copy"><h1 id="ff-hero-title">Put your FUEL<br><em>to work.</em></h1><p>Forge a position. Follow $ETH and $cbBTC reward pools.<br>Keep the fire burning.</p><a class="ff-explore" href="#start">Explore the Forge <span aria-hidden="true">↗</span></a></div><div class="ff-art" aria-hidden="true"><div class="ff-atmosphere"><div class="ff-orbit"></div><div class="ff-orbit ff-orbit-two"></div><div class="ff-orbit ff-orbit-three"></div><div class="ff-glow"></div></div><img src="./images/forge-f-isolated.png" alt="" width="420" height="480"><span class="ff-token ff-eth">◇ $ETH</span><span class="ff-token ff-btc">₿ $cbBTC</span><span class="ff-caption">BUILT AROUND FUEL.</span></div>`;
+  nav.after(hero);
   // Both badges follow the same tilted ellipse, half a lap apart, without rotating their text.
   const orbitArt = hero.querySelector('.ff-art');
   if (CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) {
@@ -62,11 +62,19 @@ if (app) {
   const wallet = app.querySelector('.wallet-section');
   if (wallet) {
     wallet.removeAttribute('data-view');
-    wallet.hidden = false;
-    nav.before(wallet);
+    hero.after(wallet);
   }
   const ribbon = app.querySelector('.price-ribbon');
-  if (ribbon) nav.before(ribbon);
+  if (ribbon) (wallet || hero).after(ribbon);
+  // The welcome content belongs to Build; every other tab begins at its own section.
+  function showWelcomeForBuild() {
+    const isBuild = !['#pools', '#rewards', '#positions', '#burns'].includes(location.hash);
+    hero.hidden = !isBuild;
+    if (wallet) wallet.hidden = !isBuild;
+    if (ribbon) ribbon.hidden = !isBuild;
+  }
+  window.addEventListener('hashchange', showWelcomeForBuild);
+  showWelcomeForBuild();
   const brand = app.querySelector('.brand-wordmark-art');
   if (brand) brand.src = './images/forge-wordmark-underlined.png';
   const names = ['Build', 'Payout Pools', 'Rewards', 'Your NFTs', 'Buy & Burn'];
