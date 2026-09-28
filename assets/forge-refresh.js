@@ -77,6 +77,17 @@ if (app) {
   showWelcomeForBuild();
   const brand = app.querySelector('.brand-wordmark-art');
   if (brand) brand.src = './images/forge-wordmark-underlined.png';
+  const whitePaper = app.querySelector('.top-actions .litepaper-link');
+  if (whitePaper) {
+    const telegram = document.createElement('a');
+    telegram.className = 'telegram-link';
+    telegram.href = 'https://t.me/+82zdpAjhJ-dmNWJh';
+    telegram.target = '_blank';
+    telegram.rel = 'noopener noreferrer';
+    telegram.textContent = 'Telegram ↗';
+    telegram.setAttribute('aria-label', 'Fuel Forge Telegram (opens in a new tab)');
+    whitePaper.after(telegram);
+  }
   app.querySelectorAll('.section-heading .eyebrow').forEach(label => {
     label.textContent = label.textContent.replace(/^\d{2}\s*·\s*/, '');
   });
