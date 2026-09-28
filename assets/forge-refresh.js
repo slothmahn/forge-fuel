@@ -33,6 +33,32 @@ if (app) {
   hero.setAttribute('aria-labelledby', 'ff-hero-title');
   hero.innerHTML = `<div class="ff-hero-copy"><p class="eyebrow">FUEL FORGE ON ROBINHOOD CHAIN</p><h1 id="ff-hero-title">Put your FUEL<br><em>to work.</em></h1><p>Forge a position. Follow ETH and cbBTC reward pools.<br>Keep the fire burning.</p><a class="ff-explore" href="#start">Explore the Forge <span aria-hidden="true">↗</span></a><span class="ff-hero-note">Your FUEL. Your position.</span></div><div class="ff-art" aria-hidden="true"><div class="ff-atmosphere"><div class="ff-orbit"></div><div class="ff-orbit ff-orbit-two"></div><div class="ff-orbit ff-orbit-three"></div><div class="ff-glow"></div></div><img src="./images/forge-f-isolated.png" alt="" width="420" height="480"><span class="ff-token ff-eth">◇ ETH</span><span class="ff-token ff-btc">₿ cbBTC</span><span class="ff-caption">BUILT AROUND FUEL.</span></div>`;
   nav.before(hero);
+  // Both badges follow the same tilted ellipse, half a lap apart, without rotating their text.
+  const orbitArt = hero.querySelector('.ff-art');
+  if (CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) {
+    orbitArt.classList.add('ff-ticker-motion');
+    const badges = [...orbitArt.querySelectorAll('.ff-token')];
+    function sizeTickerOrbit() {
+      const width = orbitArt.clientWidth, height = orbitArt.clientHeight;
+      const badgeWidth = Math.max(...badges.map(badge => badge.offsetWidth));
+      const badgeHeight = Math.max(...badges.map(badge => badge.offsetHeight));
+      const tilt = -25 * Math.PI / 180, squash = .55;
+      const c = Math.cos(tilt), s = Math.sin(tilt);
+      const radius = Math.max(0, Math.min(
+        (width - badgeWidth - 16) / (2 * Math.hypot(c, squash * s)),
+        (height - badgeHeight - 42) / (2 * Math.hypot(s, squash * c))
+      ));
+      const points = Array.from({length: 97}, (_, i) => {
+        const angle = i / 96 * Math.PI * 2;
+        const x = radius * Math.cos(angle), y = radius * squash * Math.sin(angle);
+        return `${i ? 'L' : 'M'} ${(width / 2 + x*c - y*s).toFixed(2)} ${(height / 2 + x*s + y*c).toFixed(2)}`;
+      });
+      orbitArt.style.setProperty('--ff-ticker-path', `path("${points.join(' ')} Z")`);
+      orbitArt.style.setProperty('--ff-ticker-diameter', `${radius * 2}px`);
+    }
+    new ResizeObserver(sizeTickerOrbit).observe(orbitArt);
+    sizeTickerOrbit();
+  }
   const wallet = app.querySelector('.wallet-section');
   if (wallet) {
     wallet.removeAttribute('data-view');

@@ -72,3 +72,13 @@
 .ff-orbit-three:after{width:4px;height:4px;background:#8ddbb2;box-shadow:0 0 10px #8ddbb280}
 @keyframes ff-orbit-spin{from{transform:rotate(-25deg) scaleY(.55) rotate(0deg)}to{transform:rotate(-25deg) scaleY(.55) rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.ff-orbit{animation:none!important}}
+
+/* The token badges are the orbiting objects; text stays upright along the path. */
+.ff-orbit{animation:none}
+.ff-orbit:after{display:none}
+.ff-ticker-motion .ff-orbit-two{width:var(--ff-ticker-diameter);height:var(--ff-ticker-diameter)}
+.ff-ticker-motion .ff-token{display:block;left:0;top:0;right:auto;offset-path:var(--ff-ticker-path);offset-anchor:50% 50%;offset-rotate:0deg;animation:ff-ticker-lap 36s linear infinite;white-space:nowrap}
+.ff-ticker-motion .ff-eth{animation-delay:-18s;offset-distance:50%}
+.ff-ticker-motion .ff-btc{offset-distance:0%}
+@keyframes ff-ticker-lap{from{offset-distance:0%}to{offset-distance:100%}}
+@media(prefers-reduced-motion:reduce){.ff-ticker-motion .ff-token{animation:none!important}}
