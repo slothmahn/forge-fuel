@@ -129,8 +129,15 @@ if (app) {
   }
   const status = app.querySelector('.mainnet-preview-banner');
   const launch = app.querySelector('.mainnet-launch-banner');
+  const footer = app.querySelector('footer');
+  const topbar = app.querySelector('.topbar');
   function refreshStatus() {
-    status?.classList.toggle('ff-verified', status.textContent.includes('verified on-chain.'));
+    const verified = status?.textContent.includes('verified on-chain.') || false;
+    status?.classList.toggle('ff-verified', verified);
+    if (status && footer && topbar) {
+      if (verified && status.parentElement !== footer) footer.append(status);
+      else if (!verified && status.previousElementSibling !== topbar) topbar.after(status);
+    }
     const live = app.querySelector('#mainnet-launch-clock')?.textContent === 'LIVE';
     launch?.classList.toggle('ff-cycles-live', live);
     app.classList.toggle('ff-live', live);
