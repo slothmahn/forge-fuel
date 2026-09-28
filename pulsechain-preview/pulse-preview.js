@@ -175,6 +175,7 @@ if (CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) {
       const a = i / 96 * Math.PI * 2, x = radius*Math.cos(a), y = radius*.55*Math.sin(a);
       return `${i ? 'L' : 'M'} ${width/2+x*c-y*s} ${height/2+x*s+y*c}`;
     });
+    orbitArt.style.setProperty('--orbit-diameter', `${radius * 2}px`);
     orbitArt.style.setProperty('--ticker-path', `path("${points.join(' ')} Z")`);
   }
   new ResizeObserver(sizeOrbit).observe(orbitArt);

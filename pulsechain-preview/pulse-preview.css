@@ -12,3 +12,10 @@
 @media(max-width:480px){.hero{padding-top:30px}.hero-art{inset:auto;position:relative;height:260px;width:100%;opacity:1}.hero-art .forge-symbol{height:235px;width:240px}.hero-copy h1{font-size:48px}.chain-menu .network{font-size:10px;padding:8px}.header-actions{gap:6px}.wallet-strip{margin-top:8px}.orbit-tag{font-size:10px;padding:7px 10px}.art-caption{font-size:7px}.site-header{gap:10px}.preview-notice{font-size:10px}}
 @media(prefers-reduced-motion:reduce){.hero-art.orbit-motion .orbit-tag{animation:none}}
 .forge-glow{border-radius:0;-webkit-mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%);mask-image:radial-gradient(ellipse at center,#000 10%,transparent 70%)}
+
+/* All three rings share one center, tilt and equal diameter increments. */
+.hero-art{--orbit-diameter:300px;--orbit-step:70px}
+.hero-art .orbit{left:50%;top:50%;width:var(--orbit-diameter);height:var(--orbit-diameter);transform:translate(-50%,-50%) rotate(-25deg) scaleY(.55)}
+.hero-art .orbit-one{width:calc(var(--orbit-diameter) - var(--orbit-step));height:calc(var(--orbit-diameter) - var(--orbit-step))}
+.hero-art .orbit-three{width:calc(var(--orbit-diameter) + var(--orbit-step));height:calc(var(--orbit-diameter) + var(--orbit-step))}
+@media(max-width:760px){.hero-art{--orbit-step:60px}}
