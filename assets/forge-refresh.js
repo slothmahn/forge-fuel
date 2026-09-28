@@ -77,6 +77,9 @@ if (app) {
   showWelcomeForBuild();
   const brand = app.querySelector('.brand-wordmark-art');
   if (brand) brand.src = './images/forge-wordmark-underlined.png';
+  app.querySelectorAll('.section-heading .eyebrow').forEach(label => {
+    label.textContent = label.textContent.replace(/^\d{2}\s*·\s*/, '');
+  });
   const names = ['Build', 'Payout Pools', 'Rewards', 'Your NFTs', 'Buy & Burn'];
   const icons = ['ϟ', '▦', '◇', '⬡', '♨'];
   app.querySelectorAll('[data-site-tab]').forEach((link, i) => {
