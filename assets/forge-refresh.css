@@ -92,3 +92,10 @@
 .forge-refresh .burn-card-actions button[data-burn-key]{flex:0 0 auto;width:auto;height:42px;min-height:42px;padding:8px 16px;align-self:auto}
 .forge-refresh .burn-card-actions a{text-align:left}
 @media(max-width:760px){.forge-refresh .burn-card-actions{flex-direction:row}}
+
+/* Keep both ring gaps equal as the ticker orbit resizes. */
+.ff-art{--ff-ring-step:90px;--ff-ring-base:390px}
+.ff-art .ff-orbit{left:50%;top:50%;width:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) - var(--ff-ring-step));height:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) - var(--ff-ring-step));transform:translate(-50%,-50%) rotate(-25deg) scaleY(.55)}
+.ff-art .ff-orbit-two{width:var(--ff-ticker-diameter,var(--ff-ring-base));height:var(--ff-ticker-diameter,var(--ff-ring-base))}
+.ff-art .ff-orbit-three{width:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) + var(--ff-ring-step));height:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) + var(--ff-ring-step))}
+@media(max-width:760px){.ff-art{--ff-ring-step:65px;--ff-ring-base:290px}}
