@@ -2,6 +2,23 @@
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const fmt = (n, places = 2) => new Intl.NumberFormat('en-US', { maximumFractionDigits: places }).format(n);
+const COUNTDOWN_TARGET = Date.parse('2026-09-30T14:00:00-04:00');
+function updateCountdown() {
+  let seconds = Math.max(0, Math.ceil((COUNTDOWN_TARGET - Date.now()) / 1000));
+  const days = Math.floor(seconds / 86400); seconds %= 86400;
+  const hours = Math.floor(seconds / 3600); seconds %= 3600;
+  const minutes = Math.floor(seconds / 60); seconds %= 60;
+  [['days', days], ['hours', hours], ['minutes', minutes], ['seconds', seconds]].forEach(([unit, value]) => {
+    $(`#countdown-${unit}`).textContent = String(value).padStart(2, '0');
+  });
+  if (COUNTDOWN_TARGET <= Date.now()) {
+    $('#countdown-title').textContent = 'TARGET TIME REACHED';
+    $('.launch-countdown').setAttribute('aria-label', 'Wednesday, September 30, 2026 at 2 PM Eastern Daylight Time has arrived');
+  }
+}
+updateCountdown();
+setInterval(updateCountdown, 1000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) updateCountdown(); });
 const DEMO_BALANCE = 1200000000;
 let mode = 'forge';
 let walletVisible = true;

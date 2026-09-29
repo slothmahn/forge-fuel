@@ -3,10 +3,14 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#100b19"><title>Fuel Forge · PulseChain design preview</title>
-<link rel="stylesheet" href="pulse-preview.css?v=launch-controls-1">
+<link rel="stylesheet" href="pulse-preview.css?v=launch-countdown-1">
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
+<div class="launch-countdown" role="timer" aria-label="Countdown to Wednesday, September 30, 2026 at 2 PM Eastern Daylight Time">
+  <div class="countdown-heading"><span class="countdown-spark" aria-hidden="true">✦</span><span id="countdown-title">PULSECHAIN COUNTDOWN</span><time datetime="2026-09-30T14:00:00-04:00">WED · SEP 30 · 2 PM EDT</time></div>
+  <div class="countdown-digits" aria-live="off"><span><strong id="countdown-days">00</strong><small>DAYS</small></span><i>:</i><span><strong id="countdown-hours">00</strong><small>HOURS</small></span><i>:</i><span><strong id="countdown-minutes">00</strong><small>MIN</small></span><i>:</i><span><strong id="countdown-seconds">00</strong><small>SEC</small></span></div>
+</div>
 <header class="site-header wrap">
   <a class="brand" href="#build" aria-label="Fuel Forge home"><img src="../images/forge-wordmark-underlined.png" alt="Fuel Forge"></a>
   <div class="header-actions"><details class="chain-menu"><summary class="network"><span class="network-dot"></span>PulseChain <span aria-hidden="true">⌄</span></summary><div class="chain-options"><a href="../">Robinhood Chain <small>Live site ↗</small></a><span aria-current="page">PulseChain <small>Design preview</small></span></div></details><button class="wallet-button" id="wallet-button"><span class="wallet-dot"></span><span id="wallet-label">Demo wallet</span></button></div>
@@ -46,6 +50,6 @@
 </main>
 <dialog id="preview-dialog"><button class="dialog-close" aria-label="Close preview">×</button><span class="eyebrow">DESIGN PREVIEW</span><h2 id="dialog-title">Your position</h2><p id="dialog-body"></p><button class="primary-button dialog-done">Back to the Forge</button></dialog>
 <div class="toast" role="status" id="toast" hidden><span></span><button aria-label="Dismiss notification">×</button></div>
-<script src="pulse-preview.js?v=launch-controls-1"></script>
+<script src="pulse-preview.js?v=launch-countdown-1"></script>
 </body>
 </html>
