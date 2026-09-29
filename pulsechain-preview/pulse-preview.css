@@ -19,3 +19,12 @@
 .hero-art .orbit-one{width:calc(var(--orbit-diameter) - var(--orbit-step));height:calc(var(--orbit-diameter) - var(--orbit-step))}
 .hero-art .orbit-three{width:calc(var(--orbit-diameter) + var(--orbit-step));height:calc(var(--orbit-diameter) + var(--orbit-step))}
 @media(max-width:760px){.hero-art{--orbit-step:60px}}
+
+/* Make the two independent burn settings readable at a glance. */
+.fee-policy{margin:-5px 0 18px;color:var(--muted);font-size:11px;line-height:1.55}
+.burn-heading{padding-bottom:14px}
+.burn-settings{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+.burn-settings span{display:inline-flex;align-items:baseline;gap:4px;padding:6px 9px;border:1px solid color-mix(in srgb,var(--accent) 42%,transparent);border-radius:8px;background:color-mix(in srgb,var(--accent) 10%,transparent);color:#e0d5e8;font-size:11px;line-height:1.3;white-space:nowrap}
+.burn-settings strong{color:var(--accent);font-size:13px;font-weight:750}
+@media(max-width:1050px){.burn-settings span{font-size:10px;padding:6px 7px}.burn-settings strong{font-size:12px}}
+@media(max-width:760px){.burn-settings span{font-size:12px;padding:7px 10px}.burn-settings strong{font-size:14px}.fee-policy{font-size:12px}}
