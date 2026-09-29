@@ -18,6 +18,11 @@
 .hero-art .orbit{left:50%;top:50%;width:var(--orbit-diameter);height:var(--orbit-diameter);transform:translate(-50%,-50%) rotate(-25deg) scaleY(.55)}
 .hero-art .orbit-one{width:calc(var(--orbit-diameter) - var(--orbit-step));height:calc(var(--orbit-diameter) - var(--orbit-step))}
 .hero-art .orbit-three{width:calc(var(--orbit-diameter) + var(--orbit-step));height:calc(var(--orbit-diameter) + var(--orbit-step))}
+/* Let the orbital tracks recede into the page instead of ending as hard outlines. */
+.hero-art .orbit{-webkit-mask-image:conic-gradient(from 10deg,transparent 0deg,#000 65deg,#000 285deg,transparent 355deg);mask-image:conic-gradient(from 10deg,transparent 0deg,#000 65deg,#000 285deg,transparent 355deg)}
+.hero-art .orbit-one{border-color:#e985d024}
+.hero-art .orbit-two{border-color:#ab83ff1d}
+.hero-art .orbit-three{border-color:#6ee7ed14}
 @media(max-width:760px){.hero-art{--orbit-step:60px}}
 
 /* Make the two independent burn settings readable at a glance. */
