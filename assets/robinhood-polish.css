@@ -1,0 +1,117 @@
+/* Visual layer shared in spirit with the PulseChain concept. The live app and
+   its wallet/contract logic remain in the existing module. */
+#app.forge-refresh{
+  color:#f4f8f2;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:radial-gradient(ellipse 760px 490px at 8% 0%,#8ecb2b12,transparent 70%),radial-gradient(ellipse 740px 550px at 92% 0%,#298d5130,transparent 76%),#0a0f0c;
+}
+.forge-refresh :is(h1,h2,h3){font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;letter-spacing:-.045em}
+.forge-refresh .topbar{border-color:#d9f7de22}
+.forge-refresh .site-tabs{background:#111a14f2;border:1px solid #a8d6aa30;box-shadow:0 12px 35px #0005;backdrop-filter:blur(14px)}
+.forge-refresh .site-tabs a:not(.is-active){color:#aebfad}
+.forge-refresh .site-tabs a.is-active{box-shadow:0 5px 18px #8cca3240}
+.forge-refresh .section-heading h2,.forge-refresh .build-intro .section-heading h2{font-weight:750}
+.forge-refresh .section-heading>p{color:#b9c7b6}
+
+/* Quiet surfaces put the content and pool accent colors first. */
+.forge-refresh .builder-grid>.card,.forge-refresh .nft-layout>.section{
+  border-color:#b3d5b12b;
+  background:radial-gradient(circle at 90% 0%,#7bb53712,transparent 55%),linear-gradient(145deg,#19231b,#111a15 85%);
+  box-shadow:inset 0 1px 0 #ffffff08;
+}
+.forge-refresh .build-preview{
+  background:radial-gradient(circle at 75% 4%,#8fdd4330,transparent 58%),linear-gradient(145deg,#1b2a1c,#121c16 85%)!important;
+  border-color:#90bd6d51!important;
+}
+.forge-refresh .status-grid,.forge-refresh .pool-overview>div{
+  border-color:#b3d5b12b;
+  background:linear-gradient(145deg,#1a251c,#121a15);
+}
+.forge-refresh .amount-input,.forge-refresh .foundry-quantity-field select{background:#0b130e;border-color:#afcdb02b}
+.forge-refresh .amount-input:focus-within{border-color:#b5f956;box-shadow:0 0 0 3px #b5f95620}
+.forge-refresh .button-primary{background:linear-gradient(110deg,#baff47,#97e25f);box-shadow:0 4px 18px #8edb3140}
+.forge-refresh .button-primary:disabled{box-shadow:none}
+
+/* Pool cards keep their four colors but use the calmer backdrop of the mockup. */
+.forge-refresh .pool-card{border-radius:18px;box-shadow:inset 0 1px 0 #ffffff11,0 12px 30px #0003}
+.forge-refresh .pool-lime{--pool-surface:#1a291d;--pool-end:#101a14;--pool-glow:#8bdb4838;--pool-border:#679456}
+.forge-refresh .pool-violet{--pool-surface:#231e2d;--pool-end:#151821;--pool-glow:#b065ed35;--pool-border:#80639a}
+.forge-refresh .pool-blue{--pool-surface:#1a2a35;--pool-end:#121c25;--pool-glow:#44aff042;--pool-border:#4c87a4}
+.forge-refresh .pool-gold{--pool-surface:#2a251f;--pool-end:#1b1c18;--pool-glow:#f3a65b39;--pool-border:#9b774f}
+.forge-refresh .pool-card .pool-row{font-size:13px;line-height:1.5}
+.forge-refresh .pool-card .pool-row strong{font-size:13px}
+.forge-refresh .pool-card .pool-top{font-weight:750}
+.forge-refresh .pool-card .pool-value{font-weight:750}
+.forge-refresh .pool-card .pool-usd{font-weight:750}
+.forge-refresh .pool-card .progress-track{height:7px;border-radius:999px;overflow:hidden}
+
+/* Burn settings match the mockup's paired, easy-to-scan badges. */
+.forge-refresh .burn-card{
+  --burn-accent:#baff50;
+  --burn-glow:#80d44d30;
+  --burn-surface:#1b2a1e;
+  --burn-end:#101b15;
+  --burn-border:#60914f;
+  --burn-soft:#cde9b3;
+  border-radius:18px;
+  background:radial-gradient(circle at 93% 3%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 86%);
+  box-shadow:inset 0 1px 0 #ffffff11,0 12px 30px #0003;
+}
+.forge-refresh .burn-card.burn-violet{--burn-glow:#b065e934;--burn-surface:#241e2d;--burn-end:#171821;--burn-border:#80639a;--burn-soft:#e7c4fa}
+.forge-refresh .burn-card.burn-orange{--burn-glow:#efa45a36;--burn-surface:#2a251f;--burn-end:#1b1d19;--burn-border:#9b774f;--burn-soft:#f5d5ad}
+.forge-refresh .burn-card:is(.burn-violet,.burn-orange){background:radial-gradient(circle at 93% 3%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 86%)}
+.forge-refresh #burns .burn-card-top{padding-bottom:0;align-items:center}
+.forge-refresh #burns .burn-card h3{margin:5px 0 0;font-weight:750}
+.forge-refresh .burn-card-kicker{justify-content:flex-start}
+.forge-refresh .burn-settings{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 22px}
+.forge-refresh .burn-settings>span{
+  display:inline-flex;align-items:center;padding:7px 10px;
+  border:1px solid color-mix(in srgb,var(--burn-accent) 38%,transparent);
+  border-radius:8px;background:color-mix(in srgb,var(--burn-accent) 11%,transparent);
+  color:var(--burn-soft);font-size:12px;line-height:1.3;font-weight:650;white-space:nowrap;
+}
+.forge-refresh .burn-settings .burn-allocation{margin:0}
+.forge-refresh .burn-settings .burn-allocation strong{display:inline;color:var(--burn-accent);font-size:13px;font-weight:800}
+.forge-refresh #burns .burn-drip-badge{font-size:12px;font-weight:700;color:var(--burn-accent)}
+.forge-refresh #burns .burn-metrics>div{font-size:13px;line-height:1.5}
+.forge-refresh #burns .burn-metrics strong{font-size:16px}
+.forge-refresh #burns .burn-metrics>div:first-child>strong{font-size:32px}
+.forge-refresh #burns .burn-metrics>div:first-child{border-top:1px solid color-mix(in srgb,var(--burn-accent) 18%,transparent)}
+.forge-refresh #burns .burn-card-actions a{font-weight:650}
+
+/* Keep the live ETH total while getting users to the three cards sooner. */
+.forge-refresh #burns .burn-overview{padding:15px;margin-bottom:18px;background:linear-gradient(110deg,#18231b,#121b17);border:1px solid #b3d5b12b}
+.forge-refresh #burns .burn-overview>div{padding:14px 16px;background:#ffffff03;border-color:#b3d5b126}
+.forge-refresh #burns .burn-overview strong{font-size:27px}
+.forge-refresh #burns .burn-flow{font-size:12px;line-height:1.6}
+.forge-refresh footer>span:first-child{margin-right:12px}
+
+@media(max-width:1050px){
+  .forge-refresh #burns .burn-card{padding:22px}
+  .forge-refresh .burn-settings>span{font-size:11px;padding:6px 8px}
+  .forge-refresh #burns .burn-drip-badge{font-size:11px}
+}
+@media(max-width:760px){
+  .forge-refresh .pool-card .pool-row,.forge-refresh #burns .burn-metrics>div{font-size:12px}
+  .forge-refresh #burns .burn-overview{padding:10px}
+  .forge-refresh #burns .burn-overview>div{padding:13px}
+  .forge-refresh #burns .burn-flow{display:block;min-height:0;font-size:11px;line-height:1.5}
+  .forge-refresh #burns .burn-flow>span{display:block}
+  .forge-refresh #burns .burn-flow>b,.forge-refresh #burns .burn-flow>span:first-child{display:none}
+  .forge-refresh #burns .burn-flow #burn-interval-label{margin-top:4px}
+  .forge-refresh #burns .burn-card{padding:24px}
+  .forge-refresh .burn-settings{margin:15px 0 19px}
+  .forge-refresh .burn-settings>span{font-size:12px;padding:7px 10px}
+  .forge-refresh #burns .burn-drip-badge{font-size:12px}
+}
+@media(max-width:390px){
+  .forge-refresh .burn-settings>span{font-size:11px;padding:6px 8px}
+  .forge-refresh #burns .burn-drip-badge{font-size:11px}
+}
+@media(max-width:480px){
+  .forge-refresh .topbar{display:block;position:relative;min-height:0;padding:13px 0 12px}
+  .forge-refresh .brand-wordmark-art{width:155px;height:48px}
+  .forge-refresh .top-actions{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin-top:8px}
+  .forge-refresh .top-actions #connect{position:absolute;top:17px;right:0;min-height:34px;padding:7px 10px}
+  .forge-refresh .top-actions .pill,.forge-refresh .top-actions .litepaper-link,.forge-refresh .top-actions .telegram-link{font-size:9px;padding:6px 8px}
+}
