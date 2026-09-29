@@ -42,3 +42,4 @@ body{padding-top:116px}
 .countdown-digits i{font-style:normal;color:#d793ef;font-size:25px;line-height:1;font-weight:700}
 @media(max-width:760px){body{padding-top:105px}.launch-countdown{top:7px;padding:10px 13px 9px;border-radius:14px}.countdown-heading{font-size:9px;gap:5px}.countdown-heading time{font-size:9px}.countdown-digits{gap:6px}.countdown-digits span{min-width:43px}.countdown-digits strong{font-size:26px}.countdown-digits i{font-size:22px}}
 @media(max-width:390px){.countdown-heading{font-size:8px}.countdown-heading time{font-size:8px}.countdown-digits strong{font-size:24px}.countdown-digits span{min-width:38px}}
+.tabs .fire-tab-icon{display:inline-grid;place-items:center;width:17px;height:17px;flex:none;font-family:"Apple Color Emoji","Segoe UI Emoji","Noto Color Emoji",sans-serif;font-size:18px;line-height:1}
