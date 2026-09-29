@@ -92,7 +92,14 @@ if (app) {
     label.textContent = label.textContent.replace(/^\d{2}\s*·\s*/, '');
   });
   const names = ['Build', 'Payout Pools', 'Rewards', 'Your NFTs', 'Buy & Burn'];
-  const icons = ['ϟ', '▦', '◇', '⬡', '♨'];
+  // Match the PulseChain preview's crisp, consistently sized navigation icons.
+  const icons = [
+    '<svg viewBox="0 0 24 24"><path d="m14 3-9 11h6l-1 7 9-12h-6z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v5H4zM14 15h6v5h-6z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M4 8h16v4H4zM6 12v9h12v-9M12 8v13M12 8C3 9 6 0 10 4l2 4Zm0 0c9 1 6-8 2-4l-2 4Z"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="m12 2 9 5v10l-9 5-9-5V7zM3 7l9 5 9-5M12 12v10"/></svg>',
+    '<svg viewBox="0 0 24 24"><path d="M12 2c1 6-5 6-3 11 1-3 4-3 4-6 8 8 6 15-1 15C4 22 2 14 7 9c0 5 5 4 5-7Z"/></svg>'
+  ];
   app.querySelectorAll('[data-site-tab]').forEach((link, i) => {
     link.setAttribute('aria-label', names[i]);
     link.innerHTML = `<span class="ff-tab-icon" aria-hidden="true">${icons[i]}</span><span class="ff-tab-full">${names[i]}</span><span class="ff-tab-short" aria-hidden="true">${['Build','Pools','Rewards','NFTs','Burn'][i]}</span>`;

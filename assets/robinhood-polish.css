@@ -10,6 +10,10 @@
 .forge-refresh .site-tabs{background:#111a14f2;border:1px solid #a8d6aa30;box-shadow:0 12px 35px #0005;backdrop-filter:blur(14px)}
 .forge-refresh .site-tabs a:not(.is-active){color:#aebfad}
 .forge-refresh .site-tabs a.is-active{box-shadow:0 5px 18px #8cca3240}
+.forge-refresh .site-tabs a{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:650}
+.forge-refresh .ff-tab-icon{display:grid;place-items:center;flex:none;width:17px;height:17px;line-height:1}
+.forge-refresh .ff-tab-icon svg{display:block;width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.45;stroke-linecap:round;stroke-linejoin:round}
+.forge-refresh .ff-hero h1{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-weight:760;letter-spacing:-.062em}
 .forge-refresh .section-heading h2,.forge-refresh .build-intro .section-heading h2{font-weight:750}
 .forge-refresh .section-heading>p{color:#b9c7b6}
 
@@ -92,6 +96,8 @@
   .forge-refresh #burns .burn-drip-badge{font-size:11px}
 }
 @media(max-width:760px){
+  .forge-refresh .site-tabs{padding:4px;gap:2px;border-radius:11px}
+  .forge-refresh .site-tabs a{box-sizing:border-box;height:55px;min-height:55px;padding:9px 3px;gap:5px;border-radius:7px;font-size:10px;line-height:15px}
   .forge-refresh .pool-card .pool-row,.forge-refresh #burns .burn-metrics>div{font-size:12px}
   .forge-refresh #burns .burn-overview{padding:10px}
   .forge-refresh #burns .burn-overview>div{padding:13px}
@@ -109,6 +115,7 @@
   .forge-refresh #burns .burn-drip-badge{font-size:11px}
 }
 @media(max-width:480px){
+  .forge-refresh .ff-hero h1{max-width:none;font-size:48px;line-height:1.04;margin-bottom:16px}
   .forge-refresh .topbar{display:block;position:relative;min-height:0;padding:13px 0 12px}
   .forge-refresh .brand-wordmark-art{width:155px;height:48px}
   .forge-refresh .top-actions{display:flex;flex-wrap:wrap;justify-content:flex-start;align-items:center;gap:6px;margin-top:8px}
