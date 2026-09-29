@@ -1,6 +1,6 @@
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './mainnet-white-paper-v1.js';
+import './mainnet-white-paper-v1.js?v=foundry-batch-1';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
