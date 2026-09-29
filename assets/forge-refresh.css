@@ -89,6 +89,7 @@
 @media(prefers-reduced-motion:reduce){.ff-ticker-motion .ff-token{animation:none!important}}
 
 /* A burner is highlighted only when its live contract checks allow execution. */
+.forge-refresh .burn-card .burn-metrics [data-burn-usd]{color:#a9ff34;font-weight:700}
 .forge-refresh .burn-card:has([data-burn-key][data-ready="true"]) .burn-metrics>div:nth-child(4)>strong{color:#b4ff38;display:inline-flex;align-items:center;gap:7px}
 .forge-refresh .burn-card:has([data-burn-key][data-ready="true"]) .burn-metrics>div:nth-child(4)>strong:before{content:'';width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:#b4ff38;box-shadow:0 0 9px #b4ff38aa}
 .forge-refresh .burn-card-actions{height:auto;min-height:0;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
