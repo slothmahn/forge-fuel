@@ -119,6 +119,7 @@
 .forge-refresh .burn-card.burn-violet{--burn-accent:#d695ff;--burn-glow:#a04be855;--burn-surface:#251d32;--burn-end:#16171f;--burn-border:#70548a;--burn-soft:#d9b9ef;background:radial-gradient(circle at 90% 6%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 88%)}
 .forge-refresh .burn-card.burn-orange{--burn-accent:#ffc077;--burn-glow:#ed914950;--burn-surface:#2c231c;--burn-end:#1b1b18;--burn-border:#896747;--burn-soft:#efd0ac;background:radial-gradient(circle at 90% 6%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 88%)}
 .forge-refresh .burn-card .burn-card-kicker .eyebrow{color:var(--burn-accent)}
+.forge-refresh .burn-allocation{display:flex;flex-wrap:wrap;gap:2px 9px;margin-top:9px;font-size:10px;line-height:1.5}.forge-refresh .burn-allocation strong{color:var(--burn-accent,#b4ff38);font-weight:700}.forge-refresh .burn-allocation span{color:var(--burn-soft)}
 .forge-refresh .burn-card .burn-drip-badge{color:var(--burn-soft);border-color:var(--burn-border)}
 .forge-refresh .burn-card .burn-metrics>div{border-color:color-mix(in srgb,var(--burn-accent) 16%,transparent)}
 .forge-refresh .burn-card .burn-card-actions a{color:var(--burn-soft)}
