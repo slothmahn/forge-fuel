@@ -103,3 +103,22 @@
 .ff-art .ff-orbit-two{width:var(--ff-ticker-diameter,var(--ff-ring-base));height:var(--ff-ticker-diameter,var(--ff-ring-base))}
 .ff-art .ff-orbit-three{width:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) + var(--ff-ring-step));height:calc(var(--ff-ticker-diameter,var(--ff-ring-base)) + var(--ff-ring-step))}
 @media(max-width:760px){.ff-art{--ff-ring-step:65px;--ff-ring-base:290px}}
+
+/* Give each payout and burn pool its own color without tinting the whole page. */
+.forge-refresh .pool-card{background:radial-gradient(circle at 92% 8%,var(--pool-glow),transparent 56%),linear-gradient(135deg,var(--pool-surface),var(--pool-end) 88%);border-color:var(--pool-border);box-shadow:inset 0 1px 0 #ffffff0b}
+.forge-refresh .pool-lime{--accent:#b1ff42;--pool-glow:#82dc3840;--pool-surface:#1b2a18;--pool-end:#101b13;--pool-border:#557846}
+.forge-refresh .pool-violet{--accent:#d695ff;--pool-glow:#a14aeb4d;--pool-surface:#211b2d;--pool-end:#171622;--pool-border:#71558a}
+.forge-refresh .pool-blue{--accent:#65d4ff;--pool-glow:#299de654;--pool-surface:#172735;--pool-end:#121c25;--pool-border:#417895}
+.forge-refresh .pool-gold{--accent:#ffc277;--pool-glow:#ea90464d;--pool-surface:#2a221b;--pool-end:#1c1a17;--pool-border:#8b6849}
+.forge-refresh .pool-card .pool-row,.forge-refresh .pool-card .pool-live,.forge-refresh .pool-card .pool-foot{color:#b6c1b7}
+.forge-refresh .pool-card .pool-divider{border-color:color-mix(in srgb,var(--accent) 20%,transparent)}
+.forge-refresh .pool-card .progress-track span{background:linear-gradient(90deg,color-mix(in srgb,var(--accent) 70%,#ffffff),var(--accent))}
+
+.forge-refresh .burn-card{--burn-glow:#77d33842;--burn-surface:#1b2918;--burn-end:#101a13;--burn-border:#557643;--burn-soft:#c6eea4;background:radial-gradient(circle at 90% 6%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 88%);border-color:var(--burn-border);box-shadow:inset 0 1px 0 #ffffff0b}
+.forge-refresh .burn-card.burn-violet{--burn-accent:#d695ff;--burn-glow:#a04be855;--burn-surface:#251d32;--burn-end:#16171f;--burn-border:#70548a;--burn-soft:#d9b9ef;background:radial-gradient(circle at 90% 6%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 88%)}
+.forge-refresh .burn-card.burn-orange{--burn-accent:#ffc077;--burn-glow:#ed914950;--burn-surface:#2c231c;--burn-end:#1b1b18;--burn-border:#896747;--burn-soft:#efd0ac;background:radial-gradient(circle at 90% 6%,var(--burn-glow),transparent 58%),linear-gradient(145deg,var(--burn-surface),var(--burn-end) 88%)}
+.forge-refresh .burn-card .burn-card-kicker .eyebrow{color:var(--burn-accent)}
+.forge-refresh .burn-card .burn-drip-badge{color:var(--burn-soft);border-color:var(--burn-border)}
+.forge-refresh .burn-card .burn-metrics>div{border-color:color-mix(in srgb,var(--burn-accent) 16%,transparent)}
+.forge-refresh .burn-card .burn-card-actions a{color:var(--burn-soft)}
+.forge-refresh .burn-card .burn-card-actions button[data-burn-key]{border-color:var(--burn-border)}
