@@ -122,3 +122,42 @@
 .forge-refresh .burn-card .burn-metrics>div{border-color:color-mix(in srgb,var(--burn-accent) 16%,transparent)}
 .forge-refresh .burn-card .burn-card-actions a{color:var(--burn-soft)}
 .forge-refresh .burn-card .burn-card-actions button[data-burn-key]{border-color:var(--burn-border)}
+
+/* Use the available desktop space and keep the burn figures readable. */
+.forge-refresh .topbar,.forge-refresh main,.forge-refresh footer,.forge-refresh .ff-hero,.forge-refresh>.wallet-section,.forge-refresh>.price-ribbon,.forge-refresh .site-tabs{max-width:1440px}
+.forge-refresh .top-actions .pill,.forge-refresh .top-actions .button{font-size:13px}
+.forge-refresh .site-tabs a{font-size:14px;min-height:50px}
+.forge-refresh #burns .section-heading{margin-bottom:28px}
+.forge-refresh #burns .section-heading h2{font-size:34px}
+.forge-refresh #burns .section-heading>p{font-size:14px;max-width:540px}
+.forge-refresh #burns .eyebrow{font-size:11px}
+.forge-refresh #burns .burn-overview{padding:24px;gap:16px;margin-bottom:20px}
+.forge-refresh #burns .burn-overview>div{padding:20px}
+.forge-refresh #burns .burn-overview span{font-size:11px}
+.forge-refresh #burns .burn-overview strong{font-size:30px}
+.forge-refresh #burns .burn-overview small,.forge-refresh #burns .burn-flow{font-size:13px}
+.forge-refresh #burns .burn-grid,.forge-refresh #burns .burn-grid.has-three{grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:20px}
+.forge-refresh #burns .burn-card{padding:28px}
+.forge-refresh #burns .burn-card-top{gap:15px;padding-bottom:24px}
+.forge-refresh #burns .burn-emblem{width:58px;height:58px;flex-basis:58px}
+.forge-refresh #burns .burn-card-kicker .eyebrow,.forge-refresh #burns .burn-drip-badge{font-size:10px}
+.forge-refresh #burns .burn-card h3{font-size:22px}
+.forge-refresh #burns .burn-metrics>div{padding:18px 0;gap:12px;font-size:13px}
+.forge-refresh #burns .burn-metrics>div:first-child{padding:22px 0 24px}
+.forge-refresh #burns .burn-metrics>div:first-child>span{font-size:12px}
+.forge-refresh #burns .burn-metrics>div:first-child>strong{font-size:32px}
+.forge-refresh #burns .burn-metrics strong{font-size:15px;line-height:1.45}
+.forge-refresh #burns .burn-metrics strong small{font-size:12px;line-height:1.45}
+.forge-refresh #burns .burn-card-actions button[data-burn-key]{min-height:46px;font-size:13px}
+.forge-refresh #burns .burn-card-actions a,.forge-refresh #burns .burn-owner-controls summary{font-size:12px}
+@media(max-width:760px){
+  .forge-refresh .top-actions .pill,.forge-refresh .top-actions .button{font-size:11px}
+  .forge-refresh .site-tabs a{font-size:11px;min-height:56px}
+  .forge-refresh #burns .section-heading h2{font-size:29px}
+  .forge-refresh #burns .section-heading>p{font-size:13px}
+  .forge-refresh #burns .burn-overview{padding:0}
+  .forge-refresh #burns .burn-card{padding:23px}
+  .forge-refresh #burns .burn-card h3{font-size:21px}
+  .forge-refresh #burns .burn-metrics strong{font-size:14px}
+  .forge-refresh #burns .burn-metrics strong small{font-size:11px}
+}
