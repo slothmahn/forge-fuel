@@ -80,11 +80,11 @@ if (app) {
   const whitePaper = app.querySelector('.top-actions .litepaper-link');
   if (whitePaper) {
     const telegram = document.createElement('a');
-    telegram.className = 'telegram-link';
+    telegram.className = 'litepaper-link telegram-link';
     telegram.href = 'https://t.me/+82zdpAjhJ-dmNWJh';
     telegram.target = '_blank';
     telegram.rel = 'noopener noreferrer';
-    telegram.textContent = 'Telegram ↗';
+    telegram.innerHTML = '<span>Telegram</span><span class="telegram-arrow" aria-hidden="true">↗</span>';
     telegram.setAttribute('aria-label', 'Fuel Forge Telegram (opens in a new tab)');
     whitePaper.after(telegram);
   }
