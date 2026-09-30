@@ -63,6 +63,10 @@ needle='throw Error(`A configured token has an unexpected decimal count.`)}'
 patch(needle,'throw Error(`A configured token has an unexpected decimal count.`)'+checks+'}')
 patch('Z.block=e;let[t,n]', 'Z.block=e;await pulseReadBurnShares();let[t,n]')
 patch('async function Wf(){','async function Wf(){pulseRenderBurnShares();')
+# Format displayed PLS fees for readability; transaction values remain exact bigint quotes.
+patch('Position fee: ${_t(t)} PLS','Position fee: ${X(t,18,2)} PLS')
+patch('Y(`#preview-fee`,`${_t(t)} PLS`)','Y(`#preview-fee`,`${X(t,18,2)} PLS`)')
+patch('Y(`#foundry-fee`,`${_t(e)} PLS total`)','Y(`#foundry-fee`,`${X(e,18,2)} PLS total`)')
 # Globals remain internal; only an explicit opt-in localhost test hook can expose them.
 extra=r'''
 async function pulseReadBurnShares(){
