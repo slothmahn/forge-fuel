@@ -64,6 +64,9 @@ patch(needle,'throw Error(`A configured token has an unexpected decimal count.`)
 patch('Z.block=e;let[t,n]', 'Z.block=e;await pulseReadBurnShares();let[t,n]')
 patch('async function Wf(){','async function Wf(){pulseRenderBurnShares();')
 # Format displayed PLS fees for readability; transaction values remain exact bigint quotes.
+# Presentation precision only: swap/fee arithmetic remains in BigInt.
+patch('${X(e.gross,18,10)} PLS · ${t} intervals ready','<span class="burn-amount">${X(e.gross,18,4)} PLS</span><small class="burn-intervals">${t} ${t===1n?`interval`:`intervals`} ready</small>')
+patch('${X(e.callerReward,18,12)} PLS','${X(e.callerReward,18,6)} PLS')
 patch('Position fee: ${_t(t)} PLS','Position fee: ${X(t,18,2)} PLS')
 patch('Y(`#preview-fee`,`${_t(t)} PLS`)','Y(`#preview-fee`,`${X(t,18,2)} PLS`)')
 patch('Y(`#foundry-fee`,`${_t(e)} PLS total`)','Y(`#foundry-fee`,`${X(e,18,2)} PLS total`)')
@@ -96,7 +99,7 @@ if([`localhost`,`127.0.0.1`].includes(location.hostname)&&new URLSearchParams(lo
 # Must create new forms before asynchronous initialization starts; existing form bindings are safe.
 patch(')),gf(),Af(),setInterval', '));'+extra+'gf(),Af(),setInterval')
 (root/'assets/pulse-mainnet.js').write_text(head+app)
-r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=live-chains-1','./pulse-mainnet.js?v=live-chains-1').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
+r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=live-chains-1','./pulse-mainnet.js?v=burn-layout-4').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
 r=r.replace('BUILT AROUND FUEL.','A NEW CHAIN. THE SAME FORGE.').replace('◇ $PLS','<i class="pulse-pls-icon"></i> $PLS').replace('₿ $wBTC','<b class="pulse-btc-icon">₿</b> $wBTC')
 r+='\n'+r'''
 // The root asset base must not send tab links back to the Robinhood home page.
@@ -127,7 +130,7 @@ for source,target in [('mainnet-HhRsVR2f.css','pulse-base.css'),('forge-refresh.
     content=(root/'assets'/source).read_text()
     content=re.sub(r'#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])',pulse_color,content)
     (root/'assets'/target).write_text('/* Generated PulseChain controls; see build-pulsechain.py. */\n'+content)
-html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('./assets/mainnet-HhRsVR2f.css','./assets/pulse-base.css?v=pulse-theme-3').replace('./assets/forge-refresh.css?v=robinhood-polish-1','./assets/pulse-components.css?v=pulse-theme-3').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=live-chains-1','./assets/pulse-refresh.js?v=mobile-theme-3').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=pulse-theme-3">\n  </head>')
+html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('./assets/mainnet-HhRsVR2f.css','./assets/pulse-base.css?v=pulse-theme-4').replace('./assets/forge-refresh.css?v=robinhood-polish-1','./assets/pulse-components.css?v=pulse-theme-4').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=live-chains-1','./assets/pulse-refresh.js?v=burn-layout-4').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=pulse-theme-4">\n  </head>')
 (root/'pulsechain/index.html').write_text(html)
 manifest=root/'pulsechain-deployment.json'
 if not manifest.exists():manifest.write_text(json.dumps({'status':'pending','chainId':369,'owner':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','development':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','deploymentBlock':None,'launchTime':1790798400,'contracts':{}},indent=2)+'\n')

@@ -114,3 +114,13 @@ body .mainnet-preview-toast button,body .activity button{background:#ffffff12;co
 #app.forge-refresh .fee-bounds-fields label{min-width:0;align-content:start}
 #app.forge-refresh .fee-policy-form input[type=number]{min-height:46px;font-size:14px}
 @media(max-width:600px){#app.forge-refresh .fee-policy-form{gap:18px}#app.forge-refresh .fee-policy-form .fee-bounds-toggle{font-size:13px}#app.forge-refresh .fee-bounds-fields{grid-template-columns:1fr}#app.forge-refresh .fee-policy-form label:has(input[name=percent]){grid-template-columns:minmax(80px,1fr) minmax(95px,1.5fr) auto}body .mainnet-preview-toast,body .activity{width:calc(100vw - 32px);font-size:13px;bottom:16px}}
+
+/* Fee share and daily drip are independent settings with matching badges. */
+#app.forge-refresh #burns .burn-card-top{padding-bottom:18px}
+#app.forge-refresh .burn-settings{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 18px}
+#app.forge-refresh .burn-settings>span{display:inline-flex;align-items:center;gap:4px;margin:0;padding:6px 9px;border:1px solid color-mix(in srgb,var(--burn-accent) 42%,transparent);border-radius:8px;background:color-mix(in srgb,var(--burn-accent) 10%,transparent);font-size:11px;line-height:1.4;color:#e0d5e8;white-space:nowrap}
+#app.forge-refresh .burn-settings .burn-allocation strong{display:inline;color:var(--burn-accent);font-size:11px;line-height:inherit}
+#app.forge-refresh .burn-metrics .burn-amount{display:block;white-space:nowrap}
+#app.forge-refresh #burns .burn-metrics .burn-intervals{display:block;color:#b3a4bd;font-weight:500;font-size:11px;margin-top:4px}
+#app.forge-refresh #burns .burn-metrics [data-burn-usd]{display:block;letter-spacing:normal;word-spacing:normal;line-height:1.6;margin-top:6px}
+@media(max-width:600px){#app.forge-refresh .burn-settings>span,#app.forge-refresh .burn-settings .burn-allocation strong{font-size:12px}#app.forge-refresh #burns .burn-metrics>div:not(:first-child){display:grid;grid-template-columns:minmax(95px,1fr) minmax(0,1.65fr);gap:16px}#app.forge-refresh #burns .burn-metrics>div>span{line-height:1.5}#app.forge-refresh #burns .burn-metrics>div:first-child [data-burn-usd]{font-size:12px;letter-spacing:normal}}
