@@ -126,3 +126,18 @@ body .mainnet-preview-toast button,body .activity button{background:#ffffff12;co
 @media(max-width:600px){#app.forge-refresh .burn-settings>span,#app.forge-refresh .burn-settings .burn-allocation strong{font-size:12px}#app.forge-refresh #burns .burn-metrics>div:not(:first-child){display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px}#app.forge-refresh #burns .burn-metrics>div>span{line-height:1.5}#app.forge-refresh #burns .burn-metrics>div:first-child [data-burn-usd]{font-size:12px;letter-spacing:normal}}
 
 @media(max-width:600px){#app.forge-refresh #burns .burn-metrics>div:not(:first-child)>strong{justify-self:end;justify-content:flex-end;text-align:right}}
+/* Quiet, structured footer matching the PulseChain preview. */
+#app.forge-refresh footer{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:start;gap:12px 24px;padding-top:24px;padding-bottom:32px;color:#a899b4;font-size:11px;line-height:1.6;letter-spacing:normal}
+#app.forge-refresh footer>span:first-child{color:#c6b2d2;font-size:10px;letter-spacing:.1em}
+#app.forge-refresh footer>span:nth-child(2){color:#a899b4;font-size:10px;font-weight:500}
+#app.forge-refresh footer .contract-footer{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 16px;border-color:#ffffff18;padding-top:20px;margin-top:6px}
+#app.forge-refresh .contract-footer>span{grid-column:1/-1;color:#c6b2d2;font-size:10px;letter-spacing:.1em;margin-bottom:2px}
+#app.forge-refresh .contract-footer a{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:7px 12px;padding:13px 15px;background:#1d152580;border:1px solid #ffffff18;border-radius:10px;min-width:0;text-decoration:none;line-height:1.5}
+#app.forge-refresh .contract-footer a strong{grid-column:1;grid-row:1;font-size:12px;color:#eadcf4}
+#app.forge-refresh .contract-footer a>span{grid-column:2;grid-row:1;color:#ab83ff;align-self:center;font-size:15px}
+#app.forge-refresh .contract-footer a code{grid-column:1/-1;grid-row:2;color:#a899b4;font-size:10px;line-height:1.6;letter-spacing:normal;overflow-wrap:anywhere;word-break:normal}
+#app.forge-refresh .contract-footer a:hover{background:#30203980;border-color:#ab83ff66}
+#app.forge-refresh footer .mainnet-preview-banner.ff-verified{grid-column:1/-1;display:block;background:transparent!important;border:0!important;border-radius:0;margin:0;padding:4px 0 0;letter-spacing:normal;line-height:1.6;color:#a899b4}
+#app.forge-refresh footer .ff-verified strong{font-size:11px;font-weight:600;color:#c6b2d2}
+#app.forge-refresh footer .ff-verified span{display:block;margin-top:4px;color:#a899b4;font-size:11px;line-height:1.65;letter-spacing:normal;font-weight:400}
+@media(max-width:600px){#app.forge-refresh footer{grid-template-columns:minmax(0,1fr);gap:7px;margin-top:28px;padding-top:22px;padding-bottom:28px}#app.forge-refresh footer .contract-footer{grid-template-columns:minmax(0,1fr);gap:12px;padding-top:18px;margin-top:10px}#app.forge-refresh .contract-footer a{padding:14px}#app.forge-refresh .contract-footer a code{font-size:10px}}
