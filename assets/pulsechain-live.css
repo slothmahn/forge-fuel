@@ -101,3 +101,16 @@ html,body{background:#100b19;color:#f9f3ff;font-family:Inter,-apple-system,Blink
 #app.forge-refresh .ff-orbit:after,#app.forge-refresh .ff-orbit-two:after{background:#ab83ff;box-shadow:0 0 12px #ab83ffaa}
 #app.forge-refresh .market-reference-grid a{color:#b3a4bd;background:#1d1525;border-color:#ffffff26}
 #app.forge-refresh .fee-bounds-toggle input{accent-color:#ff62c5}
+/* Wallet messages live outside #app; include them in the PulseChain theme. */
+body .mainnet-preview-toast,body .activity{color:#f9f3ff;background:linear-gradient(110deg,#512442,#35224f);border:1px solid #b574bc66;border-radius:12px;box-shadow:0 12px 32px #0009;font:600 13px/1.6 Inter,-apple-system,sans-serif;max-width:calc(100vw - 32px);padding:14px 18px;overflow-wrap:anywhere}
+body .mainnet-preview-toast button,body .activity button{background:#ffffff12;color:#f9f3ff;border:0;border-radius:7px;flex:0 0 auto}
+#app.forge-refresh .fee-policy-form label{color:#dfcce9;line-height:1.5}
+#app.forge-refresh .fee-policy-form .fee-bounds-toggle{display:flex;justify-content:flex-start;align-items:flex-start;gap:12px;white-space:normal}
+#app.forge-refresh .fee-policy-form .fee-bounds-toggle input[type=checkbox]{appearance:none;-webkit-appearance:none;position:relative;display:inline-block;width:21px;height:21px;min-width:21px;flex:0 0 21px;margin:2px 0 0;padding:0;border:1px solid #ab83ff99;border-radius:5px;background:#211728;box-shadow:none;cursor:pointer}
+#app.forge-refresh .fee-policy-form .fee-bounds-toggle input:checked{background:#c850ae;border-color:#e487cc}
+#app.forge-refresh .fee-policy-form .fee-bounds-toggle input:checked:after{content:'✓';position:absolute;inset:0;color:#fff;text-align:center;font:700 16px/19px sans-serif}
+#app.forge-refresh .fee-policy-form label:has(input[name=percent]){display:grid;grid-template-columns:minmax(90px,1fr) minmax(95px,1.65fr) auto;gap:10px}
+#app.forge-refresh .fee-bounds-fields{gap:14px}
+#app.forge-refresh .fee-bounds-fields label{min-width:0;align-content:start}
+#app.forge-refresh .fee-policy-form input[type=number]{min-height:46px;font-size:14px}
+@media(max-width:600px){#app.forge-refresh .fee-policy-form{gap:18px}#app.forge-refresh .fee-policy-form .fee-bounds-toggle{font-size:13px}#app.forge-refresh .fee-bounds-fields{grid-template-columns:1fr}#app.forge-refresh .fee-policy-form label:has(input[name=percent]){grid-template-columns:minmax(80px,1fr) minmax(95px,1.5fr) auto}body .mainnet-preview-toast,body .activity{width:calc(100vw - 32px);font-size:13px;bottom:16px}}
