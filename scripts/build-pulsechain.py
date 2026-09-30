@@ -105,7 +105,29 @@ const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLin
 
 '''
 (root/'assets/pulse-refresh.js').write_text(r)
-html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=live-chains-1','./assets/pulse-refresh.js?v=live-chains-1').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=live-chains-1">\n  </head>')
+# Give PulseChain its own base styles so Robinhood's literal green colors,
+# including !important rules, cannot leak through presentation overrides.
+import colorsys, re
+def pulse_color(match):
+    raw=match.group(1)
+    if len(raw) in (3,4): raw=''.join(c*2 for c in raw)
+    rgb=tuple(int(raw[i:i+2],16)/255 for i in (0,2,4))
+    hue,light,saturation=colorsys.rgb_to_hls(*rgb)
+    if 65 <= hue*360 <= 180:
+        if light < .30:
+            hue=278/360
+        elif saturation > .55 and light < .85:
+            hue=322/360
+        else:
+            hue=280/360
+        rgb=colorsys.hls_to_rgb(hue,light,saturation)
+        return '#'+''.join(f'{round(c*255):02x}' for c in rgb)+raw[6:]
+    return match.group(0)
+for source,target in [('mainnet-HhRsVR2f.css','pulse-base.css'),('forge-refresh.css','pulse-components.css')]:
+    content=(root/'assets'/source).read_text()
+    content=re.sub(r'#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])',pulse_color,content)
+    (root/'assets'/target).write_text('/* Generated PulseChain controls; see build-pulsechain.py. */\n'+content)
+html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('./assets/mainnet-HhRsVR2f.css','./assets/pulse-base.css?v=pulse-theme-2').replace('./assets/forge-refresh.css?v=robinhood-polish-1','./assets/pulse-components.css?v=pulse-theme-2').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=live-chains-1','./assets/pulse-refresh.js?v=live-chains-1').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=pulse-theme-2">\n  </head>')
 (root/'pulsechain/index.html').write_text(html)
 manifest=root/'pulsechain-deployment.json'
 if not manifest.exists():manifest.write_text(json.dumps({'status':'pending','chainId':369,'owner':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','development':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','deploymentBlock':None,'launchTime':1790798400,'contracts':{}},indent=2)+'\n')

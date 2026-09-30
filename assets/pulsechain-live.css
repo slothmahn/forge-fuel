@@ -79,3 +79,25 @@ html,body{background:#100b19;color:#f9f3ff;font-family:Inter,-apple-system,Blink
 #app.forge-refresh .foundry-collection-details summary,#app.forge-refresh .foundry-reward-tag{color:#6ee7ed;background:#1d1525;border-color:#6ee7ed44}
 #app.forge-refresh .contract-footer .eyebrow{color:#c7a3ce}#app.forge-refresh .contract-footer code{color:#b3a4bd}
 @media(max-width:480px){#app.forge-refresh .topbar{display:block;position:relative;padding:12px 0;min-height:104px}#app.forge-refresh .top-actions{display:flex;align-items:center;justify-content:flex-start;gap:6px;margin-top:8px}#app.forge-refresh .top-actions #connect{position:absolute;top:20px;right:0}#app.forge-refresh .ff-art{position:relative;inset:auto;width:100%;opacity:1;pointer-events:auto}#app.forge-refresh .ff-orbit{display:block}#app.forge-refresh .ff-hero{display:grid;grid-template-columns:1fr}}
+
+/* Complete preview palette for all live and owner states. */
+#app.forge-refresh .builder-grid>.card.build-preview,#app.forge-refresh .builder-grid>.card.foundry-preview{background:radial-gradient(ellipse at 80% 0%,#7c337735,transparent 65%),linear-gradient(120deg,#26182d,#181420 80%)!important;border-color:#a981c13d!important}
+#app.forge-refresh .preview-breakdown,#app.forge-refresh .preview-breakdown>div{border-color:#ffffff26}
+#app.forge-refresh #preview-fee{color:#ff62c5}
+#app.forge-refresh .notice,#app.forge-refresh .wallet-connect-status{color:#dfcce9;background:#251a31;border-color:#a981c155}
+#app.forge-refresh .notice-dot{background:#ab83ff;box-shadow:0 0 0 5px #ab83ff20}
+#app.forge-refresh .burn-card .burn-metrics [data-burn-usd]{color:var(--burn-accent)}
+#app.forge-refresh .burn-card:has([data-burn-key][data-ready="true"]) .burn-metrics>div:nth-child(4)>strong{color:#6ee7ed}
+#app.forge-refresh .burn-card:has([data-burn-key][data-ready="true"]) .burn-metrics>div:nth-child(4)>strong:before{background:#6ee7ed;box-shadow:0 0 9px #6ee7edaa}
+#app.forge-refresh .burn-flow b{color:#6ee7ed}#app.forge-refresh .burn-flow,#app.forge-refresh .burn-overview>div span{color:#b3a4bd}
+#app.forge-refresh footer,#app.forge-refresh .contract-footer,#app.forge-refresh .ff-verified span{color:#a899b4}
+#app.forge-refresh .contract-footer>span{color:#c7a3ce}
+#app.forge-refresh .empty-state,#app.forge-refresh .foundry-collection-info p{color:#b3a4bd}
+#app.forge-refresh .position-tabs,#app.forge-refresh .foundry-cycle-group{border-color:#ffffff26}
+#app.forge-refresh .text-link,#app.forge-refresh .asset-type{color:#ff62c5}
+#app.forge-refresh .button-quiet{background:#2b1f36;color:#eadcf4;border-color:#a981c144}
+#app.forge-refresh .amount-input .amount-max{background:#25172e;border-color:#78548255;color:#dcb2e8}
+#app.forge-refresh :focus-visible{outline-color:#6ee7ed}#app.forge-refresh input:focus,#app.forge-refresh select:focus{border-color:#ab83ff;box-shadow:0 0 0 3px #ab83ff20}
+#app.forge-refresh .ff-orbit:after,#app.forge-refresh .ff-orbit-two:after{background:#ab83ff;box-shadow:0 0 12px #ab83ffaa}
+#app.forge-refresh .market-reference-grid a{color:#b3a4bd;background:#1d1525;border-color:#ffffff26}
+#app.forge-refresh .fee-bounds-toggle input{accent-color:#ff62c5}
