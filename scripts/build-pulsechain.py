@@ -96,7 +96,7 @@ if([`localhost`,`127.0.0.1`].includes(location.hostname)&&new URLSearchParams(lo
 # Must create new forms before asynchronous initialization starts; existing form bindings are safe.
 patch(')),gf(),Af(),setInterval', '));'+extra+'gf(),Af(),setInterval')
 (root/'assets/pulse-mainnet.js').write_text(head+app)
-r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=robinhood-polish-1','./pulse-mainnet.js?v=verified-launch-4').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
+r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=robinhood-polish-1','./pulse-mainnet.js?v=verified-launch-5').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
 r=r.replace('BUILT AROUND FUEL.','A NEW CHAIN. THE SAME FORGE.').replace('◇ $PLS','<i class="pulse-pls-icon"></i> $PLS').replace('₿ $wBTC','<b class="pulse-btc-icon">₿</b> $wBTC')
 r+='\n'+r'''
 // The root asset base must not send tab links back to the Robinhood home page.
@@ -113,7 +113,7 @@ function tickPulseLaunch(){
 tickPulseLaunch();fetch('./pulsechain-launch.json',{cache:'no-store'}).then(response=>response.json()).then(status=>{pulseLaunchStatus=status;tickPulseLaunch()}).catch(()=>{});setInterval(tickPulseLaunch,1000);
 '''
 (root/'assets/pulse-refresh.js').write_text(r)
-html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=fire-nav-1','./assets/pulse-refresh.js?v=verified-launch-4').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=verified-launch-4">\n  </head>')
+html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=fire-nav-1','./assets/pulse-refresh.js?v=verified-launch-5').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=verified-launch-5">\n  </head>')
 (root/'pulsechain/index.html').write_text(html)
 manifest=root/'pulsechain-deployment.json'
 if not manifest.exists():manifest.write_text(json.dumps({'status':'pending','chainId':369,'owner':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','development':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','deploymentBlock':None,'launchTime':1790798400,'contracts':{}},indent=2)+'\n')
