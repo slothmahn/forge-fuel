@@ -1,6 +1,7 @@
+import './chain-navigation.js?v=live-chains-1';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=verified-launch-5';
+import './pulse-mainnet.js?v=live-chains-1';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
@@ -196,12 +197,4 @@ if (app) {
 // The root asset base must not send tab links back to the Robinhood home page.
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
 const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
-const pulseTimer=document.createElement('aside');
-pulseTimer.className='pulse-launch-countdown';pulseTimer.setAttribute('aria-label','PulseChain launch countdown');document.body.prepend(pulseTimer);
-let pulseLaunchStatus={status:'delayed',launchTime:null};
-function tickPulseLaunch(){
- if(!['scheduled','live'].includes(pulseLaunchStatus.status)||!Number.isSafeInteger(pulseLaunchStatus.launchTime)){pulseTimer.innerHTML='<span>PULSECHAIN</span><strong>Launch delayed</strong><small>New launch time to be announced</small>';return;}
- const seconds=Math.max(0,Math.floor(pulseLaunchStatus.launchTime-Date.now()/1000));
- pulseTimer.innerHTML=seconds?`<span>PULSECHAIN LAUNCH COUNTDOWN</span><strong>${String(Math.floor(seconds/3600)).padStart(2,'0')} : ${String(Math.floor(seconds/60)%60).padStart(2,'0')} : ${String(seconds%60).padStart(2,'0')}</strong>`:'<span>PULSECHAIN MAINNET</span><strong>THE FORGE IS LIVE</strong><small>PLS &amp; wBTC payout pools</small>';
-}
-tickPulseLaunch();fetch('./pulsechain-launch.json',{cache:'no-store'}).then(response=>response.json()).then(status=>{pulseLaunchStatus=status;tickPulseLaunch()}).catch(()=>{});setInterval(tickPulseLaunch,1000);
+

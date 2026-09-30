@@ -96,24 +96,16 @@ if([`localhost`,`127.0.0.1`].includes(location.hostname)&&new URLSearchParams(lo
 # Must create new forms before asynchronous initialization starts; existing form bindings are safe.
 patch(')),gf(),Af(),setInterval', '));'+extra+'gf(),Af(),setInterval')
 (root/'assets/pulse-mainnet.js').write_text(head+app)
-r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=robinhood-polish-1','./pulse-mainnet.js?v=verified-launch-5').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
+r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=live-chains-1','./pulse-mainnet.js?v=live-chains-1').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
 r=r.replace('BUILT AROUND FUEL.','A NEW CHAIN. THE SAME FORGE.').replace('◇ $PLS','<i class="pulse-pls-icon"></i> $PLS').replace('₿ $wBTC','<b class="pulse-btc-icon">₿</b> $wBTC')
 r+='\n'+r'''
 // The root asset base must not send tab links back to the Robinhood home page.
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
 const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
-const pulseTimer=document.createElement('aside');
-pulseTimer.className='pulse-launch-countdown';pulseTimer.setAttribute('aria-label','PulseChain launch countdown');document.body.prepend(pulseTimer);
-let pulseLaunchStatus={status:'delayed',launchTime:null};
-function tickPulseLaunch(){
- if(!['scheduled','live'].includes(pulseLaunchStatus.status)||!Number.isSafeInteger(pulseLaunchStatus.launchTime)){pulseTimer.innerHTML='<span>PULSECHAIN</span><strong>Launch delayed</strong><small>New launch time to be announced</small>';return;}
- const seconds=Math.max(0,Math.floor(pulseLaunchStatus.launchTime-Date.now()/1000));
- pulseTimer.innerHTML=seconds?`<span>PULSECHAIN LAUNCH COUNTDOWN</span><strong>${String(Math.floor(seconds/3600)).padStart(2,'0')} : ${String(Math.floor(seconds/60)%60).padStart(2,'0')} : ${String(seconds%60).padStart(2,'0')}</strong>`:'<span>PULSECHAIN MAINNET</span><strong>THE FORGE IS LIVE</strong><small>PLS &amp; wBTC payout pools</small>';
-}
-tickPulseLaunch();fetch('./pulsechain-launch.json',{cache:'no-store'}).then(response=>response.json()).then(status=>{pulseLaunchStatus=status;tickPulseLaunch()}).catch(()=>{});setInterval(tickPulseLaunch,1000);
+
 '''
 (root/'assets/pulse-refresh.js').write_text(r)
-html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=fire-nav-1','./assets/pulse-refresh.js?v=verified-launch-5').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=verified-launch-5">\n  </head>')
+html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=live-chains-1','./assets/pulse-refresh.js?v=live-chains-1').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=live-chains-1">\n  </head>')
 (root/'pulsechain/index.html').write_text(html)
 manifest=root/'pulsechain-deployment.json'
 if not manifest.exists():manifest.write_text(json.dumps({'status':'pending','chainId':369,'owner':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','development':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','deploymentBlock':None,'launchTime':1790798400,'contracts':{}},indent=2)+'\n')
