@@ -123,4 +123,6 @@ body .mainnet-preview-toast button,body .activity button{background:#ffffff12;co
 #app.forge-refresh .burn-metrics .burn-amount{display:block;white-space:nowrap}
 #app.forge-refresh #burns .burn-metrics .burn-intervals{display:block;color:#b3a4bd;font-weight:500;font-size:11px;margin-top:4px}
 #app.forge-refresh #burns .burn-metrics [data-burn-usd]{display:block;letter-spacing:normal;word-spacing:normal;line-height:1.6;margin-top:6px}
-@media(max-width:600px){#app.forge-refresh .burn-settings>span,#app.forge-refresh .burn-settings .burn-allocation strong{font-size:12px}#app.forge-refresh #burns .burn-metrics>div:not(:first-child){display:grid;grid-template-columns:minmax(95px,1fr) minmax(0,1.65fr);gap:16px}#app.forge-refresh #burns .burn-metrics>div>span{line-height:1.5}#app.forge-refresh #burns .burn-metrics>div:first-child [data-burn-usd]{font-size:12px;letter-spacing:normal}}
+@media(max-width:600px){#app.forge-refresh .burn-settings>span,#app.forge-refresh .burn-settings .burn-allocation strong{font-size:12px}#app.forge-refresh #burns .burn-metrics>div:not(:first-child){display:grid;grid-template-columns:120px minmax(0,1fr);gap:12px}#app.forge-refresh #burns .burn-metrics>div>span{line-height:1.5}#app.forge-refresh #burns .burn-metrics>div:first-child [data-burn-usd]{font-size:12px;letter-spacing:normal}}
+
+@media(max-width:600px){#app.forge-refresh #burns .burn-metrics>div:not(:first-child)>strong{justify-self:end;justify-content:flex-end;text-align:right}}
