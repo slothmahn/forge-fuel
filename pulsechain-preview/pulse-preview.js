@@ -129,7 +129,7 @@ $('#forge-form').addEventListener('submit', event => {
   event.preventDefault(); clampFuel(); $('#term').value = formValues().term; updatePreview();
   const { principal, burn, term } = formValues();
   if (principal <= 0) { notify('Enter some principal FUEL to preview a position.'); $('#principal').focus(); return; }
-  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The proposed fee is 1% of the quoted FUEL value, bounded by 200,000–2,000,000 PLS per position. The actual quote and launch settings must be confirmed before minting. No wallet request has been made.`);
+  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The proposed fee is 100% of the quoted PLS value of locked principal, bounded by 200,000–200,000,000 PLS per position. Optional burn does not affect the fee. The actual quote and launch settings must be confirmed before minting. No wallet request has been made.`);
 });
 function setMode(next) {
   mode = next;
@@ -142,12 +142,12 @@ $('#foundry-mode').addEventListener('click', () => setMode('foundry'));
 $('#quantity').addEventListener('input', () => { cleanInput($('#quantity'), true); if (val('#quantity') > 10) $('#quantity').value = '10'; updatePreview(); });
 $('#quantity').addEventListener('blur', () => { $('#quantity').value = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); updatePreview(); });
 $('#quantity-max').addEventListener('click', () => { $('#quantity').value = '10'; updatePreview(); });
-$('#foundry-form').addEventListener('submit', event => { event.preventDefault(); const n = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); $('#quantity').value = n; updatePreview(); showModal('Your Foundry mint', `${n} ${n === 1 ? 'NFT' : 'NFTs'} · ${fmt(n * 100000000)} FUEL permanently burned.\n\nThis is a sample of the Foundry flow. The proposed fee is 1% of the quoted FUEL value, bounded by 200,000–2,000,000 PLS per NFT and multiplied by quantity. The actual quote and launch settings must be confirmed before minting. No transaction has been submitted.`); });
+$('#foundry-form').addEventListener('submit', event => { event.preventDefault(); const n = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); $('#quantity').value = n; updatePreview(); showModal('Your Foundry mint', `${n} ${n === 1 ? 'NFT' : 'NFTs'} · ${fmt(n * 100000000)} FUEL permanently burned.\n\nThis is a sample of the Foundry flow. The proposed fee is 10% of the quoted PLS value of 100 million FUEL, bounded by 2,000,000–20,000,000 PLS per NFT and multiplied by quantity. The actual quote and launch settings must be confirmed before minting. No transaction has been submitted.`); });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
   $('#wallet-label').textContent = walletVisible ? 'Demo wallet' : 'Show demo wallet';
   $('#wallet-fuel').innerHTML = walletVisible ? '1,200,000,000 <small>FUEL</small>' : '— <small>FUEL</small>';
-  $('#wallet-pls').innerHTML = walletVisible ? '3,000,000 <small>PLS</small>' : '— <small>PLS</small>';
+  $('#wallet-pls').innerHTML = walletVisible ? '100,000,000 <small>PLS</small>' : '— <small>PLS</small>';
   notify(walletVisible ? 'Showing sample balances. No real wallet is connected.' : 'Sample balances hidden. The form still uses demo FUEL for exploration.');
 });
 const pools = [
