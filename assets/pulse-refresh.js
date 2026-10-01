@@ -1,7 +1,7 @@
 import './chain-navigation.js?v=chain-choice-2';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=wide-preview-14';
+import './pulse-mainnet.js?v=header-markets-15';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
@@ -66,13 +66,13 @@ if (app) {
     hero.after(wallet);
   }
   const ribbon = app.querySelector('.price-ribbon');
-  if (ribbon) (wallet || hero).after(ribbon);
+  if (ribbon) { nav.before(ribbon); ribbon.hidden = false; }
   // The welcome content belongs to Build; every other tab begins at its own section.
   function showWelcomeForBuild() {
     const isBuild = !['#pools', '#rewards', '#positions', '#burns'].includes(location.hash);
     hero.hidden = !isBuild;
     if (wallet) wallet.hidden = !isBuild;
-    if (ribbon) ribbon.hidden = !isBuild;
+    if (ribbon) ribbon.hidden = false;
   }
   window.addEventListener('hashchange', showWelcomeForBuild);
   showWelcomeForBuild();
