@@ -70,7 +70,8 @@ payoutRows.className = 'estimate-rows';
 $('.demo-share strong').after(payoutRows);
 const scenario = document.createElement('section');
 scenario.className = 'card term-scenario';
-$('#forge-form').append(scenario);
+$('.builder-grid').insertBefore(scenario,$('.power-card'));
+$('.builder-grid').classList.add('wide-forge-layout');
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 2700, sampleBtcUsd = 83000;
   const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
@@ -93,6 +94,7 @@ function updatePreview() {
     $('#power-limit').textContent = 'Equal shares within the same mint cycle';
     $('#demo-share').textContent = `${(100*quantity/(12+quantity)).toFixed(2)}%`;
     $('.power-card').append(detailBlock);
+    $('.builder-grid').classList.remove('wide-forge-layout');
     updateEstimates(quantity/(12+quantity),288,true);
     $('#preview-principal').textContent = 'No principal locked';
     $('#preview-duration').textContent = '288-day cycle';
@@ -103,7 +105,8 @@ function updatePreview() {
     $('#timeline-note').textContent = 'The FUEL burn is permanent. A Foundry NFT participates in its mint cycle, and unclaimed rewards follow the NFT when transferred.';
     return;
   }
-  $('.power-card').append(detailBlock);
+  scenario.append(detailBlock);
+  $('.builder-grid').classList.add('wide-forge-layout');
   const durationBonus = principal * (term - 8) / 992;
   const power = principal + durationBonus + burn;
   const multiplier = principal > 0 ? power / principal : 0;
@@ -114,6 +117,7 @@ function updatePreview() {
   $('#power-limit').textContent = 'Up to 5× your principal';
   $('#demo-share').textContent = `${(100 * power / (450000000 + power)).toFixed(2)}%`;
   updateEstimates(power/(450000000+power),term);
+  scenario.append(detailBlock);
   $('#preview-principal').textContent = `${fmt(principal)} FUEL`;
   $('#preview-duration').textContent = `${fmt(term)} days`;
   $('#preview-burn').textContent = `${fmt(burn)} FUEL`;

@@ -54,12 +54,16 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
 
   root.querySelector('#preview-fee').parentElement.hidden = true;
   const positionDetails = document.createElement('section');
-  positionDetails.className = 'forge-position-details';
+  positionDetails.className = 'card forge-position-details';
   positionDetails.setAttribute('aria-label','Position details before confirmation');
   const detailsHeading = document.createElement('h4');
   detailsHeading.textContent = 'Position details';
   positionDetails.append(detailsHeading,termPanel);
-  root.querySelector('#forge-form').append(positionDetails);
+  const builder = root.querySelector('#forge-build');
+  const preview = builder.querySelector('.build-preview');
+  positionDetails.append(preview.querySelector('.preview-rows'),preview.querySelector(':scope > .hint'));
+  builder.insertBefore(positionDetails,preview);
+  builder.classList.add('forge-wide-layout');
   const termHeading = termPanel.querySelector('h4');
   const termRows = [8,28,88].map(days => {
     const row = document.createElement('div');
