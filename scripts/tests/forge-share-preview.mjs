@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {estimateForgeShare, estimateForgePayout, estimateTermPayout, readForgePower} from '../../assets/forge-share-preview.js';
+import {estimateForgeShare, estimateForgePayout, estimateTermPayout, estimateFoundryRewards, readForgePower} from '../../assets/forge-share-preview.js';
 
 assert.equal(estimateForgeShare(100n, 900n), '10.00%');
 assert.equal(estimateForgeShare(100n, 100n), '50.00%');
@@ -39,3 +39,11 @@ assert.equal(estimateTermPayout(null,1000,8),null);
 assert.equal(estimateTermPayout(100n,1001,8),null);
 assert.equal(estimateTermPayout(100n,88.5,8),null);
 console.log('Term scenarios and complete-cycle counts passed.');
+
+assert.deepEqual(estimateFoundryRewards(1,9n,10000n),{share:'10.00%',payout:997n});
+assert.deepEqual(estimateFoundryRewards(10,0n,10000n),{share:'100.00%',payout:9975n});
+assert.equal(estimateFoundryRewards(11,0n,10000n),null);
+assert.equal(estimateFoundryRewards(1,undefined,0n),null);
+assert.equal(estimateFoundryRewards(1,-1n,0n),null);
+assert.equal(estimateFoundryRewards(1,9n,0n).payout,0n);
+console.log('Foundry quantity, dilution, net cycle rewards and unavailable states passed.');

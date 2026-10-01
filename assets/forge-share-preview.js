@@ -105,3 +105,29 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
   render();
   return {render, refresh};
 }
+
+export function estimateFoundryRewards(quantity, mintCount, balance) {
+  if (!Number.isInteger(quantity) || quantity < 1 || quantity > 10 || typeof mintCount !== 'bigint' || mintCount < 0n || typeof balance !== 'bigint' || balance < 0n) return null;
+  const added = BigInt(quantity);
+  return {share:estimateForgeShare(added,mintCount), payout:estimateForgePayout(balance,added,mintCount)};
+}
+
+export function createFoundrySharePreview({root,getQuantity,getPool,getBtcUsd,btcSymbol,formatBtc}) {
+  const panel=document.createElement('div');
+  panel.className='forge-share-preview foundry-share-preview';
+  panel.innerHTML='<span>Estimated cycle share after mint</span><strong class="foundry-estimated-share">Checking…</strong><div class="forge-payout-estimates"><div><span>288-day pool</span><div><strong class="foundry-estimated-payout">Checking…</strong><small class="foundry-estimated-usd">USD reference unavailable</small></div></div></div><p class="foundry-estimate-details"></p><p>Based on the selected quantity divided by the cycle’s NFT count including this mint. Uses current pool funding after the 0.25% settlement incentive; excludes the funding added by your mint. Future mints, funding and USD prices can change the final payout. Each NFT earns in its mint cycle only. Rewards shown are before mint fees and gas.</p>';
+  root.querySelector('.foundry-preview > img').after(panel);
+  function render() {
+    const pool=getPool();
+    const quantity=getQuantity();
+    const result=estimateFoundryRewards(quantity,pool?.mintCount,pool?.balance);
+    panel.querySelector('.foundry-estimated-share').textContent=result?.share ?? 'Unavailable';
+    panel.querySelector('.foundry-estimated-payout').textContent=result ? `≈ ${formatBtc(result.payout)} ${btcSymbol}` : 'Unavailable';
+    const price=getBtcUsd();
+    const usd=result && Number.isFinite(price) && price>0 ? Number(result.payout)/1e8*price : null;
+    panel.querySelector('.foundry-estimated-usd').textContent=usd===null?'USD reference unavailable':`≈ ${usd.toLocaleString(undefined,{style:'currency',currency:'USD',maximumFractionDigits:usd>0&&usd<.01?6:2})} USD`;
+    panel.querySelector('.foundry-estimate-details').textContent=result ? `${quantity} selected · ${pool.mintCount.toLocaleString()} already minted in cycle ${pool.cycle} · closes ${new Date(Number(pool.deadline)*1000).toLocaleString(undefined,{timeZoneName:'short'})}` : 'Waiting for current cycle data…';
+  }
+  render();
+  return {render};
+}
