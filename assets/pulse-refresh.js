@@ -1,7 +1,7 @@
 import './chain-navigation.js?v=live-chains-1';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=burn-layout-4';
+import './pulse-mainnet.js?v=share-1';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
