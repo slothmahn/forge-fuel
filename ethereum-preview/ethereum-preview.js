@@ -60,6 +60,27 @@ function clampFuel() {
   const maxBurn = Math.max(0, Math.min(p * 3, DEMO_BALANCE - p));
   if (val('#burn') > maxBurn) $('#burn').value = maxBurn;
 }
+const detailBlock = document.createElement('section');
+detailBlock.className = 'position-details';
+detailBlock.innerHTML = '<h4>Position details</h4>';
+detailBlock.append($('.preview-breakdown'),$('.timeline-note'));
+$('#forge-form').append(detailBlock);
+const payoutRows = document.createElement('div');
+payoutRows.className = 'estimate-rows';
+$('.demo-share strong').after(payoutRows);
+const scenario = document.createElement('section');
+scenario.className = 'card term-scenario';
+$('.builder-grid').append(scenario);
+function updateEstimates(share, term, foundry = false) {
+  const sampleEthUsd = 2700, sampleBtcUsd = 83000;
+  const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
+  const rows = balances.map(p=>({...p,payout:p.balance*.9975*share}));
+  payoutRows.innerHTML=rows.map(p=>`<div><b>${p.days} Day</b><div><strong>≈ ${fmt(p.payout,p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*p.usd)} USD</small></div></div>`).join('');
+  $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
+  scenario.hidden=foundry;
+  const total=rows.reduce((sum,p)=>sum+p.payout*Math.floor(term/p.days),0);
+  scenario.innerHTML=`<h4>Over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),6)} ETH</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*sampleEthUsd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ ${fmt(total,6)} ETH</strong><small>≈ $${fmt(total*sampleEthUsd)} USD</small></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
+}
 function updatePreview() {
   const { principal, burn, term } = formValues();
   $$('[data-term]').forEach(button => button.classList.toggle('active', Number(button.dataset.term) === term));
@@ -70,7 +91,9 @@ function updatePreview() {
     $('#power-caption').textContent = quantity === 1 ? 'Foundry NFT' : 'Foundry NFTs';
     $('#power-total').textContent = '288-day wBTC reward cycle';
     $('#power-limit').textContent = 'Equal shares within the same mint cycle';
-    $('#demo-share').textContent = 'Equal share · sample';
+    $('#demo-share').textContent = `${(100*quantity/(12+quantity)).toFixed(2)}%`;
+    $('#foundry-form').append(detailBlock);
+    updateEstimates(quantity/(12+quantity),288,true);
     $('#preview-principal').textContent = 'No principal locked';
     $('#preview-duration').textContent = '288-day cycle';
     $('#preview-burn').textContent = `${fmt(quantity * 100000000)} FUEL`;
@@ -80,6 +103,7 @@ function updatePreview() {
     $('#timeline-note').textContent = 'The FUEL burn is permanent. A Foundry NFT participates in its mint cycle, and unclaimed rewards follow the NFT when transferred.';
     return;
   }
+  $('#forge-form').append(detailBlock);
   const durationBonus = principal * (term - 8) / 992;
   const power = principal + durationBonus + burn;
   const multiplier = principal > 0 ? power / principal : 0;
@@ -89,11 +113,12 @@ function updatePreview() {
   $('#power-total').textContent = `${fmt(power, 0)} power`;
   $('#power-limit').textContent = 'Up to 5× your principal';
   $('#demo-share').textContent = `${(100 * power / (450000000 + power)).toFixed(2)}%`;
+  updateEstimates(power/(450000000+power),term);
   $('#preview-principal').textContent = `${fmt(principal)} FUEL`;
-  $('#preview-duration').textContent = `+${fmt(durationBonus, 0)}`;
-  $('#preview-burn').textContent = `+${fmt(burn)}`;
+  $('#preview-duration').textContent = `${fmt(term)} days`;
+  $('#preview-burn').textContent = `${fmt(burn)} FUEL`;
   const labels = $$('.preview-breakdown dt');
-  labels[1].lastChild.textContent = 'Duration bonus'; labels[2].lastChild.textContent = 'Burn bonus';
+  labels[1].lastChild.textContent = 'Term / maturity'; labels[2].lastChild.textContent = 'FUEL burned for extra power';
   $('#timeline-note').textContent = `${fmt(term)}-day term. After maturity, a 7-day grace period comes before 7 days of principal decay.`;
 }
 ['#principal', '#burn'].forEach(id => {
