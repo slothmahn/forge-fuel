@@ -66,3 +66,9 @@ body{padding-top:0;background:#090b0d}.launch-countdown{display:none}.ambient{ba
 .demo-share{padding:17px;border:1px solid #62e6a730;border-radius:12px;text-align:center;margin-bottom:20px}.demo-share span{display:block;color:var(--muted);font-size:12px}.demo-share strong{display:block;color:#62e6a7;font-size:29px;margin:5px 0}.demo-share p{font-size:11px;color:var(--muted);margin:0}
 
 .hero-art .forge-symbol{filter:none}
+
+/* Use Robinhood's centered hero artwork and stationary 9-degree mark rotation. */
+.hero-art{height:290px;margin:0;max-width:none;overflow:visible}
+.hero-art .forge-symbol{width:240px;height:260px;transform:rotate(9deg);transform-origin:center;object-fit:contain}
+@media(max-width:760px){.hero-art{height:230px;margin:16px auto 0}.hero-art .forge-symbol{width:180px;height:195px}}
+@media(max-width:480px){.hero-art{height:225px;margin-top:12px}.hero-art .forge-symbol{width:185px;height:210px}}

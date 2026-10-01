@@ -141,3 +141,9 @@ body .mainnet-preview-toast button,body .activity button{background:#ffffff12;co
 #app.forge-refresh footer .ff-verified strong{font-size:11px;font-weight:600;color:#c6b2d2}
 #app.forge-refresh footer .ff-verified span{display:block;margin-top:4px;color:#a899b4;font-size:11px;line-height:1.65;letter-spacing:normal;font-weight:400}
 @media(max-width:600px){#app.forge-refresh footer{grid-template-columns:minmax(0,1fr);gap:7px;margin-top:28px;padding-top:22px;padding-bottom:28px}#app.forge-refresh footer .contract-footer{grid-template-columns:minmax(0,1fr);gap:12px;padding-top:18px;margin-top:10px}#app.forge-refresh .contract-footer a{padding:14px}#app.forge-refresh .contract-footer a code{font-size:10px}}
+
+/* Match Robinhood's mark axis. Pulse artwork already contains the extra 9-degree tilt. */
+#app.forge-refresh .ff-art{height:290px}
+#app.forge-refresh .ff-art img{width:247px;height:260px;object-fit:contain;transform:none;transform-origin:center}
+@media(max-width:760px){#app.forge-refresh .ff-art{height:230px}#app.forge-refresh .ff-art img{width:185px;height:195px}}
+@media(max-width:480px){#app.forge-refresh .ff-art{height:225px;margin-top:12px}#app.forge-refresh .ff-art img{width:190px;height:210px}}
