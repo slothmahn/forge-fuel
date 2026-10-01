@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {estimateForgeShare, estimateForgePayout, estimateTermPayout, estimateFoundryRewards, readForgePower} from '../../assets/forge-share-preview.js';
+import {estimateEntryFunding, estimateForgeShare, estimateForgePayout, estimateTermPayout, estimateFoundryRewards, readForgePower} from '../../assets/forge-share-preview.js';
 
 assert.equal(estimateForgeShare(100n, 900n), '10.00%');
 assert.equal(estimateForgeShare(100n, 100n), '50.00%');
@@ -47,3 +47,15 @@ assert.equal(estimateFoundryRewards(1,undefined,0n),null);
 assert.equal(estimateFoundryRewards(1,-1n,0n),null);
 assert.equal(estimateFoundryRewards(1,9n,0n).payout,0n);
 console.log('Foundry quantity, dilution, net cycle rewards and unavailable states passed.');
+
+const fee=549008221588729377n;
+const added=estimateEntryFunding(fee,[1312n,1107n,861n]);
+assert.deepEqual(added,[fee*1312n/10000n,fee*1107n/10000n,fee*861n/10000n]);
+assert.equal(estimateEntryFunding(null,[1312n,1107n,861n]),null);
+const base=estimateForgePayout(10000n,100n,900n);
+const funded=estimateForgePayout(10000n+added[0],100n,900n);
+assert(funded>base);
+assert.deepEqual(estimateTermPayout(base,1000,8,funded-base),{cycles:125,amount:base*125n+funded-base});
+assert.deepEqual(estimateTermPayout(base,8,88,funded-base),{cycles:0,amount:0n});
+assert.equal(estimateForgeShare(100n,900n),'10.00%');
+console.log('Entry fee routing and one-time term funding checks passed.');

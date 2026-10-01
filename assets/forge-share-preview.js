@@ -10,10 +10,15 @@ export function estimateForgePayout(balance, proposedPower, existingPower) {
   return balance * 9975n / 10000n * proposedPower / (existingPower + proposedPower);
 }
 
-export function estimateTermPayout(perCycle, termDays, cycleDays) {
+export function estimateTermPayout(perCycle, termDays, cycleDays, entryReward = 0n) {
   if (typeof perCycle !== 'bigint' || perCycle < 0n || !Number.isInteger(termDays) || termDays < 8 || termDays > 1000 || ![8,28,88].includes(cycleDays)) return null;
   const cycles = Math.floor(termDays / cycleDays);
-  return {cycles, amount:perCycle * BigInt(cycles)};
+  return {cycles, amount:perCycle * BigInt(cycles) + (cycles > 0 ? entryReward : 0n)};
+}
+
+export function estimateEntryFunding(fee, allocations) {
+  if (typeof fee !== 'bigint' || fee < 0n || !Array.isArray(allocations) || allocations.length !== 3 || allocations.some(bps => typeof bps !== 'bigint' || bps < 0n || bps > 10000n)) return null;
+  return allocations.map(bps => fee * bps / 10000n);
 }
 
 export async function readForgePower(contract, block) {
@@ -29,10 +34,10 @@ export async function readForgePower(contract, block) {
   return total;
 }
 
-export function createForgeSharePreview({root, getProposedPower, getPosition, getPools = () => [], getNativeUsd = () => null, getTermDays = () => null, nativeSymbol = 'ETH', formatNative = value => String(value)}) {
+export function createForgeSharePreview({root, getProposedPower, getPosition, getPools = () => [], getEntryFunding = () => null, getNativeUsd = () => null, getTermDays = () => null, nativeSymbol = 'ETH', formatNative = value => String(value)}) {
   const panel = document.createElement('div');
   panel.className = 'forge-share-preview';
-  panel.innerHTML = '<span>Estimated pool share after entry</span><strong id="preview-share">Checking…</strong><div class="forge-payout-estimates" aria-label="Estimated payouts from current pool balances"></div><p>Based on this position’s power divided by total current Forge power, including this position. The 8-, 28-, and 88-day pools use power at their deadlines, so final shares can change as positions enter, end, or decay. Payouts use current funding after the 0.25% settlement incentive; future fees, changes in power and USD prices can change the result. Your position must remain eligible at each deadline.</p>';
+  panel.innerHTML = '<span>Estimated pool share after entry</span><strong id="preview-share">Checking…</strong><div class="forge-payout-estimates" aria-label="Estimated payouts from current pool balances"></div><p>Based on this position’s power divided by total current Forge power, including this position. The 8-, 28-, and 88-day pools use power at their deadlines, so final shares can change as positions enter, end, or decay. Payouts include this entry fee’s routed contribution to each current pool, after the 0.25% settlement incentive; the fee adds funding, not power or share percentage; future fees, changes in power and USD prices can change the result. Your position must remain eligible at each deadline.</p>';
   root.querySelector('.preview-power').after(panel);
   const value = panel.querySelector('strong');
   const payouts = panel.querySelector('.forge-payout-estimates');
@@ -45,7 +50,7 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
   const termPanel = document.createElement('section');
   termPanel.className = 'forge-term-estimate';
   termPanel.setAttribute('aria-label','Illustrative rewards over selected term');
-  termPanel.innerHTML = '<h4>Estimated rewards over your selected term</h4><p class="term-assumption">If today’s funding per cycle and your share stayed the same</p><div class="forge-payout-estimates term-rows"></div><div class="term-total"><span>Illustrative total rewards</span><strong></strong><small></small></div><p class="term-note">Assumes every future cycle receives the same funding as today’s current cycle. Counts complete cycles in your term; actual closing dates can change the count. No compounding. Rewards only, before entry fees and gas. This is a scenario, not a forecast.</p>';
+  termPanel.innerHTML = '<h4>Estimated rewards over your selected term</h4><p class="term-assumption">If existing funding per cycle and your share stayed the same</p><div class="forge-payout-estimates term-rows"></div><div class="term-total"><span>Illustrative total rewards</span><strong></strong><small></small></div><p class="term-note">Assumes every future cycle receives the same existing funding as today’s current cycle. Your entry fee is added only once per pool, not repeated in future cycles. Counts complete cycles in your term; actual closing dates can change the count. No compounding. Rewards only, before entry fees and gas. This is a scenario, not a forecast.</p>';
 
   root.querySelector('#preview-fee').parentElement.hidden = true;
   const positionDetails = document.createElement('section');
@@ -76,9 +81,11 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
     try { proposed = getProposedPower(); } catch { proposed = null; }
     value.textContent = typeof proposed !== 'bigint' || proposed <= 0n ? 'Check inputs' : total === null ? status : estimateForgeShare(proposed, total);
     const pools = getPools();
+    const funding = getEntryFunding();
     const price = getNativeUsd();
     rows.forEach((row,index) => {
-      const amount = total === null ? null : estimateForgePayout(pools[index]?.balance, proposed, total);
+      const balance = pools[index]?.balance;
+      const amount = total === null || funding === null || typeof balance !== 'bigint' ? null : estimateForgePayout(balance + funding[index], proposed, total);
       row.amount.textContent = amount === null ? (total === null ? status : 'Unavailable') : `≈ ${formatNative(amount)} ${nativeSymbol}`;
       row.usd.textContent = usdText(amount,price);
     });
@@ -88,7 +95,8 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
     let complete = true;
     termRows.forEach((row,index) => {
       const perCycle = total === null ? null : estimateForgePayout(pools[index]?.balance,proposed,total);
-      const scenario = estimateTermPayout(perCycle,termDays,row.days);
+      const withEntry = total === null || funding === null || typeof pools[index]?.balance !== 'bigint' ? null : estimateForgePayout(pools[index].balance + funding[index],proposed,total);
+      const scenario = withEntry === null || perCycle === null ? null : estimateTermPayout(perCycle,termDays,row.days,withEntry-perCycle);
       row.count.textContent = scenario ? `${scenario.cycles} complete ${scenario.cycles===1?'cycle':'cycles'}` : 'Check term / data';
       row.amount.textContent = scenario ? `≈ ${formatNative(scenario.amount)} ${nativeSymbol}` : 'Unavailable';
       row.usd.textContent = usdText(scenario?.amount ?? null,price);
