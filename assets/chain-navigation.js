@@ -3,7 +3,17 @@ const chains = [{id:4663n,name:'Robinhood Chain',path:'/'},{id:369n,name:'PulseC
 const current = location.pathname.startsWith('/pulsechain/') ? 369n : 4663n;
 function routeChain(value) {
   let target; try { target=chains.find(chain=>chain.id===BigInt(value)); } catch { return false; }
-  if (!target || target.id===current) return false;
+  if (!target) return false;
+  const url=new URL(location.href);
+  const explicitChoice=url.searchParams.get('chain')===String(current);
+  if (target.id===current) {
+    // The wallet has caught up with the manually selected site.
+    if (explicitChoice) {url.searchParams.delete('chain');history.replaceState(history.state,'',url.pathname+url.search+url.hash);}
+    return false;
+  }
+  // Do not bounce back to the wallet's old chain while opening a selected site.
+  // Returning false also lets the connection flow request the selected network.
+  if (explicitChoice) return false;
   const hash=['#start','#pools','#rewards','#positions','#burns'].includes(location.hash)?location.hash:'#start';
   location.replace(target.path+hash);
   return true;
@@ -26,7 +36,7 @@ function addNavigation() {
  const arrow=document.createElement('span'); arrow.textContent='⌄'; arrow.setAttribute('aria-hidden','true'); summary.append(arrow);
  const links=document.createElement('nav'); links.setAttribute('aria-label','Live blockchain sites');
  for (const chain of chains) {
-   const link=document.createElement('a'); link.href=chain.path; link.textContent=chain.name;
+   const link=document.createElement('a'); link.href=chain.path+'?chain='+chain.id; link.textContent=chain.name;
    if(chain.id===current) link.setAttribute('aria-current','page');
    const status=document.createElement('small'); status.textContent='Live site ↗'; link.append(status); links.append(link);
  }

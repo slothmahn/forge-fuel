@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=live-chains-1';
+import './chain-navigation.js?v=chain-choice-2';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './mainnet-white-paper-v1.js?v=share-1';
