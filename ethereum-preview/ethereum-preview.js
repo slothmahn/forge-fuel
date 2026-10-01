@@ -68,7 +68,7 @@ function updatePreview() {
     $('#power-ring').style.setProperty('--power-angle', '288deg');
     $('#power-multiplier').textContent = String(quantity);
     $('#power-caption').textContent = quantity === 1 ? 'Foundry NFT' : 'Foundry NFTs';
-    $('#power-total').textContent = '288-day BTC (TBD) reward cycle';
+    $('#power-total').textContent = '288-day wBTC reward cycle';
     $('#power-limit').textContent = 'Equal shares within the same mint cycle';
     $('#demo-share').textContent = 'Equal share · sample';
     $('#preview-principal').textContent = 'No principal locked';
@@ -127,7 +127,7 @@ $('#foundry-mode').addEventListener('click', () => setMode('foundry'));
 $('#quantity').addEventListener('input', () => { cleanInput($('#quantity'), true); if (val('#quantity') > 10) $('#quantity').value = '10'; updatePreview(); });
 $('#quantity').addEventListener('blur', () => { $('#quantity').value = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); updatePreview(); });
 $('#quantity-max').addEventListener('click', () => { $('#quantity').value = '10'; updatePreview(); });
-$('#foundry-form').addEventListener('submit', event => { event.preventDefault(); const n = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); $('#quantity').value = n; updatePreview(); showModal('Your Foundry mint', `${n} ${n === 1 ? 'NFT' : 'NFTs'} · ${fmt(n * 100000000)} FUEL permanently burned.\n\nThis is a sample of the Foundry flow. Ethereum mint fees, burn requirements and the Bitcoin reward token are pending. This is an illustration of the existing Foundry flow. No transaction has been submitted.`); });
+$('#foundry-form').addEventListener('submit', event => { event.preventDefault(); const n = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); $('#quantity').value = n; updatePreview(); showModal('Your Foundry mint', `${n} ${n === 1 ? 'NFT' : 'NFTs'} · ${fmt(n * 100000000)} FUEL permanently burned.\n\nThis is a sample of the Foundry flow. Ethereum mint fees, burn requirements and swap routes are pending. This is an illustration of the existing Foundry flow. No transaction has been submitted.`); });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
   $('#wallet-label').textContent = walletVisible ? 'Demo wallet' : 'Show demo wallet';
@@ -139,7 +139,7 @@ const pools = [
   {days:8, name:'ETH reward pool', balance:.84, unit:'ETH', elapsed:62, left:'3d 1h left', share:1.25},
   {days:28, name:'ETH reward pool', balance:1.2, unit:'ETH', elapsed:43, left:'15d 23h left', share:.84},
   {days:88, name:'ETH reward pool', balance:2.4, unit:'ETH', elapsed:26, left:'65d 3h left', share:.62},
-  {days:288, name:'Foundry reward pool', balance:.032, unit:'BTC (TBD)', elapsed:18, left:'236d 4h left', share:.8}
+  {days:288, name:'Foundry reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:.8}
 ];
 $('#pool-grid').innerHTML = pools.map(p => `<article class="card pool-card"><div class="pool-top"><span class="pool-number"><b>${p.days}</b> DAY</span><span class="sample-pill">SAMPLE CYCLE</span></div><div class="pool-amount">${fmt(p.balance, 8)}<small>${p.unit}</small></div><h3>${p.name}</h3><div class="progress-label"><span>${p.elapsed}% of cycle elapsed</span><b>${p.left}</b></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-detail"><div><span>Your estimated share</span><strong>${p.share}%</strong></div><div><span>Estimated payout</span><strong>${fmt(p.balance * .9975 * p.share / 100, p.unit === 'ETH' ? 6 : 8)} ${p.unit}</strong></div></div></article>`).join('');
 const burns = [
