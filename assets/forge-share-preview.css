@@ -15,3 +15,5 @@
 @media(min-width:761px){#app.forge-refresh #forge-build{align-items:stretch}}
 
 .forge-share-preview>p{text-align:left}
+
+.forge-position-details>.forge-term-estimate{margin:16px 0 20px}.forge-position-details>.forge-term-estimate h4{font-size:18px;color:var(--ff-accent,#b5ff4d)}

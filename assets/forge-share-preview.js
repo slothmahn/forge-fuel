@@ -45,15 +45,15 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
   const termPanel = document.createElement('section');
   termPanel.className = 'forge-term-estimate';
   termPanel.setAttribute('aria-label','Illustrative rewards over selected term');
-  termPanel.innerHTML = '<h4>Over your selected term</h4><p class="term-assumption">If today’s funding per cycle and your share stayed the same</p><div class="forge-payout-estimates term-rows"></div><div class="term-total"><span>Illustrative total rewards</span><strong></strong><small></small></div><p class="term-note">Assumes every future cycle receives the same funding as today’s current cycle. Counts complete cycles in your term; actual closing dates can change the count. No compounding. Rewards only, before entry fees and gas. This is a scenario, not a forecast.</p>';
-  root.querySelector('#forge-build').append(termPanel);
+  termPanel.innerHTML = '<h4>Estimated rewards over your selected term</h4><p class="term-assumption">If today’s funding per cycle and your share stayed the same</p><div class="forge-payout-estimates term-rows"></div><div class="term-total"><span>Illustrative total rewards</span><strong></strong><small></small></div><p class="term-note">Assumes every future cycle receives the same funding as today’s current cycle. Counts complete cycles in your term; actual closing dates can change the count. No compounding. Rewards only, before entry fees and gas. This is a scenario, not a forecast.</p>';
+
   root.querySelector('#preview-fee').parentElement.hidden = true;
   const positionDetails = document.createElement('section');
   positionDetails.className = 'forge-position-details';
   positionDetails.setAttribute('aria-label','Position details before confirmation');
   const detailsHeading = document.createElement('h4');
   detailsHeading.textContent = 'Position details';
-  positionDetails.append(detailsHeading,root.querySelector('.build-preview > .preview-rows'));
+  positionDetails.append(detailsHeading,termPanel,root.querySelector('.build-preview > .preview-rows'));
   const detailsNote = root.querySelector('.build-preview > .hint');
   if (detailsNote) positionDetails.append(detailsNote);
   root.querySelector('#forge-form').append(positionDetails);
@@ -83,7 +83,7 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
       row.usd.textContent = usdText(amount,price);
     });
     const termDays = getTermDays();
-    termHeading.textContent = Number.isInteger(termDays) && termDays >= 8 && termDays <= 1000 ? `Over your ${termDays.toLocaleString()}-day term` : 'Over your selected term';
+    termHeading.textContent = Number.isInteger(termDays) && termDays >= 8 && termDays <= 1000 ? `Estimated rewards over your ${termDays.toLocaleString()}-day term` : 'Estimated rewards over your selected term';
     let combined = 0n;
     let complete = true;
     termRows.forEach((row,index) => {

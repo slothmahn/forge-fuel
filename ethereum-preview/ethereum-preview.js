@@ -70,7 +70,7 @@ payoutRows.className = 'estimate-rows';
 $('.demo-share strong').after(payoutRows);
 const scenario = document.createElement('section');
 scenario.className = 'card term-scenario';
-$('.builder-grid').append(scenario);
+detailBlock.querySelector('h4').after(scenario);
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 2700, sampleBtcUsd = 83000;
   const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
@@ -79,7 +79,7 @@ function updateEstimates(share, term, foundry = false) {
   $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
   scenario.hidden=foundry;
   const total=rows.reduce((sum,p)=>sum+p.payout*Math.floor(term/p.days),0);
-  scenario.innerHTML=`<h4>Over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),6)} ETH</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*sampleEthUsd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ ${fmt(total,6)} ETH</strong><small>≈ $${fmt(total*sampleEthUsd)} USD</small></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
+  scenario.innerHTML=`<h4>Estimated rewards over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),6)} ETH</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*sampleEthUsd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ ${fmt(total,6)} ETH</strong><small>≈ $${fmt(total*sampleEthUsd)} USD</small></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
 }
 function updatePreview() {
   const { principal, burn, term } = formValues();
