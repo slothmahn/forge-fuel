@@ -13,3 +13,5 @@
 #app.forge-refresh #forge-fee{color:var(--ff-accent,#b5ff4d);font-weight:700;font-variant-numeric:tabular-nums}#app.forge-refresh .forge-position-details .preview-rows>[hidden]{display:none}
 
 @media(min-width:761px){#app.forge-refresh #forge-build{align-items:stretch}}
+
+.forge-share-preview>p{text-align:left}
