@@ -64,13 +64,13 @@ const detailBlock = document.createElement('section');
 detailBlock.className = 'position-details';
 detailBlock.innerHTML = '<h4>Position details</h4>';
 detailBlock.append($('.preview-breakdown'),$('.timeline-note'));
-$('#forge-form').append(detailBlock);
+$('.power-card').append(detailBlock);
 const payoutRows = document.createElement('div');
 payoutRows.className = 'estimate-rows';
 $('.demo-share strong').after(payoutRows);
 const scenario = document.createElement('section');
 scenario.className = 'card term-scenario';
-detailBlock.querySelector('h4').after(scenario);
+$('#forge-form').append(scenario);
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 2700, sampleBtcUsd = 83000;
   const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
@@ -92,7 +92,7 @@ function updatePreview() {
     $('#power-total').textContent = '288-day wBTC reward cycle';
     $('#power-limit').textContent = 'Equal shares within the same mint cycle';
     $('#demo-share').textContent = `${(100*quantity/(12+quantity)).toFixed(2)}%`;
-    $('#foundry-form').append(detailBlock);
+    $('.power-card').append(detailBlock);
     updateEstimates(quantity/(12+quantity),288,true);
     $('#preview-principal').textContent = 'No principal locked';
     $('#preview-duration').textContent = '288-day cycle';
@@ -103,7 +103,7 @@ function updatePreview() {
     $('#timeline-note').textContent = 'The FUEL burn is permanent. A Foundry NFT participates in its mint cycle, and unclaimed rewards follow the NFT when transferred.';
     return;
   }
-  $('#forge-form').append(detailBlock);
+  $('.power-card').append(detailBlock);
   const durationBonus = principal * (term - 8) / 992;
   const power = principal + durationBonus + burn;
   const multiplier = principal > 0 ? power / principal : 0;

@@ -58,9 +58,7 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
   positionDetails.setAttribute('aria-label','Position details before confirmation');
   const detailsHeading = document.createElement('h4');
   detailsHeading.textContent = 'Position details';
-  positionDetails.append(detailsHeading,termPanel,root.querySelector('.build-preview > .preview-rows'));
-  const detailsNote = root.querySelector('.build-preview > .hint');
-  if (detailsNote) positionDetails.append(detailsNote);
+  positionDetails.append(detailsHeading,termPanel);
   root.querySelector('#forge-form').append(positionDetails);
   const termHeading = termPanel.querySelector('h4');
   const termRows = [8,28,88].map(days => {
