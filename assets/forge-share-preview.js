@@ -46,7 +46,16 @@ export function createForgeSharePreview({root, getProposedPower, getPosition, ge
   termPanel.className = 'forge-term-estimate';
   termPanel.setAttribute('aria-label','Illustrative rewards over selected term');
   termPanel.innerHTML = '<h4>Over your selected term</h4><p class="term-assumption">If today’s funding per cycle and your share stayed the same</p><div class="forge-payout-estimates term-rows"></div><div class="term-total"><span>Illustrative total rewards</span><strong></strong><small></small></div><p class="term-note">Assumes every future cycle receives the same funding as today’s current cycle. Counts complete cycles in your term; actual closing dates can change the count. No compounding. Rewards only, before entry fees and gas. This is a scenario, not a forecast.</p>';
-  panel.after(termPanel);
+  root.querySelector('#forge-build').append(termPanel);
+  const positionDetails = document.createElement('section');
+  positionDetails.className = 'forge-position-details';
+  positionDetails.setAttribute('aria-label','Position details before confirmation');
+  const detailsHeading = document.createElement('h4');
+  detailsHeading.textContent = 'Position details';
+  positionDetails.append(detailsHeading,root.querySelector('.build-preview > .preview-rows'));
+  const detailsNote = root.querySelector('.build-preview > .hint');
+  if (detailsNote) positionDetails.append(detailsNote);
+  root.querySelector('#forge-form').append(positionDetails);
   const termHeading = termPanel.querySelector('h4');
   const termRows = [8,28,88].map(days => {
     const row = document.createElement('div');
