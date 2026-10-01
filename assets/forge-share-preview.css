@@ -11,3 +11,5 @@
 #app.forge-refresh #forge-build{align-items:start}#forge-build>.forge-term-estimate{grid-column:1/-1;margin:0}#app.forge-refresh .forge-position-details{margin-top:24px;padding-top:20px;border-top:1px solid var(--ff-line,#ffffff22)}.forge-position-details h4{font-size:15px;margin:0 0 6px;line-height:1.4}#app.forge-refresh .forge-position-details>.preview-rows{margin-top:0}#app.forge-refresh .forge-position-details>.hint{font-size:11px;line-height:1.6;margin:12px 0 0}#app.forge-refresh .build-preview>.forge-share-preview{margin-bottom:0}@media(min-width:761px){#forge-build>.forge-term-estimate .term-rows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px}#forge-build>.forge-term-estimate .term-rows>div{display:block}#forge-build>.forge-term-estimate .term-rows>div>div{text-align:left;margin-top:10px}#forge-build>.forge-term-estimate .term-total{margin-top:8px}}
 
 #app.forge-refresh #forge-fee{color:var(--ff-accent,#b5ff4d);font-weight:700;font-variant-numeric:tabular-nums}#app.forge-refresh .forge-position-details .preview-rows>[hidden]{display:none}
+
+@media(min-width:761px){#app.forge-refresh #forge-build{align-items:stretch}}
