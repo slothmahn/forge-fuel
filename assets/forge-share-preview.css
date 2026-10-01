@@ -19,3 +19,5 @@
 .forge-position-details>.forge-term-estimate{margin:16px 0 20px}.forge-position-details>.forge-term-estimate h4{font-size:18px;color:var(--ff-accent,#b5ff4d)}
 
 #app.forge-refresh .build-preview .preview-rows>[hidden]{display:none}
+
+#app.forge-refresh .forge-term-estimate p,#app.forge-refresh .forge-share-preview>p{max-width:none;width:100%;text-align:left;white-space:normal;overflow-wrap:break-word}
