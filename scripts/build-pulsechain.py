@@ -99,7 +99,7 @@ if([`localhost`,`127.0.0.1`].includes(location.hostname)&&new URLSearchParams(lo
 # Must create new forms before asynchronous initialization starts; existing form bindings are safe.
 patch(')),gf(),Af(),setInterval', '));'+extra+'gf(),Af(),setInterval')
 (root/'assets/pulse-mainnet.js').write_text(head+app)
-r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=layout-5','./pulse-mainnet.js?v=layout-5').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
+r=(root/'assets/forge-refresh.js').read_text().replace('./mainnet-white-paper-v1.js?v=fee-6','./pulse-mainnet.js?v=fee-6').replace('Robinhood Chain','PulseChain').replace('$ETH','$PLS').replace('$cbBTC','$wBTC').replace('./images/forge-f-isolated.png','./pulsechain-preview/forge-f-approved.png')
 r=r.replace('BUILT AROUND FUEL.','A NEW CHAIN. THE SAME FORGE.').replace('◇ $PLS','<i class="pulse-pls-icon"></i> $PLS').replace('₿ $wBTC','<b class="pulse-btc-icon">₿</b> $wBTC')
 r+='\n'+r'''
 // The root asset base must not send tab links back to the Robinhood home page.
@@ -130,7 +130,7 @@ for source,target in [('mainnet-HhRsVR2f.css','pulse-base.css'),('forge-refresh.
     content=(root/'assets'/source).read_text()
     content=re.sub(r'#([0-9a-fA-F]{8}|[0-9a-fA-F]{6}|[0-9a-fA-F]{4}|[0-9a-fA-F]{3})(?![0-9a-fA-F])',pulse_color,content)
     (root/'assets'/target).write_text('/* Generated PulseChain controls; see build-pulsechain.py. */\n'+content)
-html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('./assets/mainnet-HhRsVR2f.css','./assets/pulse-base.css?v=pulse-theme-6').replace('./assets/forge-refresh.css?v=robinhood-polish-1','./assets/pulse-components.css?v=pulse-theme-6').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=layout-5','./assets/pulse-refresh.js?v=layout-5').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=hero-align-1">\n  </head>')
+html=(root/'index.html').read_text().replace('<head>','<head>\n    <base href="../">').replace('./assets/mainnet-HhRsVR2f.css','./assets/pulse-base.css?v=pulse-theme-6').replace('./assets/forge-refresh.css?v=robinhood-polish-1','./assets/pulse-components.css?v=pulse-theme-6').replace('<title>Fuel Forge</title>','<title>Fuel Forge · PulseChain</title>').replace('./assets/forge-refresh.js?v=fee-6','./assets/pulse-refresh.js?v=fee-6').replace('    <link rel="stylesheet" href="./assets/robinhood-polish.css?v=3">','').replace('</head>','<link rel="stylesheet" href="./assets/pulsechain-live.css?v=hero-align-1">\n  </head>')
 (root/'pulsechain/index.html').write_text(html)
 manifest=root/'pulsechain-deployment.json'
 if not manifest.exists():manifest.write_text(json.dumps({'status':'pending','chainId':369,'owner':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','development':'0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9','deploymentBlock':None,'launchTime':1790798400,'contracts':{}},indent=2)+'\n')
