@@ -3,3 +3,5 @@
 .forge-share-preview>strong{display:block;margin:8px 0;font-size:clamp(25px,4vw,34px);line-height:1.2;color:var(--ff-accent,#b5ff4d);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .forge-share-preview>p{margin:12px 0 0;font-size:13px;line-height:1.6;color:var(--ff-muted,#aabbab)}
 @media(max-width:600px){.forge-share-preview{padding:18px 14px}.forge-share-preview>p{font-size:13px}}
+
+.forge-payout-estimates{margin:16px 0 0;text-align:left}.forge-payout-estimates>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid color-mix(in srgb,var(--ff-accent,#b5ff4d) 18%,transparent)}.forge-payout-estimates>div>span{font-size:13px;font-weight:600;white-space:nowrap}.forge-payout-estimates>div>div{text-align:right;min-width:0}.forge-payout-estimates strong{display:block;font-size:14px;line-height:1.5;overflow-wrap:anywhere}.forge-payout-estimates small{display:block;font-size:12px;line-height:1.5;color:var(--ff-accent,#b5ff4d)}

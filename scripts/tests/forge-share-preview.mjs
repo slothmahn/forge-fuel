@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {estimateForgeShare, readForgePower} from '../../assets/forge-share-preview.js';
+import {estimateForgeShare, estimateForgePayout, readForgePower} from '../../assets/forge-share-preview.js';
 
 assert.equal(estimateForgeShare(100n, 900n), '10.00%');
 assert.equal(estimateForgeShare(100n, 100n), '50.00%');
@@ -21,3 +21,12 @@ assert.equal(await readForgePower(contract, block), 1000n);
 await assert.rejects(() => readForgePower({...contract, powerAt: async () => {throw Error('RPC failed');}}, block));
 assert.equal(await readForgePower({...contract, nextTokenId: async () => 1n}, block), 0n);
 console.log('Forge share calculations and same-block read checks passed.');
+
+// Payouts use the proposed share including the new position and net settlement funding.
+assert.equal(estimateForgePayout(10000n,100n,900n),997n);
+assert.equal(estimateForgePayout(10000n,100n,0n),9975n);
+assert.equal(estimateForgePayout(0n,100n,900n),0n);
+assert.equal(estimateForgePayout(undefined,100n,900n),null);
+assert.equal(estimateForgePayout(10000n,0n,900n),null);
+assert.equal(estimateForgePayout(-1n,100n,900n),null);
+console.log('Current-pool payout calculations, settlement deduction and unavailable states passed.');
