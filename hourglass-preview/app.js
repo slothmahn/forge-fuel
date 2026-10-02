@@ -93,6 +93,26 @@ $('review').onclick = () => {
   const q = quote(), stake = document.querySelector('[name=destination]:checked').value === 'stake';
   show('Your sample deposit', `${fmt(eth)} ETH${paired ? ' + ' + fmt(fuel) + ' FUEL' : ''} → ${fmt(q.gross)} estimated LP receipts.\n\n${stake ? `Staking entry fee: ${fmt(q.fee)} LP — ${fmt(q.stakers)} to eligible stakers and ${fmt(q.dev)} to development.\n\nYou receive ${fmt(q.net)} staked receipts. A separate 10% fee applies when unstaking.` : `You receive ${fmt(q.net)} wallet receipts. No staking entry fee and no protocol redemption fee.`}\n\nCurrent-price spot estimate for the prototype full-range vault, not an executable zap quote. Swap price impact, DEX fees and gas are excluded. Unused paired assets are refunded.`);
 };
+const fuelAmount = n => new Intl.NumberFormat('en-US', {maximumFractionDigits:2}).format(n);
+const ethAmount = n => new Intl.NumberFormat('en-US', {maximumSignificantDigits:6}).format(n);
+function compoundUpdate() {
+  const state = $('compound-scenario').value;
+  const backing = units => marketReady ? `≈ ${fuelAmount(units * sample.fuelPerReceipt)} FUEL + ${ethAmount(units * sample.ethPerReceipt)} ETH equivalent
+≈ ${usd(receiptValue(units))} USD` : 'Current backing unavailable';
+  $('compound-added-assets').textContent = backing(2);
+  $('compound-reward-assets').textContent = backing(1);
+  $('compound-protocol-assets').textContent = backing(1);
+  $('compound-total-assets').textContent = backing(sample.staked + sample.wallet + sample.rewards + 3);
+  $('compound-available').textContent = marketReady ? `${fuelAmount((state === 'fuel' ? 3 : 2) * sample.fuelPerReceipt)} FUEL
+${ethAmount((state === 'eth' ? 3 : 2) * sample.ethPerReceipt)} WETH` : 'Unavailable';
+  $('compound-used').textContent = marketReady ? `${fuelAmount(2 * sample.fuelPerReceipt)} FUEL
+${ethAmount(2 * sample.ethPerReceipt)} WETH` : 'Unavailable';
+  $('compound-unmatched').textContent = !marketReady ? 'Unavailable' : state === 'balanced' ? '0 FUEL + 0 WETH · fully matched' : state === 'fuel' ? `${fuelAmount(sample.fuelPerReceipt)} FUEL + 0 WETH
+≈ ${usd(sample.fuelPerReceipt * sample.fuelUsd)} USD waiting` : `0 FUEL + ${ethAmount(sample.ethPerReceipt)} WETH
+≈ ${usd(sample.ethPerReceipt * sample.ethUsd)} USD waiting`;
+  $('compound-action').disabled = !marketReady;
+}
+$('compound-scenario').onchange = compoundUpdate;
 function walletUpdate() {
   const held = sample.staked + sample.wallet, users = held + sample.rewards;
   $('total-demo').textContent = fmt(users + 1);
@@ -104,6 +124,7 @@ function walletUpdate() {
   $('user-demo').textContent = fmt(users);
   $('demo-total-note').textContent = `${fmt(held)} held + ${fmt(sample.rewards)} reward units`;
   $('compound-total').textContent = `${fmt(users + 3)} LP`;
+  compoundUpdate();
   document.querySelector('.liquidity-bar span').style.width = `${users / (users + 1) * 100}%`;
   $('wallet').querySelector('span').textContent = demo ? 'Demo wallet active' : 'Try demo wallet';
   $('wallet').setAttribute('aria-pressed', String(demo));
@@ -170,7 +191,7 @@ $('exit').onclick = () => {
   else show('Your sample unstake', `Unstake ${fmt(q.gross)} receipts.\n\nExit fee: ${fmt(q.fee)} LP — ${fmt(q.stakers)} to eligible stakers and ${fmt(q.dev)} to development.\n\n${fmt(q.net)} net receipts are redeemed for an illustrative ${fmt(q.net * sample.fuelPerReceipt)} FUEL + ${fmt(q.net * sample.ethPerReceipt)} native ETH in the same transaction. No extra redemption fee.\n\nEarned rewards stay in Claim Rewards for a separate claim, even after a full unstake. This demo does not change sample balances.`);
 };
 $('claim').onclick = () => show('Your sample reward claim', `${fmt(sample.rewards)} sample reward receipts → ${fmt(sample.rewards * sample.fuelPerReceipt)} FUEL + ${fmt(sample.rewards * sample.ethPerReceipt)} native ETH. Estimated backing: ${usd(receiptValue(sample.rewards))} USD at current prices. WETH is automatically unwrapped. No protocol claim or redemption fee; gas still applies. Sample balances remain unchanged.`);
-$('compound-action').onclick = () => show('Your sample compound', `2 new liquidity units: 1 issues reward receipts for eligible stakers, and 1 is retained as protocol-owned liquidity.\n\nTotal liquidity would rise from ${fmt(sample.staked + sample.wallet + sample.rewards + 1)} to ${fmt(sample.staked + sample.wallet + sample.rewards + 3)}. Unmatched trading fees carry forward. No balancing swaps are made. This demo does not change sample balances.`);
+$('compound-action').onclick = () => show('Your sample compound', `2 new liquidity units: 1 issues reward receipts for eligible stakers, and 1 is retained as protocol-owned liquidity.\n\nTotal liquidity would rise from ${fmt(sample.staked + sample.wallet + sample.rewards + 1)} to ${fmt(sample.staked + sample.wallet + sample.rewards + 3)}. Unmatched fees after this example: ${$('compound-unmatched').textContent}. No balancing swaps are made. This demo does not change sample balances.`);
 $('how-it-works').onclick = () => show('Inside the Furnace', '1. Add ETH, or FUEL + ETH, to the shared full-range V3 vault. Existing position NFTs are not accepted.\n\n2. Receive transferable LP receipts. Hold them, or stake them to participate in rewards. Staking entry and exit each take 10%: 7% for eligible stakers and 3% for development. If none are eligible, the reward portion goes to the protocol reserve.\n\n3. Unstake and redeem principal for FUEL + native ETH in one transaction. Accrued rewards remain separately claimable, even after a full exit. Claim Rewards also redeems reward receipts for FUEL + ETH. Wallet receipt redemption remains available. No extra claim or redemption fee. Outputs change with pool price; gas still applies.');
 document.querySelectorAll('.close').forEach(button => button.onclick = () => $('modal').close());
 update(); withdrawalMode(false); walletUpdate();
