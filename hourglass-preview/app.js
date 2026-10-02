@@ -174,6 +174,7 @@ function exitUpdate() {
   $('redeem-eth').textContent = valid ? `${ethAmount(q.net * sample.ethPerReceipt)} ETH` : '— ETH';
   $('withdraw-usd').textContent = valid ? `Estimated returned assets: ≈ ${usd(receiptValue(q.net))} USD · ${redeem ? 'no redemption fee' : 'after exit fee'} · current prices` : 'USD estimate unavailable';
   $('exit').disabled = !demo || !valid;
+  $('withdraw-max').disabled = !demo || max <= 0;
   return q;
 }
 function withdrawalMode(isRedeem) {
@@ -181,6 +182,7 @@ function withdrawalMode(isRedeem) {
   $('unstake-tab').setAttribute('aria-pressed', String(!redeem));
   $('redeem-tab').setAttribute('aria-pressed', String(redeem));
   $('withdraw-label').textContent = redeem ? 'Wallet receipts to redeem' : 'Receipts to unstake';
+  $('withdraw-max').setAttribute('aria-label', redeem ? 'Use maximum wallet receipts' : 'Use maximum staked receipts');
   $('withdraw').max = redeem ? sample.wallet : sample.staked;
   $('withdraw').value = redeem ? sample.wallet : sample.staked;
   $('available-line').textContent = `Demo balance: ${redeem ? fmt(sample.wallet) + ' wallet' : fmt(sample.staked) + ' staked'} LP`;
@@ -197,6 +199,11 @@ function withdrawalMode(isRedeem) {
 $('unstake-tab').onclick = () => withdrawalMode(false);
 $('redeem-tab').onclick = () => withdrawalMode(true);
 $('withdraw').addEventListener('input', exitUpdate);
+$('withdraw-max').onclick = () => {
+  // Fill the available balance, never the rounded display amount.
+  $('withdraw').value = String(redeem ? sample.wallet : sample.staked);
+  exitUpdate();
+};
 $('exit').onclick = () => {
   const q = exitUpdate();
   if (redeem) show('Your sample redemption', `Redeem ${fmt(q.gross)} wallet receipts for an illustrative ${fmt(q.net * sample.fuelPerReceipt)} FUEL + ${ethAmount(q.net * sample.ethPerReceipt)} ETH.\n\nProtocol redemption fee: 0%. The WETH portion is automatically unwrapped into native ETH. Gas still applies.\n\nReal outputs depend on pool price and your minimum amounts. This demo does not change sample balances.`);

@@ -47,3 +47,5 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 .liquidity-art .art-asset{left:0;top:0;right:auto;offset-path:ellipse(34% 30% at 50% 42%);offset-anchor:50% 50%;offset-rotate:0deg;animation:furnace-token-orbit 36s linear infinite;white-space:nowrap}.liquidity-art .asset-fuel{animation-delay:-18s;offset-distance:50%}.liquidity-art .asset-eth{offset-distance:0%}
 @keyframes furnace-token-orbit{from{offset-distance:0%}to{offset-distance:100%}}
 @media(prefers-reduced-motion:reduce){.liquidity-art .art-asset{animation:none}}
+
+.amount-field .amount-max{flex-shrink:0;border:1px solid #ffab5545;background:#ffab5510;color:var(--mint);font-size:11px;font-weight:750;letter-spacing:.04em;border-radius:7px;padding:9px 10px;margin-left:10px}.amount-field .amount-max:hover:not(:disabled){background:#ffab5524}.withdrawal-card .amount-field input{min-width:0}.withdrawal-card .amount-field .input-token{position:static;flex-shrink:0}
