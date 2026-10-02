@@ -52,3 +52,6 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* Forged steel underline with ember edges and flame-shaped points. */
 .brand{position:relative;padding-bottom:15px}.brand::after{content:"";position:absolute;left:1%;bottom:18px;width:98%;height:24px;background:url("assets/furnace-underline.svg") center/100% 100% no-repeat;pointer-events:none}@media(max-width:440px){.brand{padding-bottom:12px}.brand::after{height:18px;bottom:12px}}
+
+/* Match the exact orientation used by the live Robinhood Forge hero. */
+.fuel-icon img,.pair-fuel img{transform:rotate(9deg)}
