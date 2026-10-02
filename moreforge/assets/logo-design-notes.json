@@ -1,0 +1,11 @@
+{
+  "method": "Built-in image_gen",
+  "wordmark": {
+    "asset": "more-forge-metal-wordmark.png",
+    "prompt": "MORE FORGE in one horizontal line matching the Fuel Furnace metallic wordmark; hammered silver titanium, charcoal depth, pointed angular lettering, red-orange-yellow edge lighting and a flowing flame underline below the letters; transparent background."
+  },
+  "emblem": {
+    "asset": "more-forge-metal-emblem.png",
+    "prompt": "Single M matching Fuel Forge F and original MORE brush-lettering: sharp blade terminals, jagged slashes, cracked dark steel, silver bevels, red-orange embers and gold rim glow, transparent background; no frame or detached triangle."
+  }
+}
