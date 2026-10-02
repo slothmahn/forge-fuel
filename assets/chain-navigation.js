@@ -41,6 +41,17 @@ function addNavigation() {
    const status=document.createElement('small'); status.textContent='Live site ↗'; link.append(status); links.append(link);
  }
  menu.append(links);
+ // Header controls wrap onto different rows on phones. Keep the open menu
+ // within the viewport regardless of where the chain button ends up.
+ function fitNavigation() {
+   menu.style.setProperty('--forge-menu-shift','0px');
+   if (!menu.open) return;
+   const bounds=links.getBoundingClientRect(),margin=16;
+   const shift=Math.max(margin-bounds.left,Math.min(0,window.innerWidth-margin-bounds.right));
+   menu.style.setProperty('--forge-menu-shift',shift+'px');
+ }
+ menu.addEventListener('toggle',()=>requestAnimationFrame(fitNavigation));
+ window.addEventListener('resize',fitNavigation);
  document.addEventListener('click',event=>{if(!menu.contains(event.target)) menu.open=false;});
  document.addEventListener('keydown',event=>{if(event.key==='Escape') menu.open=false;});
 }

@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=companion-more-40';
+import './chain-navigation.js?v=chain-dropdown-43';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './pulse-mainnet.js?v=blended-markets-16';
