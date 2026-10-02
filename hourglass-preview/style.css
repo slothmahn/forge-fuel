@@ -50,8 +50,8 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 .amount-field .amount-max{flex-shrink:0;border:1px solid #ffab5545;background:#ffab5510;color:var(--mint);font-size:11px;font-weight:750;letter-spacing:.04em;border-radius:7px;padding:9px 10px;margin-left:10px}.amount-field .amount-max:hover:not(:disabled){background:#ffab5524}.withdrawal-card .amount-field input{min-width:0}.withdrawal-card .amount-field .input-token{position:static;flex-shrink:0}
 
-/* Forged steel underline with ember edges and flame-shaped points. */
-.brand{position:relative;padding-bottom:15px}.brand::after{content:"";position:absolute;left:1%;bottom:18px;width:98%;height:24px;background:url("assets/furnace-underline.svg") center/100% 100% no-repeat;pointer-events:none}@media(max-width:440px){.brand{padding-bottom:12px}.brand::after{height:18px;bottom:12px}}
+/* Flowing flame underline with orange tongues and a yellow hot core. */
+.brand{position:relative;padding-bottom:15px}.brand::after{content:"";position:absolute;left:1%;bottom:18px;width:98%;height:24px;background:url("assets/furnace-underline.svg?v=flame-21") center/100% 100% no-repeat;pointer-events:none}@media(max-width:440px){.brand{padding-bottom:12px}.brand::after{height:18px;bottom:12px}}
 
 /* Match the exact orientation used by the live Robinhood Forge hero. */
 .fuel-icon img,.pair-fuel img{transform:rotate(9deg)}
