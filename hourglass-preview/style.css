@@ -58,3 +58,6 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* One shared ellipse defines the drawn track and badge motion at every size. */
 .liquidity-art{--orbit-rx:34%;--orbit-ry:30%;--orbit-x:50%;--orbit-y:42%}.liquidity-art .orbit-one{left:calc(var(--orbit-x) - var(--orbit-rx));top:calc(var(--orbit-y) - var(--orbit-ry));width:calc(var(--orbit-rx) * 2);height:calc(var(--orbit-ry) * 2);transform:none;border-color:#ffab552b}.liquidity-art .orbit-two{left:10%;top:4.5%;width:80%;height:75%;transform:none;border-color:#ffab550e}.liquidity-art .art-asset{z-index:3}
+
+/* User-approved F artwork: preserve its supplied orientation and glow. */
+.fuel-icon,.pair-symbols>.pair-fuel{background:#000;overflow:hidden}.fuel-icon img,.pair-fuel img{transform:none;object-fit:contain}
