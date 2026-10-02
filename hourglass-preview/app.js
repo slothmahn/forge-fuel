@@ -96,6 +96,11 @@ $('review').onclick = () => {
 function walletUpdate() {
   const held = sample.staked + sample.wallet, users = held + sample.rewards;
   $('total-demo').textContent = fmt(users + 1);
+  [['total', users + 1], ['user', users], ['protocol', 1]].forEach(([prefix, units]) => {
+    $(prefix + '-fuel').textContent = marketReady ? `≈ ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(units * sample.fuelPerReceipt)} FUEL` : '— FUEL';
+    $(prefix + '-eth').textContent = marketReady ? `≈ ${new Intl.NumberFormat('en-US', { maximumSignificantDigits: 6 }).format(units * sample.ethPerReceipt)} ETH equivalent` : '— ETH equivalent';
+    $(prefix + '-usd').textContent = marketReady ? `≈ ${usd(receiptValue(units))} USD · current prices` : 'Asset estimate unavailable';
+  });
   $('user-demo').textContent = fmt(users);
   $('demo-total-note').textContent = `${fmt(held)} held + ${fmt(sample.rewards)} reward units`;
   $('compound-total').textContent = `${fmt(users + 3)} LP`;

@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#090b0d">
   <meta name="description" content="Explore Fuel Furnace: create full-range FUEL / ETH liquidity, hold or stake LP receipts, and redeem for FUEL + ETH. Interactive design preview.">
   <title>Fuel Furnace — Liquidity, put to work.</title>
-  <link rel="stylesheet" href="style.css?v=furnace-live-prices-6">
+  <link rel="stylesheet" href="style.css?v=furnace-asset-totals-7">
 </head>
 <body>
 <svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -37,9 +37,10 @@
   </section>
   <div class="field-note"><span id="market-status" role="status">Loading current pool data…</span> <button id="refresh-market" class="quiet-button" type="button">Refresh prices</button></div><div class="market-row"><a href="https://dexscreener.com/robinhood/0xFF40c99525ffA6b6cf79ecbE370eF7C887D68F69" target="_blank" rel="noopener"><span class="pair-symbols"><span>F</span><svg aria-hidden="true"><use href="#i-eth"/></svg></span><b>FUEL / WETH</b><span>View pool on DexScreener</span><svg class="out-icon"><use href="#i-out"/></svg></a><span class="market-note">Full-range liquidity <span>•</span> ERC-20 receipts</span></div>
   <section class="totals" aria-label="Sample contract liquidity">
-    <div class="total-primary"><div class="metric-label">Total liquidity held <span class="sample-tag">SAMPLE</span></div><div class="metric-value"><span id="total-demo">1,261</span> <span>LP units</span></div><div class="liquidity-bar" aria-hidden="true"><span></span></div></div>
-    <div><div class="metric-label"><i class="metric-dot mint"></i>User-backed liquidity</div><div class="metric-value"><span id="user-demo">1,260</span> <span>LP units</span></div><p><span id="demo-total-note">1,250 held + 10 reward units</span></p></div>
-    <div><div class="metric-label"><i class="metric-dot silver"></i>Protocol-owned liquidity</div><div class="metric-value">1 <span>LP unit</span></div><p>Retained by the protocol</p></div>
+    <div class="total-primary"><div class="metric-label">Assets backing vault liquidity <span class="sample-tag">SIMULATED</span></div><div class="asset-totals"><strong id="total-fuel">— FUEL</strong><strong id="total-eth">— ETH equivalent</strong><span id="total-usd">Loading current prices…</span></div><p class="lp-secondary"><span id="total-demo">1,261</span> LP units</p><div class="liquidity-bar" aria-hidden="true"><span></span></div></div>
+    <div><div class="metric-label"><i class="metric-dot mint"></i>User-backed liquidity</div><div class="asset-totals asset-split"><strong id="user-fuel">— FUEL</strong><strong id="user-eth">— ETH equivalent</strong><span id="user-usd">— USD</span></div><p><span id="user-demo">1,260</span> LP units · <span id="demo-total-note">1,250 held + 10 reward units</span></p></div>
+    <div><div class="metric-label"><i class="metric-dot silver"></i>Protocol-owned liquidity</div><div class="asset-totals asset-split"><strong id="protocol-fuel">— FUEL</strong><strong id="protocol-eth">— ETH equivalent</strong><span id="protocol-usd">— USD</span></div><p>1 LP unit · Retained by the protocol</p></div>
+    <p class="vault-assets-note">Simulated vault liquidity at the current pool price, not the entire DEX pool. ETH equivalent is WETH backing, unwrapped on redemption. Excludes uncollected fees and idle assets; Furnace contracts are not deployed.</p>
   </section>
   <div id="workspace" class="workspace">
     <nav class="tabs" role="tablist" aria-label="Furnace sections"><button id="tab-create" role="tab" aria-selected="true" aria-controls="create" data-tab="create"><svg aria-hidden="true"><use href="#i-flame"/></svg><span>Create liquidity</span></button><button id="tab-position" role="tab" aria-selected="false" aria-controls="position" data-tab="position" tabindex="-1"><svg aria-hidden="true"><use href="#i-wallet"/></svg><span>Your position</span></button><button id="tab-compound" role="tab" aria-selected="false" aria-controls="compound" data-tab="compound" tabindex="-1"><svg aria-hidden="true"><use href="#i-cycle"/></svg><span>Compound fees</span></button></nav>
@@ -75,6 +76,6 @@
   <footer><div><strong>FUEL FURNACE</strong><span>From the Fuel Forge family.</span></div><p>Design preview · live prices · simulated balances · contracts not deployed</p><a href="https://thefuelforge.com/" target="_blank" rel="noopener">Visit Fuel Forge <svg aria-hidden="true"><use href="#i-out"/></svg></a></footer>
 </div>
 <dialog id="modal" aria-labelledby="modal-title"><button class="icon-button close" aria-label="Close review">×</button><div class="eyebrow">FUEL FURNACE / PREVIEW</div><h2 id="modal-title"></h2><p id="modal-body"></p><p class="field-note">No assets move. Live integration and real-pool testing are still pending.</p><button class="primary close">Back to preview</button></dialog>
-<script type="module" src="app.js?v=furnace-live-prices-6"></script>
+<script type="module" src="app.js?v=furnace-asset-totals-7"></script>
 </body>
 </html>
