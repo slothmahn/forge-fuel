@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=chain-choice-2';
+import './chain-navigation.js?v=companion-more-40';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './mainnet-white-paper-v1.js?v=blended-markets-16';
@@ -88,6 +88,19 @@ if (app) {
     telegram.innerHTML = '<span>Telegram</span><span class="telegram-arrow" aria-hidden="true">↗</span>';
     telegram.setAttribute('aria-label', 'Fuel Forge Telegram (opens in a new tab)');
     whitePaper.after(telegram);
+    const moreForge = document.createElement('a');
+    moreForge.className = 'litepaper-link more-forge-link';
+    moreForge.href = '/moreforge/?chain=rh#build';
+    moreForge.target = '_blank';
+    moreForge.rel = 'noopener noreferrer';
+    moreForge.setAttribute('aria-label', 'MORE Forge on Robinhood Chain (opens in a new tab)');
+    const moreLogo = document.createElement('img');
+    moreLogo.src = './moreforge/assets/more-forge-metal-wordmark.png';
+    moreLogo.alt = 'MORE Forge';
+    moreLogo.width = 2172;
+    moreLogo.height = 724;
+    moreForge.append(moreLogo);
+    whitePaper.before(moreForge);
   }
   app.querySelectorAll('.section-heading .eyebrow').forEach(label => {
     label.textContent = label.textContent.replace(/^\d{2}\s*·\s*/, '');

@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=chain-choice-2';
+import './chain-navigation.js?v=companion-more-40';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './pulse-mainnet.js?v=blended-markets-16';
@@ -88,6 +88,19 @@ if (app) {
     telegram.innerHTML = '<span>Telegram</span><span class="telegram-arrow" aria-hidden="true">↗</span>';
     telegram.setAttribute('aria-label', 'Fuel Forge Telegram (opens in a new tab)');
     whitePaper.after(telegram);
+    const moreForge = document.createElement('a');
+    moreForge.className = 'litepaper-link more-forge-link';
+    moreForge.href = '/moreforge/?chain=pls#build';
+    moreForge.target = '_blank';
+    moreForge.rel = 'noopener noreferrer';
+    moreForge.setAttribute('aria-label', 'MORE Forge on PulseChain (opens in a new tab)');
+    const moreLogo = document.createElement('img');
+    moreLogo.src = './moreforge/assets/more-forge-metal-wordmark.png';
+    moreLogo.alt = 'MORE Forge';
+    moreLogo.width = 2172;
+    moreLogo.height = 724;
+    moreForge.append(moreLogo);
+    whitePaper.before(moreForge);
   }
   app.querySelectorAll('.section-heading .eyebrow').forEach(label => {
     label.textContent = label.textContent.replace(/^\d{2}\s*·\s*/, '');
@@ -196,5 +209,5 @@ if (app) {
 
 // The root asset base must not send tab links back to the Robinhood home page.
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
-const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
+const paperLink=document.querySelector('.top-actions .litepaper-link:not(.more-forge-link):not(.telegram-link)');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
 

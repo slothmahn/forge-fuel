@@ -3,6 +3,9 @@
 (()=>{
  const menu=document.querySelector('#chain-menu'),select=document.querySelector('#chain');
  const choices=[...menu.querySelectorAll('[data-chain]')],summary=menu.querySelector('summary');
+ const requested=new URL(location.href).searchParams.get('chain');
+ const initialChain={rh:'rh',pls:'pls','4663':'rh','369':'pls'}[requested];
+ if(initialChain)select.value=initialChain;
  function sync(){
   const fuel=document.querySelector('.fuel-forge-link');
   fuel.dataset.chain=select.value;
