@@ -1,3 +1,4 @@
+import {displayAmount} from './amounts.js?v=more-forge-polish-33';
 import {Interface,formatUnits,parseUnits} from './vendor/ethers-6.15.0.js';
 import {referenceMarkup} from './usd-reference.js?v=more-forge-burns-32';
 
@@ -43,7 +44,7 @@ export function ownerSetting(field,raw){
  const value=parseUnits(raw,2),min=field==='drip'?100n:0n;
  if(!['drip','slippage'].includes(field)||value<min||value>1000n)throw Error(field==='drip'?'Daily drip must be from 1% to 10%.':'Slippage must be from 0% to 10%.');return value;
 }
-const amount=n=>Number(formatUnits(n,18)).toLocaleString(undefined,{maximumFractionDigits:12});
+const amount=n=>displayAmount(n,18,8);
 const localTime=n=>new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(n*1000));
 export function burnMarkup(x,rows,account){
  const total=rows.reduce((n,p)=>n+p.balance,0n);

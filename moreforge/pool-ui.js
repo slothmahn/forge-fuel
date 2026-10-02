@@ -1,7 +1,7 @@
-import {formatUnits} from './vendor/ethers-6.15.0.js';
+import {displayAmount} from './amounts.js?v=more-forge-polish-33';
 import {referenceMarkup} from './usd-reference.js';
 
-const format=(n,d=18)=>Number(formatUnits(n,d)).toLocaleString(undefined,{maximumFractionDigits:d===8?8:6});
+const format=(n,d=18)=>displayAmount(n,d,d===8?8:6);
 const deadlineDate=n=>new Intl.DateTimeFormat(undefined,{year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'}).format(new Date(Number(n)*1000));
 const eligiblePower=(positions,deadline)=>positions.reduce((total,p)=>total+(p.created<deadline&&p.maturity>=deadline?p.power:0n),0n);
 export function poolEstimate(pool,positions,owned,now,launchTime){
