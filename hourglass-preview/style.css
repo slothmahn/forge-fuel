@@ -44,7 +44,7 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* The Robinhood F stays authentic; badges orbit a stationary Furnace flame. */
 .fuel-icon{background:#152118}.fuel-icon img,.pair-fuel img{width:100%;height:100%;object-fit:contain;display:block}.core-inner .furnace-emblem{width:62px;height:74px;transform:rotate(-45deg);filter:drop-shadow(0 0 10px #ff7c3545)}
-.liquidity-art .art-asset{left:0;top:0;right:auto;offset-path:ellipse(34% 30% at 50% 42%);offset-anchor:50% 50%;offset-rotate:0deg;animation:furnace-token-orbit 36s linear infinite;white-space:nowrap}.liquidity-art .asset-fuel{animation-delay:-18s;offset-distance:50%}.liquidity-art .asset-eth{offset-distance:0%}
+.liquidity-art .art-asset{left:0;top:0;right:auto;offset-path:ellipse(var(--orbit-rx) var(--orbit-ry) at var(--orbit-x) var(--orbit-y));offset-anchor:50% 50%;offset-rotate:0deg;animation:furnace-token-orbit 36s linear infinite;white-space:nowrap}.liquidity-art .asset-fuel{animation-delay:-18s;offset-distance:50%}.liquidity-art .asset-eth{offset-distance:0%}
 @keyframes furnace-token-orbit{from{offset-distance:0%}to{offset-distance:100%}}
 @media(prefers-reduced-motion:reduce){.liquidity-art .art-asset{animation:none}}
 
@@ -55,3 +55,6 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* Match the exact orientation used by the live Robinhood Forge hero. */
 .fuel-icon img,.pair-fuel img{transform:rotate(9deg)}
+
+/* One shared ellipse defines the drawn track and badge motion at every size. */
+.liquidity-art{--orbit-rx:34%;--orbit-ry:30%;--orbit-x:50%;--orbit-y:42%}.liquidity-art .orbit-one{left:calc(var(--orbit-x) - var(--orbit-rx));top:calc(var(--orbit-y) - var(--orbit-ry));width:calc(var(--orbit-rx) * 2);height:calc(var(--orbit-ry) * 2);transform:none;border-color:#ffab552b}.liquidity-art .orbit-two{left:10%;top:4.5%;width:80%;height:75%;transform:none;border-color:#ffab550e}.liquidity-art .art-asset{z-index:3}
