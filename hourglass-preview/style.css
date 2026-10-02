@@ -67,3 +67,6 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 .furnace-core,.core-inner{border:0;background:none;box-shadow:none;transform:none;border-radius:0}.furnace-core{top:42px;width:110px;height:122px}.core-inner{width:110px;height:122px}.core-inner .furnace-emblem{width:90px;height:108px;transform:none;filter:drop-shadow(0 0 18px #f9763545)}.art-label{top:181px}.art-output{bottom:42px}
 .flame-options{position:absolute;bottom:0;display:flex;gap:5px;align-items:center;font-size:9px;color:var(--subtle)}.flame-options>span{margin-right:5px}.flame-options button{padding:4px 8px;border:1px solid var(--line-strong);border-radius:5px;background:transparent;font-size:9px;color:var(--muted)}.flame-options button[aria-pressed=true]{color:var(--mint);border-color:#ffab5570;background:#ffab5510}
 .fuel-icon,.pair-symbols>.pair-fuel{background:none;overflow:visible}.fuel-icon img,.pair-fuel img{border-radius:0}
+
+/* Selected Ember: centered on the orbit origin, with clear space below. */
+.liquidity-art{height:300px}.furnace-core{top:51px;height:108px}.core-inner{height:108px}.core-inner .furnace-emblem{width:80px;height:96px}.art-label{top:217px}.art-output{top:241px;bottom:auto}.flame-options{display:none}

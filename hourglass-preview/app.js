@@ -304,15 +304,8 @@ function sizeFurnaceOrbit() {
   const main = path(1);
   furnaceArt.style.setProperty('--furnace-orbit-path', `path("${main}")`);
   furnaceArt.querySelector('.orbit-main').setAttribute('d', main);
-  furnaceArt.querySelector('.orbit-inner').setAttribute('d', path(.8));
-  furnaceArt.querySelector('.orbit-outer').setAttribute('d', path(1.14));
+  furnaceArt.querySelector('.orbit-inner').setAttribute('d', path(.84));
+  furnaceArt.querySelector('.orbit-outer').setAttribute('d', path(1.16));
 }
 new ResizeObserver(sizeFurnaceOrbit).observe(furnaceArt);
 sizeFurnaceOrbit();
-const flameFiles = {ember:'furnace-flame.svg',rising:'furnace-flame-rising.svg',spark:'furnace-flame-spark.svg'};
-document.querySelectorAll('[data-flame]').forEach(button => {
-  button.onclick = () => {
-    furnaceArt.querySelector('.furnace-emblem').src = `assets/${flameFiles[button.dataset.flame]}`;
-    document.querySelectorAll('[data-flame]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
-  };
-});
