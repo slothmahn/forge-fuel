@@ -256,3 +256,5 @@
 #bitcoin-convert{justify-content:center;margin:0;font-size:12px;min-height:42px}
 #bitcoin-convert-status{margin:12px 0 0;font-size:11px;line-height:1.7;color:var(--muted);overflow-wrap:anywhere}
 #bitcoin-review-body{white-space:pre-line}
+
+.tabs .burn-tab-flame{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;font-size:20px;line-height:1}@media(max-width:800px){.tabs .burn-tab-flame{width:18px;height:18px;font-size:18px}}
