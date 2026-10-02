@@ -135,9 +135,9 @@ function walletUpdate() {
   $('wallet-assets').textContent = assets(sample.wallet);
   $('wallet-usd').textContent = demo && marketReady ? `≈ ${usd(receiptValue(sample.wallet))} USD` : '— USD';
   $('position-demo').hidden = demo;
-  $('stake-balance').textContent = demo ? `${fmt(sample.staked)} LP` : '—';
+  $('stake-balance').textContent = demo ? `${fmt(sample.staked)} LP receipts` : '—';
   $('reward-balance').textContent = demo ? `${fmt(sample.rewards)} LP` : '—';
-  $('wallet-balance').textContent = demo ? `${fmt(sample.wallet)} LP` : '—';
+  $('wallet-balance').textContent = demo ? `${fmt(sample.wallet)} LP receipts` : '—';
   $('reward-fuel').textContent = demo && marketReady ? `${fmt(sample.rewards * sample.fuelPerReceipt)} FUEL` : '— FUEL';
   $('reward-eth').textContent = demo && marketReady ? `${ethAmount(sample.rewards * sample.ethPerReceipt)} ETH` : '— ETH';
   $('stake-usd').textContent = demo && marketReady ? `≈ ${usd(receiptValue(sample.staked))} USD backing · before exit fee · current prices` : 'Participating in Furnace rewards';
