@@ -39,3 +39,14 @@
 .buy-guide>ol{margin:24px 0 0;padding-left:22px}
 .buy-balance-line{margin-top:12px}.buy-balance-line .field-help{margin:0;line-height:1.7}
 @media(max-width:800px){[role=tabpanel]{padding-top:28px}[role=tabpanel]>.section-heading{margin-bottom:24px;gap:18px}[role=tabpanel]>.section-heading>p{margin-top:16px}#burn-overview{padding:18px}#burn-overview>div{align-items:flex-start;flex-direction:column;gap:10px}.buy-guide>.fee-line{flex-direction:column;gap:12px}.buy-grid .fee-line strong{max-width:100%;text-align:left}}
+
+/* Market reference dollars remain secondary to exact token / native amounts. */
+.usd-reference{display:block;margin-top:5px;font-size:11px;line-height:1.6;font-weight:500;letter-spacing:0;color:#ffbd70;overflow-wrap:anywhere}
+.fee-line .value-reference{max-width:65%;min-width:0;text-align:right}
+.fee-line .value-reference strong{max-width:100%}
+.buy-output .usd-reference{margin:0}.buy-guide .usd-reference{margin-bottom:16px}
+.buy-grid .amount-field+.usd-reference{margin:8px 0 0}
+.estimate-rows .usd-reference{color:#ffbd70;font-size:11px}
+#pool-cards>.pool-card>.usd-reference{margin:8px 0 18px;font-size:12px;color:var(--pool-accent)}
+.claim-combined .usd-reference{font-size:22px}.term-total>.usd-reference{font-size:14px}
+@media(max-width:800px){.fee-line .value-reference{max-width:65%}.buy-guide>.fee-line .value-reference{max-width:100%;text-align:left}.estimate-rows .usd-reference{font-size:10px}.claim-combined .usd-reference{font-size:20px}}

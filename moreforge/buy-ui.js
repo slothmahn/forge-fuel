@@ -1,7 +1,8 @@
 import {Contract,parseUnits,formatUnits} from './vendor/ethers-6.15.0.js';
 import {quotePurchase,minimumReceived,purchaseTransaction,receivedMore} from './swaps.js';
+import {setReference,refreshReferences,clearReferences} from './usd-reference.js';
 
-export function installBuy({context,account,isBusy,action,tab,status}){
+export function installBuy({context,account,isBusy,marketPrices,action,tab,status}){
   const $=s=>document.querySelector(s);let quote=null,review=null,request=0,identity='',timer;
   const text=(s,t)=>$(s).textContent=t,units=n=>formatUnits(n,18);
   const display=n=>Number(units(n)).toLocaleString(undefined,{maximumFractionDigits:10});
@@ -9,7 +10,7 @@ export function installBuy({context,account,isBusy,action,tab,status}){
   function valid(q=quote){const x=context();return q&&x?.ready&&q.context===x&&q.wallet===(account()||'').toLowerCase()&&Date.now()-q.at<60000;}
   function disable(){const x=context();for(const id of ['#buy-amount','#buy-slippage','#buy-refresh'])$(id).disabled=isBusy()||!x?.ready;$('#buy-submit').disabled=isBusy()||!account()||!valid()||!quote.affordable;$('#buy-half').disabled=isBusy()||!account()||!x?.ready;$('#buy-use').disabled=isBusy()||!x?.ready||!$('#buy-use').dataset.amount||Number($('#buy-use').dataset.amount)<=0;}
   function clear(message='Enter an amount to see your purchase.'){
-    quote=null;review=null;request++;$('#buy-review').close();
+    quote=null;review=null;request++;$('#buy-review').close();clearReferences($('#panel-buy'));
     for(const s of ['#buy-output','#buy-minimum','#buy-impact','#buy-entry-fee','#buy-gas'])text(s,'—');text('#buy-status',message);disable();
   }
   function update(){const x=context(),id=(x?.key||'')+':'+(account()||'').toLowerCase();
@@ -27,6 +28,7 @@ export function installBuy({context,account,isBusy,action,tab,status}){
       const spotOutput=amount*spot[0]/10n**18n;const impact=spotOutput>out?Number((spotOutput-out)*1000000n/spotOutput)/10000:0;
       quote={context:x,wallet,amount,out,min,bps,entryFee,gas,gasCost,balance,affordable:!wallet||balance>=amount+gasCost,at:Date.now()};
       text('#buy-output','≈ '+display(out)+' MORE');text('#buy-minimum',units(min)+' MORE');text('#buy-impact',impact.toFixed(3)+'%');text('#buy-entry-fee','≈ '+display(entryFee)+' '+x.n.unit);text('#buy-gas',gas?'≈ '+display(gasCost)+' '+x.n.unit:'Connect wallet for gas estimate');text('#buy-balance',wallet?'Wallet balance: '+units(balance)+' '+x.n.unit:'Connect wallet to see your balance');
+      for(const [id,parts] of [['#buy-spend-usd',{NATIVE:amount}],['#buy-output-usd',{MORE:out}],['#buy-minimum-usd',{MORE:min}],['#buy-entry-usd',{NATIVE:entryFee}]])setReference($(id),parts);if(gas)setReference($('#buy-gas-usd'),{NATIVE:gasCost});refreshReferences(document,marketPrices());
       text('#buy-status',!wallet?'Connect wallet to review your purchase.':!quote.affordable?'Insufficient '+x.n.unit+' for this purchase and estimated gas.':balance<amount+gasCost+entryFee?'Quote ready. Your remaining '+x.n.unit+' may not cover a later burn’s protocol fee.':'Quote ready. Buying sends MORE to your wallet; it does not burn it.');disable();
     }catch(e){if(id===request){clear(err(e));}}
   }
@@ -47,7 +49,7 @@ export function installBuy({context,account,isBusy,action,tab,status}){
       const network=await signer.provider.getNetwork();if(Number(network.chainId)!==q.context.n.id)throw Error('Wallet chain changed.');
       return signer.sendTransaction({...tx,gasLimit:gas*120n/100n});
     });
-    if(receipt&&context()===q.context&&(account()||'').toLowerCase()===q.wallet){const received=receivedMore(q.context.key,receipt,q.wallet);quote=null;review=null;request++;disable();text('#buy-status','Purchase confirmed. MORE is now in your wallet.');$('#buy-result').hidden=false;text('#buy-received',units(received)+' MORE received');$('#buy-use').dataset.amount=units(received);$('#buy-use').disabled=received===0n;}
+    if(receipt&&context()===q.context&&(account()||'').toLowerCase()===q.wallet){const received=receivedMore(q.context.key,receipt,q.wallet);quote=null;review=null;request++;disable();text('#buy-status','Purchase confirmed. MORE is now in your wallet.');$('#buy-result').hidden=false;text('#buy-received',units(received)+' MORE received');setReference($('#buy-received-usd'),{MORE:received});refreshReferences(document,marketPrices());$('#buy-use').dataset.amount=units(received);$('#buy-use').disabled=received===0n;}
     else if(context()===q.context){quote=null;disable();text('#buy-status','Purchase was not confirmed. Refresh the quote before trying again.');}
   };
   $('#buy-use').onclick=()=>{if(!$('#buy-use').dataset.amount)return;$('#amount').value=$('#buy-use').dataset.amount;$('#amount').dispatchEvent(new Event('input'));tab('build');$('#build-form').scrollIntoView({behavior:'smooth',block:'start'});};
