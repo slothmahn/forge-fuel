@@ -11,19 +11,24 @@ const quoteAbi=['function quote(uint256) view returns(uint256,uint256)'];
 const same=(a,b)=>a?.toLowerCase()===b?.toLowerCase();
 export async function prepareBitcoinConversion(x,cycle,from,requested){
  const vault=new Contract(x.m.vaults[3],bitcoinAbi,x.r);
- const [available,state,quoteAddress,maxAge,slippage,block]=await Promise.all([
-  vault.nativeCycleBalance(cycle),vault.cycles(cycle),vault.referenceQuote(),vault.MAX_QUOTE_AGE(),vault.CONVERSION_SLIPPAGE_BPS(),x.r.getBlock('latest')
+ // A spot quote timestamps itself at the block it is read from. Pin every read
+ // and the simulation to one block so a newer quote cannot look future-dated.
+ const block=await x.r.getBlock('latest');
+ if(!block||!Number.isInteger(block.number))throw Error('Unable to read the current chain block. Refresh and retry.');
+ const snapshot={blockTag:block.number};
+ const [available,state,quoteAddress,maxAge,slippage]=await Promise.all([
+  vault.nativeCycleBalance(cycle,snapshot),vault.cycles(cycle,snapshot),vault.referenceQuote(snapshot),vault.MAX_QUOTE_AGE(snapshot),vault.CONVERSION_SLIPPAGE_BPS(snapshot)
  ]);
  const amount=requested??available;
  if(amount<=0n)throw Error('No '+x.n.unit+' is waiting to convert in this cycle.');
  if(available<amount)throw Error('Pool funding changed. Refresh and review the remaining amount.');
  if(state.started)throw Error('This cycle has already started settlement. Refresh the pool.');
- const [quoted,updatedAt]=await new Contract(quoteAddress,quoteAbi,x.r).quote(amount);
+ const [quoted,updatedAt]=await new Contract(quoteAddress,quoteAbi,x.r).quote(amount,snapshot);
  if(quoted<=0n||updatedAt>BigInt(block.timestamp)||BigInt(block.timestamp)-updatedAt>maxAge)throw Error('The Bitcoin conversion quote is unavailable or expired. Refresh and retry.');
  const minimum=quoted*(10000n-slippage)/10000n;
  if(minimum<=0n)throw Error('More funding is needed for a Bitcoin conversion.');
  // The deployed adapter and output checks must also succeed before presenting a review.
- let estimated;try{estimated=await vault.convertCycle.staticCall(cycle,amount,{from});}catch(e){if(e.code==='CALL_EXCEPTION')throw Error('The pool’s swap check failed. Refresh and retry before converting.');throw e;}
+ let estimated;try{estimated=await vault.convertCycle.staticCall(cycle,amount,{from,...snapshot});}catch(e){if(e.code==='CALL_EXCEPTION')throw Error('The pool’s swap check failed. Refresh and retry before converting.');throw e;}
  if(estimated<minimum)throw Error('The conversion cannot meet the contract’s current minimum output.');
  return{vault,cycle,amount,estimated,minimum,slippage};
 }

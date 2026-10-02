@@ -2,7 +2,7 @@ import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge
 import {displayAmount,amountText} from './amounts.js?v=more-forge-polish-33';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
 import {poolMarkup} from './pool-ui.js?v=more-forge-bitcoin-convert-38';
-import {installBitcoinConversion} from './bitcoin-ui.js?v=more-forge-bitcoin-convert-38';
+import {installBitcoinConversion} from './bitcoin-ui.js?v=more-forge-conversion-block-46';
 import {installBuy} from './buy-ui.js?v=more-forge-polish-33';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js?v=more-forge-burns-32';
 import {BrowserProvider,JsonRpcProvider,Contract,Interface,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
