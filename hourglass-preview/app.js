@@ -291,7 +291,7 @@ function sizeFurnaceOrbit() {
   const badgeWidth = Math.max(...badges.map(b => b.offsetWidth));
   const badgeHeight = Math.max(...badges.map(b => b.offsetHeight));
   const tilt = -25 * Math.PI / 180, squash = .55;
-  const c = Math.cos(tilt), s = Math.sin(tilt), cy = 105;
+  const c = Math.cos(tilt), s = Math.sin(tilt), cy = 125;
   const radius = Math.max(0, Math.min(
     (width - badgeWidth - 16) / (2 * Math.hypot(c, squash * s)),
     (cy - badgeHeight / 2 - 8) / Math.hypot(s, squash * c)

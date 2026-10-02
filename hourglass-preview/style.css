@@ -70,3 +70,6 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* Selected Ember: centered on the orbit origin, with clear space below. */
 .liquidity-art{height:300px}.furnace-core{top:51px;height:108px}.core-inner{height:108px}.core-inner .furnace-emblem{width:80px;height:96px}.art-label{top:217px}.art-output{top:241px;bottom:auto}.flame-options{display:none}
+
+/* Give the Ember hero the visual weight of the Forge artwork. */
+.liquidity-art{max-width:500px;height:350px}.furnace-core{top:53px;width:144px;height:144px}.core-inner{width:144px;height:144px}.core-inner .furnace-emblem{width:120px;height:144px}.art-label{top:266px}.art-output{top:290px}
