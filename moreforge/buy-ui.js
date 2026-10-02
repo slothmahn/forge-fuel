@@ -7,7 +7,7 @@ export function installBuy({context,account,isBusy,action,tab,status}){
   const display=n=>Number(units(n)).toLocaleString(undefined,{maximumFractionDigits:10});
   const err=e=>e.shortMessage||e.message||String(e);
   function valid(q=quote){const x=context();return q&&x?.ready&&q.context===x&&q.wallet===(account()||'').toLowerCase()&&Date.now()-q.at<60000;}
-  function disable(){const x=context();$('#buy-submit').disabled=isBusy()||!account()||!valid()||!quote.affordable;$('#buy-half').disabled=isBusy()||!account()||!x?.ready;$('#buy-use').disabled=isBusy()||!x?.ready||!$('#buy-use').dataset.amount||Number($('#buy-use').dataset.amount)<=0;}
+  function disable(){const x=context();for(const id of ['#buy-amount','#buy-slippage','#buy-refresh'])$(id).disabled=isBusy()||!x?.ready;$('#buy-submit').disabled=isBusy()||!account()||!valid()||!quote.affordable;$('#buy-half').disabled=isBusy()||!account()||!x?.ready;$('#buy-use').disabled=isBusy()||!x?.ready||!$('#buy-use').dataset.amount||Number($('#buy-use').dataset.amount)<=0;}
   function clear(message='Enter an amount to see your purchase.'){
     quote=null;review=null;request++;$('#buy-review').close();
     for(const s of ['#buy-output','#buy-minimum','#buy-impact','#buy-entry-fee','#buy-gas'])text(s,'—');text('#buy-status',message);disable();
@@ -17,7 +17,7 @@ export function installBuy({context,account,isBusy,action,tab,status}){
     const unit=x?.n.unit||($('#chain').value==='pls'?'PLS':'ETH');text('#buy-native-unit',unit);if(!account())text('#buy-balance','Connect wallet to see your balance');text('#buy-unit-label',unit+' to spend');text('#buy-chain',x?.key==='pls'?'PulseChain · MORE / WPLS':'Robinhood · MORE / WETH');
     disable();
   }
-  async function preview(){clear('Getting a live swap quote…');const x=context(),id=request,wallet=(account()||'').toLowerCase();if(!x?.ready){text('#buy-status','Purchases are not available on this chain yet.');return;}
+  async function preview(){clearTimeout(timer);clear('Getting a live swap quote…');const x=context(),id=request,wallet=(account()||'').toLowerCase();if(!x?.ready){text('#buy-status','Purchases are not available on this chain yet.');return;}
     try{
       const raw=$('#buy-amount').value;if(!/^\d+(?:\.\d{0,18})?$/.test(raw))throw Error('Enter an amount with up to 18 decimals.');const amount=parseUnits(raw,18);if(amount<=0n)throw Error('Enter a positive purchase amount.');const bps=Number($('#buy-slippage').value);
       const [out,spot,balance,fees]=await Promise.all([quotePurchase(x.key,x.r,amount),new Contract(x.m.contracts.mainQuote,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(10n**18n),wallet?x.r.getBalance(wallet):0n,x.r.getFeeData()]);
