@@ -86,6 +86,8 @@ $('wallet').onclick = () => {
   $('stake-balance').textContent = demo ? `${fmt(sample.staked)} LP` : '—';
   $('reward-balance').textContent = demo ? `${fmt(sample.rewards)} LP` : '—';
   $('wallet-balance').textContent = demo ? `${fmt(sample.wallet)} LP` : '—';
+  $('reward-fuel').textContent = demo ? `${fmt(sample.rewards * sample.fuelPerReceipt)} FUEL` : '— FUEL';
+  $('reward-eth').textContent = demo ? `${fmt(sample.rewards * sample.ethPerReceipt)} ETH` : '— ETH';
   $('claim').disabled = !demo;
   exitUpdate();
 };
@@ -95,7 +97,7 @@ function exitUpdate() {
   const q = feeBreakdown(valid ? value : 0, !redeem);
   $('exit-fee').textContent = valid ? `${fmt(q.fee)} LP` : `Enter 0–${max} LP`;
   $('exit-split').textContent = `${fmt(q.stakers)} LP / ${fmt(q.dev)} LP`;
-  $('exit-net').textContent = redeem ? `${fmt(q.net * sample.fuelPerReceipt)} FUEL` : `${fmt(q.net)} LP`;
+  $('exit-net').textContent = `${fmt(q.net * sample.fuelPerReceipt)} FUEL`;
   $('redeem-eth').textContent = `${fmt(q.net * sample.ethPerReceipt)} ETH`;
   $('exit').disabled = !demo || !valid;
   return q;
@@ -110,9 +112,9 @@ function withdrawalMode(isRedeem) {
   $('available-line').textContent = `Demo balance: ${redeem ? sample.wallet + ' wallet' : sample.staked + ' staked'} LP`;
   $('exit-fee-label').textContent = redeem ? 'Redemption fee · 0%' : 'Staking exit fee · 10%';
   $('exit-split-row').hidden = redeem;
-  $('redeem-eth-row').hidden = !redeem;
-  $('exit-net-label').textContent = redeem ? 'FUEL returned' : 'Receipts returned';
-  $('withdraw-note').textContent = redeem ? 'Sample ratio: 1 receipt = 500,000 FUEL + 0.005 ETH. Real output changes with pool price. WETH is unwrapped automatically; no token sale or redemption fee.' : 'Unstake first to receive wallet receipts. Redeem them separately for FUEL + ETH, with no redemption fee.';
+  $('redeem-eth-row').hidden = false;
+  $('exit-net-label').textContent = 'FUEL returned';
+  $('withdraw-note').textContent = redeem ? 'Sample ratio: 1 receipt = 500,000 FUEL + 0.005 ETH. Real output changes with pool price. WETH is unwrapped automatically; no token sale or redemption fee.' : 'Unstake and redeem principal in one transaction. After the 10% staking exit fee, net receipts return FUEL + ETH. Earned rewards stay in Claim Rewards.';
   $('exit').innerHTML = `${redeem ? 'Review sample redemption' : 'Review sample unstake'} <svg aria-hidden="true"><use href="#i-arrow"/></svg>`;
   exitUpdate();
 }
@@ -122,10 +124,10 @@ $('withdraw').addEventListener('input', exitUpdate);
 $('exit').onclick = () => {
   const q = exitUpdate();
   if (redeem) show('Your sample redemption', `Redeem ${fmt(q.gross)} wallet receipts for an illustrative ${fmt(q.net * sample.fuelPerReceipt)} FUEL + ${fmt(q.net * sample.ethPerReceipt)} ETH.\n\nProtocol redemption fee: 0%. The WETH portion is automatically unwrapped into native ETH. Gas still applies.\n\nReal outputs depend on pool price and your minimum amounts. This demo does not change sample balances.`);
-  else show('Your sample unstake', `Unstake ${fmt(q.gross)} receipts.\n\nExit fee: ${fmt(q.fee)} LP — ${fmt(q.stakers)} to eligible stakers and ${fmt(q.dev)} to development.\n\n${fmt(q.net)} LP receipts return to your wallet. You can then redeem them separately for FUEL + ETH with no protocol redemption fee. This demo does not change sample balances.`);
+  else show('Your sample unstake', `Unstake ${fmt(q.gross)} receipts.\n\nExit fee: ${fmt(q.fee)} LP — ${fmt(q.stakers)} to eligible stakers and ${fmt(q.dev)} to development.\n\n${fmt(q.net)} net receipts are redeemed for an illustrative ${fmt(q.net * sample.fuelPerReceipt)} FUEL + ${fmt(q.net * sample.ethPerReceipt)} native ETH in the same transaction. No extra redemption fee.\n\nEarned rewards stay in Claim Rewards for a separate claim, even after a full unstake. This demo does not change sample balances.`);
 };
-$('claim').onclick = () => show('Your sample reward claim', 'Claim 1 LP receipt to your wallet with no protocol claim fee. You can hold it, stake it, or redeem it for underlying assets. Gas still applies. Sample balances remain unchanged.');
+$('claim').onclick = () => show('Your sample reward claim', 'Claim 1 sample reward receipt and redeem it in the same transaction for an illustrative 500,000 FUEL + 0.005 native ETH. WETH is automatically unwrapped. No protocol claim or redemption fee; gas still applies. Sample balances remain unchanged.');
 $('compound-action').onclick = () => show('Your sample compound', '2 new liquidity units: 1 issues reward receipts for eligible stakers, and 1 is retained as protocol-owned liquidity.\n\nTotal liquidity would rise from 302 to 304. Unmatched trading fees carry forward. No balancing swaps are made. This demo does not change sample balances.');
-$('how-it-works').onclick = () => show('Inside the Furnace', '1. Add ETH, or FUEL + ETH, to the shared full-range V3 vault. Existing position NFTs are not accepted.\n\n2. Receive transferable LP receipts. Hold them, or stake them to participate in rewards. Staking entry and exit each take 10%: 7% for eligible stakers and 3% for development. If none are eligible, the reward portion goes to the protocol reserve.\n\n3. Redeem wallet receipts for FUEL + native ETH with no protocol redemption fee. Token amounts change with pool price; gas still applies.');
+$('how-it-works').onclick = () => show('Inside the Furnace', '1. Add ETH, or FUEL + ETH, to the shared full-range V3 vault. Existing position NFTs are not accepted.\n\n2. Receive transferable LP receipts. Hold them, or stake them to participate in rewards. Staking entry and exit each take 10%: 7% for eligible stakers and 3% for development. If none are eligible, the reward portion goes to the protocol reserve.\n\n3. Unstake and redeem principal for FUEL + native ETH in one transaction. Accrued rewards remain separately claimable, even after a full exit. Claim Rewards also redeems reward receipts for FUEL + ETH. Wallet receipt redemption remains available. No extra claim or redemption fee. Outputs change with pool price; gas still applies.');
 document.querySelectorAll('.close').forEach(button => button.onclick = () => $('modal').close());
-update(); exitUpdate();
+update(); withdrawalMode(false);
