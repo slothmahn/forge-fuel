@@ -10,10 +10,41 @@ const poolPrice=p=>p.bitcoin?bitcoinUsd:selected().usd;
 let moreUsd=NaN;
 const sampleBalance='12000000', existingPower=5000000;
 const livePricesReady=()=>[moreUsd,selected().usd,bitcoinUsd].every(n=>Number.isFinite(n)&&n>0);
+const sampleClaims={rh:false,pls:false,eth:false};
+let reviewingClaimChain=null;
 let rates={MORE:1,FUEL:1,PAMP:1};
 const selected=()=>config[$('#chain').value];
 function values(){const raw=Number($('#amount').value);const days=Number($('#term').value);const valid=Number.isFinite(raw)&&raw>0&&raw<=Number(sampleBalance)&&Number.isInteger(days)&&days>=8&&days<=1000;const amount=valid?raw:0, term=Number.isFinite(days)?Math.max(8,Math.min(1000,Math.trunc(days))):8;const bigger=1+Math.min(amount/1000,1),longer=1+1.5*(term-8)/992,power=amount*bigger*longer,feeUsd=amount*moreUsd;return{amount,term,bigger,longer,power,feeUsd,fee:feeUsd/selected().usd,share:power/(existingPower+power),valid};}
-function update(){const v=values(),c=selected();$('#burn-value').textContent=`${f(v.amount)} MORE ≈ $${money(v.feeUsd)}`;$('#native-fee').textContent=`≈ ${f(v.fee,8)} ${c.unit} · $${money(v.feeUsd)}`;$('#total-cost').textContent=`≈ $${money(v.feeUsd*2)} USD`;$('#multiplier').textContent=`${f(v.bigger*v.longer,3)}×`;$('#power').textContent=`${f(v.power)} power`;$('#power-ring').style.setProperty('--power-angle',`${v.valid?Math.min(1,v.bigger*v.longer/5)*360:0}deg`);$('#share').textContent=`${f(v.share*100,4)}%`;$('#amount-bonus').textContent=`${f(v.bigger,4)}×`;$('#term-bonus').textContent=`${f(v.longer,4)}×`;$$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.term));$('#payouts').innerHTML=poolWeights.map(p=>{const eligible=v.term>=p.left,payout=eligible?(p.balanceUsd+v.feeUsd*p.bps/10000)*.9975*v.share:0;return `<div><b>${p.days} Day<small>Closes in ${p.left}d · sample</small></b><div><strong>${eligible?'≈ '+f(payout/poolPrice(p),8)+' '+poolUnit(p):'Term too short'}</strong><small>${eligible?'≈ $'+f(payout,2)+' USD':'Closes in '+p.left+' sample days'}</small></div></div>`}).join('');$('#build-form .primary-button').disabled=!v.valid||!livePricesReady();drawPools(v);drawTermEstimate(v);$('#hero-native').textContent='$'+c.unit;$('#hero-bitcoin').textContent=c.btc.includes('pending')?'BTC · pending':'$'+c.btc;$('.native-symbol').textContent=c.unit==='ETH'?'◇':c.unit==='PLS'?'⬡':'△';drawBurns();if(!livePricesReady())showMissingPrices();}
+function update(){const v=values(),c=selected();$('#burn-value').textContent=`${f(v.amount)} MORE ≈ $${money(v.feeUsd)}`;$('#native-fee').textContent=`≈ ${f(v.fee,8)} ${c.unit} · $${money(v.feeUsd)}`;$('#total-cost').textContent=`≈ $${money(v.feeUsd*2)} USD`;$('#multiplier').textContent=`${f(v.bigger*v.longer,3)}×`;$('#power').textContent=`${f(v.power)} power`;$('#power-ring').style.setProperty('--power-angle',`${v.valid?Math.min(1,v.bigger*v.longer/5)*360:0}deg`);$('#share').textContent=`${f(v.share*100,4)}%`;$('#amount-bonus').textContent=`${f(v.bigger,4)}×`;$('#term-bonus').textContent=`${f(v.longer,4)}×`;$$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.term));$('#payouts').innerHTML=poolWeights.map(p=>{const eligible=v.term>=p.left,payout=eligible?(p.balanceUsd+v.feeUsd*p.bps/10000)*.9975*v.share:0;return `<div><b>${p.days} Day<small>Closes in ${p.left}d · sample</small></b><div><strong>${eligible?'≈ '+f(payout/poolPrice(p),8)+' '+poolUnit(p):'Term too short'}</strong><small>${eligible?'≈ $'+f(payout,2)+' USD':'Closes in '+p.left+' sample days'}</small></div></div>`}).join('');$('#build-form .primary-button').disabled=!v.valid||!livePricesReady();drawPools(v);drawTermEstimate(v);$('#hero-native').textContent='$'+c.unit;$('#hero-bitcoin').textContent=c.btc.includes('pending')?'BTC · pending':'$'+c.btc;$('.native-symbol').textContent=c.unit==='ETH'?'◇':c.unit==='PLS'?'⬡':'△';drawBurns();drawRewards();if(!livePricesReady())showMissingPrices();}
+function claimAmounts(){
+ const key=$('#chain').value,available=key in sampleClaims,claimed=sampleClaims[key]===true;
+ const native=key==='pls'?[100000,200000,300000]:[.002,.003,.005];
+ const amounts=available&&!claimed?[...native,.00002]:[0,0,0,0];
+ return {key,available,claimed,amounts,native:amounts[0]+amounts[1]+amounts[2],bitcoin:amounts[3]};
+}
+function claimValue(r){return Number.isFinite(selected().usd)&&Number.isFinite(bitcoinUsd)?r.native*selected().usd+r.bitcoin*bitcoinUsd:NaN;}
+function drawRewards(){
+ const c=selected(),r=claimAmounts();
+ $('#claim-totals').innerHTML=`<div><span>${c.unit} rewards</span><strong>${f(r.native,8)} ${c.unit}</strong><small>8-, 28- and 88-day pools</small></div><div><span>Bitcoin rewards</span><strong>${f(r.bitcoin,8)} ${r.available?c.btc:'Bitcoin · pending'}</strong><small>288-day pool</small></div>`;
+ $('#claim-usd').textContent=r.available?(Number.isFinite(claimValue(r))?'≈ $'+money(claimValue(r))+' USD':'Waiting for live prices'):'Example not configured';
+ $('#claim-cycles').innerHTML=poolWeights.map((p,i)=>`<div><span><b>${p.days}-Day ${p.bitcoin?'Bitcoin ':''}Pool</b><small>${r.available?(r.claimed?'Sample claimed':'Sample cycle settled'):'Future chain'}</small></span><strong>${f(r.amounts[i],8)} ${r.available?poolUnit(p):(p.bitcoin?'BTC':c.unit)}</strong></div>`).join('');
+ $('#claim-open').disabled=!r.available||r.claimed;
+ $('#claim-open').textContent=r.claimed?'Sample rewards claimed':'Preview claim';
+ $('#claim-reset').hidden=!r.claimed;
+ $('#claim-status').textContent=!r.available?'Avalanche rewards will be available once its markets and contracts are configured.':r.claimed?'Sample claim complete. Your available rewards are now zero.':'Four settled sample cycles · ready to claim together.';
+}
+$('#claim-open').onclick=()=>{
+ const r=claimAmounts();if(!r.available||r.claimed)return;
+ reviewingClaimChain=r.key;
+ $('#claim-review-body').textContent=`Sample position #1 · ${selected().name}\n\n${f(r.native,8)} ${selected().unit} + ${f(r.bitcoin,8)} ${selected().btc}\n${Number.isFinite(claimValue(r))?'≈ $'+money(claimValue(r))+' USD at live market prices':'USD estimate waiting for live prices'}\n\nClaim rewards from the four settled sample cycles together.`;
+ $('#claim-review').showModal();
+};
+$('#claim-confirm').onclick=()=>{
+ if(reviewingClaimChain===$('#chain').value&&reviewingClaimChain in sampleClaims){sampleClaims[reviewingClaimChain]=true;drawRewards();}
+ reviewingClaimChain=null;$('#claim-review').close();
+};
+$('.claim-dialog-close').onclick=()=>{reviewingClaimChain=null;$('#claim-review').close();};
+$('#claim-reset').onclick=()=>{if($('#chain').value in sampleClaims)sampleClaims[$('#chain').value]=false;drawRewards();};
 function burnIcon(symbol){return `assets/${symbol.toLowerCase()}-token.jpg`;}
 function drawBurns(){
  const c=selected();
