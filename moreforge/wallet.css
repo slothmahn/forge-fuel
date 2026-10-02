@@ -258,3 +258,5 @@
 #bitcoin-review-body{white-space:pre-line}
 
 .tabs .burn-tab-flame{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex-shrink:0;font-size:20px;line-height:1}@media(max-width:800px){.tabs .burn-tab-flame{width:18px;height:18px;font-size:18px}}
+
+html[data-more-tab-pending] .tabs,html[data-more-tab-pending] .hero,html[data-more-tab-pending] .burn-summary,html[data-more-tab-pending] [role="tabpanel"]{visibility:hidden}
