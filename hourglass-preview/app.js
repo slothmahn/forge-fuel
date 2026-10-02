@@ -142,7 +142,10 @@ function walletUpdate() {
   $('reward-eth').textContent = demo && marketReady ? `${ethAmount(sample.rewards * sample.ethPerReceipt)} ETH` : '— ETH';
   $('stake-usd').textContent = demo && marketReady ? `≈ ${usd(receiptValue(sample.staked))} USD backing · before exit fee · current prices` : 'Participating in Furnace rewards';
   $('reward-usd').textContent = demo && marketReady ? `≈ ${usd(receiptValue(sample.rewards))} USD · current prices` : '— USD';
-  $('claim').disabled = !demo || !marketReady;
+  $('claim').disabled = !demo || !marketReady || sample.rewards <= 0;
+  $('compound-rewards').disabled = !demo || !marketReady || sample.rewards <= 0;
+  const reinvest = feeBreakdown(sample.rewards, true);
+  $('reinvest-summary').textContent = demo ? `Compounding ${fmt(sample.rewards)} reward receipts adds ${fmt(reinvest.net)} to your stake after the 10% entry fee. No asset swap or redemption. A later staking exit still has its 10% fee.` : 'Show sample balances to preview compounding.';
   exitUpdate();
 }
 $('wallet').onclick = () => { demo = !demo; walletUpdate(); };
@@ -200,6 +203,16 @@ $('exit').onclick = () => {
   else show('Your sample unstake', `Unstake ${fmt(q.gross)} receipts.\n\nExit fee: ${fmt(q.fee)} LP — ${fmt(q.stakers)} to eligible stakers and ${fmt(q.dev)} to development.\n\n${fmt(q.net)} net receipts are redeemed for an illustrative ${fmt(q.net * sample.fuelPerReceipt)} FUEL + ${ethAmount(q.net * sample.ethPerReceipt)} native ETH in the same transaction. No extra redemption fee.\n\nEarned rewards stay in Claim Rewards for a separate claim, even after a full unstake. This demo does not change sample balances.`);
 };
 $('claim').onclick = () => show('Your sample reward claim', `${fmt(sample.rewards)} sample reward receipts → ${fmt(sample.rewards * sample.fuelPerReceipt)} FUEL + ${ethAmount(sample.rewards * sample.ethPerReceipt)} native ETH. Estimated backing: ${usd(receiptValue(sample.rewards))} USD at current prices. WETH is automatically unwrapped. No protocol claim or redemption fee; gas still applies. Sample balances remain unchanged.`);
+$('compound-rewards').onclick = () => {
+  const q = feeBreakdown(sample.rewards, true);
+  show('Compound earned rewards into your stake', `${fmt(q.gross)} reward receipts → ${fmt(q.net)} additional staked receipts.
+
+Entry fee: ${fmt(q.fee)} LP (${fmt(q.stakers)} to eligible stakes; ${fmt(q.dev)} to development).
+
+Your stake would increase from ${fmt(sample.staked)} to ${fmt(sample.staked + q.net)} LP. Added backing: ≈ ${fuelAmount(q.net * sample.fuelPerReceipt)} FUEL + ${ethAmount(q.net * sample.ethPerReceipt)} ETH equivalent (≈ ${usd(receiptValue(q.net))} USD).
+
+Receipts stay invested; no FUEL/ETH redemption or swap. Your existing stake may receive its share of the entry-fee distribution, which remains separately claimable. A later exit has the normal staking exit fee. Trading-fee rewards must first be collected and compounded by the vault. Demo only; balances do not change.`);
+};
 $('compound-action').onclick = () => show('Your sample compound', `2 new liquidity units: 1 issues reward receipts for eligible stakers, and 1 is retained as protocol-owned liquidity.\n\nTotal liquidity would rise from ${fmt(sample.staked + sample.wallet + sample.rewards + 1)} to ${fmt(sample.staked + sample.wallet + sample.rewards + 3)}. Unmatched fees after this example: ${$('compound-unmatched').textContent}. No balancing swaps are made. This demo does not change sample balances.`);
 $('how-it-works').onclick = () => show('Inside the Furnace', '1. Add ETH, or FUEL + ETH, to the shared full-range V3 vault. Existing position NFTs are not accepted.\n\n2. Receive transferable LP receipts. Hold them, or stake them to participate in rewards. Staking entry and exit each take 10%: 7% for eligible stakers and 3% for development. If none are eligible, the reward portion goes to the protocol reserve.\n\n3. Unstake and redeem principal for FUEL + native ETH in one transaction. Accrued rewards remain separately claimable, even after a full exit. Claim Rewards also redeems reward receipts for FUEL + ETH. Wallet receipt redemption remains available. No extra claim or redemption fee. Outputs change with pool price; gas still applies.');
 document.querySelectorAll('.close').forEach(button => button.onclick = () => $('modal').close());

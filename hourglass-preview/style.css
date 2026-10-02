@@ -36,3 +36,5 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 .core-inner{background:radial-gradient(ellipse at 50% 80%,#b84d2680,#28180e 75%)}
 .core-inner svg{color:var(--gold);filter:drop-shadow(0 0 14px #ff7b4288)}
 .split-ring{background:conic-gradient(#ff9e50 0 49%,var(--panel) 49% 51%,#ffd87b 51% 99%,var(--panel) 99%)}
+
+.reward-actions{display:grid;gap:12px;margin-top:24px}.reward-actions button{font-size:12px}.position-card #reinvest-summary{line-height:1.7;margin-top:14px}
