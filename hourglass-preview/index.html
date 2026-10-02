@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#090b0d">
   <meta name="description" content="Explore Fuel Furnace: create full-range FUEL / ETH liquidity, hold or stake LP receipts, and redeem for FUEL + ETH. Interactive design preview.">
   <title>Fuel Furnace — Liquidity, put to work.</title>
-  <link rel="stylesheet" href="style.css?v=furnace-asset-totals-7">
+  <link rel="stylesheet" href="style.css?v=furnace-fee-cleanup-8">
 </head>
 <body>
 <svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -57,11 +57,10 @@
         </article>
         <article class="card receipt-card" aria-label="Deposit estimate"><div class="card-title"><h3>Your receipt preview</h3><span class="sample-tag">SPOT ESTIMATE</span></div><div class="receipt-result"><div class="result-icon"><svg aria-hidden="true"><use href="#i-layers"/></svg></div><div class="result-label" id="destination-title">Receipts in your wallet</div><div class="big-number"><span id="net">—</span><span class="number-unit">LP</span></div><span class="receipt-caption" id="receipt-caption">Transferable. Redeemable. Yours.</span></div>
           <p class="mint-text" id="receipt-usd"></p><p class="field-note" id="spot-note">ETH-only uses a spot estimate; swap price impact, DEX fees and gas are excluded.</p><dl class="breakdown"><div><dt>Receipts before entry fee</dt><dd id="gross">—</dd></div><div><dt>Staking entry fee <span id="entry-rate">0%</span></dt><dd id="entry">0 LP</dd></div><div class="fee-detail" id="staker-row" hidden><dt>To eligible stakers · 7%</dt><dd id="stakers">0 LP</dd></div><div class="fee-detail" id="dev-row" hidden><dt>To development · 3%</dt><dd id="dev">0 LP</dd></div><div class="receive-row"><dt>You receive</dt><dd id="receive">—</dd></div><div><dt>Estimated FUEL backing</dt><dd id="receipt-fuel">—</dd></div><div><dt>Estimated ETH backing</dt><dd id="receipt-eth">—</dd></div></dl>
-          <div class="redemption-note"><svg aria-hidden="true"><use href="#i-check"/></svg><div><b>Redeem for FUEL + ETH</b><p>No redemption fee. WETH is automatically unwrapped.</p></div><span>0%</span></div>
           <details class="estimate-note"><summary>About this estimate</summary><p id="estimate-description">Loading current pool prices. Receipt estimates will appear once market data is available.</p></details>
         </article>
       </div>
-      <div class="fee-strip"><div><span class="strip-label">THE FURNACE FEE MODEL</span><p>Fees apply when you enter or exit staking.</p></div><div><strong>7%</strong><span>Eligible stakers</span></div><span class="strip-plus">+</span><div><strong>3%</strong><span>Development</span></div><span class="strip-divider"></span><div><strong>0%</strong><span>Receipt redemption</span></div></div>
+      <div class="fee-strip"><div><span class="strip-label">THE FURNACE FEE MODEL</span><p>10% on staking entry and 10% on staking exit. Each splits into:</p></div><div><strong>7%</strong><span>Eligible stakers</span></div><span class="strip-plus">+</span><div><strong>3%</strong><span>Development</span></div></div>
     </section>
     <section id="position" class="tab-panel" role="tabpanel" aria-labelledby="tab-position" hidden>
       <div class="section-heading"><div><div class="eyebrow">YOUR SIDE OF THE FURNACE</div><h2>Keep everything in view.</h2></div><p>Stake, claim, or bring your liquidity home.</p></div>
@@ -76,6 +75,6 @@
   <footer><div><strong>FUEL FURNACE</strong><span>From the Fuel Forge family.</span></div><p>Design preview · live prices · simulated balances · contracts not deployed</p><a href="https://thefuelforge.com/" target="_blank" rel="noopener">Visit Fuel Forge <svg aria-hidden="true"><use href="#i-out"/></svg></a></footer>
 </div>
 <dialog id="modal" aria-labelledby="modal-title"><button class="icon-button close" aria-label="Close review">×</button><div class="eyebrow">FUEL FURNACE / PREVIEW</div><h2 id="modal-title"></h2><p id="modal-body"></p><p class="field-note">No assets move. Live integration and real-pool testing are still pending.</p><button class="primary close">Back to preview</button></dialog>
-<script type="module" src="app.js?v=furnace-asset-totals-7"></script>
+<script type="module" src="app.js?v=furnace-fee-cleanup-8"></script>
 </body>
 </html>
