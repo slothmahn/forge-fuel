@@ -9,3 +9,5 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 @media(max-width:760px){.desktop-break{display:none}}
 
 .claim-assets{border:1px solid #66e2b329;border-radius:10px;background:#66e2b305;padding:16px;margin:0 0 18px}.claim-assets>span{display:block;font-size:11px;color:var(--muted);margin-bottom:8px}.claim-assets>strong{display:block;font-size:19px;font-weight:550;color:var(--mint);line-height:1.5}
+
+#deposit-unit{font:inherit;color:var(--text);background:var(--field);border:1px solid var(--line-strong);border-radius:8px;padding:8px 12px;margin:0 0 12px 8px;max-width:100%}#receipt-usd,#withdraw-usd{font-size:12px;line-height:1.6;overflow-wrap:anywhere}#demo-staked{min-width:0} .metric-value #total-demo,.metric-value #user-demo{font-size:inherit;color:inherit;display:inline}#deposit-unit:focus-visible{outline:2px solid var(--mint);outline-offset:3px}
