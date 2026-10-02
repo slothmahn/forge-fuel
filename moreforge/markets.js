@@ -13,7 +13,7 @@
   const network=networks[key];
   window.dispatchEvent(new CustomEvent('more-market-prices',{detail:{key,quotes}}));
   if(!network){strip.innerHTML='<small>AVAX · future chain. Token markets are not configured.</small>';return;}
-  const entries=[['FUEL','FUEL'],['MORE','MORE'],[network.native,'NATIVE'],[network.btc,'BTC'],['PAMP','PAMP']];
+  const entries=[['FUEL','FUEL'],['MORE','MORE'],[network.native,'NATIVE'],[network.btc,'BTC'],...(key==='rh'||key==='pls'?[['PAMP','PAMP']]:[])];
   strip.innerHTML=entries.map(([symbol,id])=>{
    const pair=network.pairs[id==='NATIVE'?'BTC':id];
    return pair?`<a href="https://dexscreener.com/${network.chain}/${pair}" target="_blank" rel="noopener noreferrer"><b>${symbol}</b><span>${quotes[id]===undefined?(status.startsWith('Checking')?'Checking…':'Unavailable'):price(quotes[id])}</span></a>`:`<span><b>${symbol}</b> Market pending</span>`;
