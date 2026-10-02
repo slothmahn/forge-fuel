@@ -228,3 +228,16 @@
  #pool-cards .pool-row{gap:12px}
 }
 @media(max-width:360px){#pool-cards .pool-value{font-size:28px}#pool-overview>div>strong{font-size:23px}}
+
+/* Fuel Forge's chain menu, in MORE's ember palette. */
+.more-chain-select{position:relative;z-index:60;justify-self:start}
+.more-chain-select summary{gap:8px;cursor:pointer;list-style:none;white-space:nowrap;background:#ffffff04;border:1px solid #ffb45b40}
+.more-chain-select summary::-webkit-details-marker{display:none}
+.more-chain-select .chain-chevron{margin-left:5px;font-size:16px;line-height:1;color:#cdb6a4}
+.more-chain-select nav{position:absolute;top:calc(100% + 10px);right:0;width:290px;max-width:calc(100vw - 32px);padding:8px;border:1px solid #9d7049;border-radius:14px;background:#211711;box-shadow:0 15px 35px #0008}
+.more-chain-select nav button{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:14px 12px;border:0;border-radius:9px;background:transparent;color:#f6eee7;font-size:14px;font-weight:650;line-height:1.5;text-align:left;cursor:pointer}
+.more-chain-select nav button:hover,.more-chain-select nav button[aria-current]{background:#ffab4d18;color:#ffbd70}
+.more-chain-select nav small{font-size:11px;color:#bcaa9c;font-weight:500;white-space:nowrap}
+.more-chain-select summary:focus-visible,.more-chain-select nav button:focus-visible{outline:2px solid #ffd08a;outline-offset:3px}
+.more-chain-select nav button:disabled{opacity:.5;cursor:wait}
+@media(max-width:600px){.more-chain-select nav{left:0;right:auto}.more-chain-select nav button{font-size:13px}.more-chain-select nav{width:290px}}
