@@ -4,3 +4,5 @@
 :root{--pink:#efb94d;--violet:#d8943d;--cyan:#ffe0a4}.hero h1 em{color:#efb94d}.tabs button[aria-selected=true]{background:linear-gradient(100deg,#efb94d,#e4c477);color:#21180c}.eyebrow{color:#efb94d}.power-ring{background:conic-gradient(#efb94d var(--power-angle),#ffffff0c 0)}.demo-share>strong,.estimate-rows small{color:#efb94d}.network-dot{background:#efb94d}
 
 .estimate-rows>div{gap:12px}.estimate-rows>div>div{min-width:0;max-width:76%;overflow-wrap:anywhere}.estimate-rows strong{white-space:normal;font-size:15px}.fee-line strong{overflow-wrap:anywhere}.table-scroll{min-width:0;max-width:100%}.form-card .fee-line strong{color:#efb94d}@media(max-width:800px){.estimate-rows strong{font-size:13px}.fee-line strong{max-width:48%}}
+
+.pool-grid{grid-template-columns:repeat(4,minmax(0,1fr))}.estimate-rows>b small,.estimate-rows b small{display:block;font-size:10px;font-weight:400;color:var(--muted);margin-top:4px}.pool-amount{overflow-wrap:anywhere}@media(max-width:1000px){.pool-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:800px){.pool-grid{grid-template-columns:1fr}}
