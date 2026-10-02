@@ -72,3 +72,38 @@
 @keyframes pool-shine{0%,100%{transform:translateX(-100%)}50%{transform:translateX(100%)}}
 @media(prefers-reduced-motion:reduce){#pool-cards .progress-track>span:after{animation:none}}
 @media(max-width:800px){#panel-pools .settle-bar{flex-direction:column;align-items:stretch;padding:20px}#panel-pools .button-row{flex-wrap:wrap}#panel-pools .button-row button{flex:1}}
+
+/* Burn pools use the same information hierarchy and controls as Fuel Forge. */
+#burn-overview{display:grid;grid-template-columns:minmax(240px,1fr) 2.4fr;gap:16px;padding:16px}
+#burn-overview>.burn-total{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+#burn-overview>.burn-flow{display:flex;flex-direction:row;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap}
+#burn-overview .burn-total strong{font-size:27px;color:var(--text);line-height:1.3;overflow-wrap:anywhere}
+#burn-overview .burn-total .usd-reference{color:#ffbd70;font-size:12px;font-weight:650;letter-spacing:0}
+#burn-overview .burn-flow span{font-size:11px;letter-spacing:0;line-height:1.7}
+#burn-cards .burn-heading h3{margin:0;line-height:1.3;font-size:20px}
+#burn-cards .burn-heading>div{min-width:0}
+#burn-cards .burn-heading small{display:block;line-height:1.6}
+#burn-cards .burn-balance strong{font-size:clamp(22px,2.15vw,30px);line-height:1.35;overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#burn-cards .burn-row{gap:14px;line-height:1.6;min-width:0}
+#burn-cards .burn-row>span{flex-shrink:0}
+#burn-cards .burn-row strong{overflow-wrap:anywhere;font-variant-numeric:tabular-nums}
+#burn-cards .burn-row small{display:block;line-height:1.65;margin-top:5px}
+#burn-cards .burn-row .usd-reference,#burn-cards .burn-balance .usd-reference{color:var(--burn-accent);font-weight:650}
+#burn-cards .burn-readiness.is-ready{color:#ffca78;display:inline-flex;align-items:center;gap:6px}
+.burn-readiness i{width:6px;height:6px;flex-shrink:0;background:currentColor;border-radius:50%;box-shadow:0 0 9px currentColor}
+#burn-cards .burn-check-note{font-size:11px;line-height:1.7;color:var(--burn-accent);margin:16px 0 0}
+#burn-cards .burn-actions{flex-wrap:wrap;margin-top:auto;gap:12px;padding:22px 0 0}
+#burn-cards .burn-actions button{margin:0;font-size:12px}
+#burn-cards .burn-actions a{color:#dac5af;font-size:11px;text-decoration:underline;text-underline-offset:3px;line-height:1.6}
+.owner-burn-settings{border-top:1px solid #ffffff16;margin-top:20px;padding-top:16px;font-size:11px;line-height:1.7}
+.owner-burn-settings summary{cursor:pointer;color:#e7dad0;font-weight:600}
+.owner-burn-fields{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px 10px;align-items:end;margin-top:18px}
+.owner-burn-fields label{display:flex;flex-direction:column;gap:6px;color:var(--muted);font-size:11px;margin:0;min-width:0}
+.owner-burn-fields input{width:100%;min-width:0;border:1px solid #ffab4d44;border-radius:8px;padding:10px;background:#100c09;color:#fff;font:inherit;min-height:38px}
+.owner-burn-fields button{font:inherit;min-height:38px;padding:8px 10px;background:#ffab4d12;border:1px solid #ffab4d44;border-radius:8px;color:#ffbd70;cursor:pointer;margin:0}
+.owner-burn-settings p{color:var(--muted);font-size:10px;line-height:1.7;margin:14px 0 0}
+@media(max-width:1050px) and (min-width:801px){#burn-cards .burn-heading h3{font-size:17px}#burn-cards .burn-row{gap:8px;font-size:11px}#burn-cards .burn-row>span{flex-shrink:1}#burn-cards .burn-actions{align-items:flex-start;flex-direction:column}}
+@media(max-width:800px){#burn-overview{grid-template-columns:1fr;padding:12px}#burn-overview>.burn-flow{gap:12px}#burn-cards .burn-balance strong{font-size:30px}}
+@media(max-width:380px){#burn-cards .burn-balance strong{font-size:24px}#burn-cards .burn-heading h3{font-size:18px}#burn-cards .burn-row{font-size:11px;gap:8px}#burn-cards .burn-row>span{flex-shrink:1}#burn-cards .burn-row strong{font-size:12px}}
+#burn-cards .burn-row{min-height:96px}
+#burn-cards .burn-balance+.burn-row{min-height:110px}
