@@ -25,7 +25,7 @@ window.moreForgeTabs = (() => {
     const brand = document.querySelector('.more-brand');
     if (brand) brand.onclick = event => {
       event.preventDefault();
-      select('build');
+      select('buy');
       window.scrollTo({top: 0, behavior: 'instant'});
     };
   }
