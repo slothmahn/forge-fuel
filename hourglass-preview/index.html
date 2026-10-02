@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0d0b0a">
   <meta name="description" content="Explore Fuel Furnace: create full-range FUEL / ETH liquidity, hold or stake LP receipts, and redeem for FUEL + ETH. Interactive design preview.">
   <title>Fuel Furnace — Liquidity, put to work.</title>
-  <link rel="stylesheet" href="style.css?v=furnace-approved-f-22">
+  <link rel="stylesheet" href="style.css?v=furnace-flame-options-23">
 </head>
 <body>
 <svg class="svg-library" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"><defs>
@@ -28,14 +28,15 @@
   <div class="preview-notice"><span class="preview-label">DESIGN PREVIEW</span><span>Current market prices · simulated balances. No wallet connection or live transactions.</span></div>
   <section class="hero" aria-labelledby="hero-title">
     <div class="hero-copy"><div class="eyebrow"><span></span> ROBINHOOD CHAIN · LIQUIDITY</div><h1 id="hero-title">$FUEL the <em>Furnace.</em></h1><p>Build liquidity. Stake liquidity.<br class="desktop-break"> Earn Furnace rewards.</p><div class="hero-links"><a href="#workspace" class="text-link">Explore the Furnace <svg aria-hidden="true"><use href="#i-arrow"/></svg></a><button class="quiet-button" id="how-it-works">How it works <svg aria-hidden="true"><use href="#i-info"/></svg></button></div></div>
-    <div class="liquidity-art" role="img" aria-label="FUEL and ETH enter a shared V3 liquidity vault. You receive LP receipts to hold or stake.">
-      <div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div>
-      <div class="art-asset asset-fuel"><span class="token-icon fuel-icon"><img src="assets/fuel-f-approved.jpg" alt="" width="26" height="26"></span> FUEL</div><div class="art-asset asset-eth"><span class="token-icon eth-icon"><svg aria-hidden="true"><use href="#i-eth"/></svg></span> ETH</div>
+    <div class="liquidity-art" role="group" aria-label="FUEL and ETH enter a shared V3 liquidity vault. You receive LP receipts to hold or stake.">
+      <svg class="furnace-orbits" aria-hidden="true"><path class="orbit-inner"/><path class="orbit-main"/><path class="orbit-outer"/></svg>
+      <div class="art-asset asset-fuel"><span class="token-icon fuel-icon"><img src="assets/fuel-f-approved-transparent.png" alt="" width="26" height="26"></span> FUEL</div><div class="art-asset asset-eth"><span class="token-icon eth-icon"><svg aria-hidden="true"><use href="#i-eth"/></svg></span> ETH</div>
       <div class="furnace-core"><div class="core-inner"><img class="furnace-emblem" src="assets/furnace-flame.svg" alt="" width="64" height="76"></div></div>
+      <div class="flame-options" role="group" aria-label="Preview flame styles"><span>Flame style</span><button type="button" data-flame="ember" aria-pressed="true">Ember</button><button type="button" data-flame="rising" aria-pressed="false">Rising</button><button type="button" data-flame="spark" aria-pressed="false">Spark</button></div>
       <span class="art-label">FULL-RANGE V3 LIQUIDITY</span><div class="art-output"><svg aria-hidden="true"><use href="#i-layers"/></svg> Your LP receipts <span>HOLD OR STAKE</span></div>
     </div>
   </section>
-  <div class="field-note"><span id="market-status" role="status">Loading current pool data…</span> <button id="refresh-market" class="quiet-button" type="button">Refresh prices</button></div><div class="market-row"><a href="https://dexscreener.com/robinhood/0xFF40c99525ffA6b6cf79ecbE370eF7C887D68F69" target="_blank" rel="noopener"><span class="pair-symbols"><span class="pair-fuel"><img src="assets/fuel-f-approved.jpg" alt="" width="23" height="23"></span><svg aria-hidden="true"><use href="#i-eth"/></svg></span><b>FUEL / WETH</b><span>View pool on DexScreener</span><svg class="out-icon"><use href="#i-out"/></svg></a><span class="market-note">Full-range liquidity <span>•</span> ERC-20 receipts</span></div>
+  <div class="field-note"><span id="market-status" role="status">Loading current pool data…</span> <button id="refresh-market" class="quiet-button" type="button">Refresh prices</button></div><div class="market-row"><a href="https://dexscreener.com/robinhood/0xFF40c99525ffA6b6cf79ecbE370eF7C887D68F69" target="_blank" rel="noopener"><span class="pair-symbols"><span class="pair-fuel"><img src="assets/fuel-f-approved-transparent.png" alt="" width="23" height="23"></span><svg aria-hidden="true"><use href="#i-eth"/></svg></span><b>FUEL / WETH</b><span>View pool on DexScreener</span><svg class="out-icon"><use href="#i-out"/></svg></a><span class="market-note">Full-range liquidity <span>•</span> ERC-20 receipts</span></div>
   <section class="totals" aria-label="Sample contract liquidity">
     <div class="total-primary"><div class="metric-label">Total contract liquidity <span class="sample-tag">SIMULATED</span></div><div class="contract-lp"><strong id="total-demo">1,261</strong><span>LP units</span></div><div class="asset-totals"><strong id="total-fuel">— FUEL</strong><strong id="total-eth">— ETH equivalent</strong><span id="total-usd">Loading current prices…</span></div><div class="liquidity-bar" aria-hidden="true"><span></span></div></div>
     <div><div class="metric-label"><i class="metric-dot mint"></i>User-backed liquidity</div><div class="contract-lp split-lp"><strong id="user-demo">1,260</strong><span>LP units</span></div><div class="asset-totals asset-split"><strong id="user-fuel">— FUEL</strong><strong id="user-eth">— ETH equivalent</strong><span id="user-usd">— USD</span></div><p id="demo-total-note">1,250 held + 10 reward units</p></div>
@@ -78,6 +79,6 @@
   <footer><div><strong>FUEL FURNACE</strong><span>From the Fuel Forge family.</span></div><p>Design preview · live prices · simulated balances · contracts not deployed</p><a href="https://thefuelforge.com/" target="_blank" rel="noopener">Visit Fuel Forge <svg aria-hidden="true"><use href="#i-out"/></svg></a></footer>
 </div>
 <dialog id="modal" aria-labelledby="modal-title"><button class="icon-button close" aria-label="Close review">×</button><div class="eyebrow">FUEL FURNACE / PREVIEW</div><h2 id="modal-title"></h2><p id="modal-body"></p><p class="field-note">No assets move. Live wallet integration and deployment are still pending.</p><button class="primary close">Back to preview</button></dialog>
-<script type="module" src="app.js?v=furnace-approved-f-22"></script>
+<script type="module" src="app.js?v=furnace-flame-options-23"></script>
 </body>
 </html>

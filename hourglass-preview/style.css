@@ -61,3 +61,9 @@ label,.destination legend{font-size:12px}.choice-copy b{font-size:13px}.choice-c
 
 /* User-approved F artwork: preserve its supplied orientation and glow. */
 .fuel-icon,.pair-symbols>.pair-fuel{background:#000;overflow:hidden}.fuel-icon img,.pair-fuel img{transform:none;object-fit:contain}
+
+/* Open flame, with the same -25 degree orbital plane used by Fuel Forge. */
+.liquidity-art{height:280px}.furnace-orbits{position:absolute;inset:0;width:100%;height:100%;overflow:visible;stroke-width:1;pointer-events:none;z-index:-1}.furnace-orbits path{fill:none;stroke:#ffab5517}.furnace-orbits .orbit-main{stroke:#ffab5533}.liquidity-art .art-asset{offset-path:var(--furnace-orbit-path)}
+.furnace-core,.core-inner{border:0;background:none;box-shadow:none;transform:none;border-radius:0}.furnace-core{top:42px;width:110px;height:122px}.core-inner{width:110px;height:122px}.core-inner .furnace-emblem{width:90px;height:108px;transform:none;filter:drop-shadow(0 0 18px #f9763545)}.art-label{top:181px}.art-output{bottom:42px}
+.flame-options{position:absolute;bottom:0;display:flex;gap:5px;align-items:center;font-size:9px;color:var(--subtle)}.flame-options>span{margin-right:5px}.flame-options button{padding:4px 8px;border:1px solid var(--line-strong);border-radius:5px;background:transparent;font-size:9px;color:var(--muted)}.flame-options button[aria-pressed=true]{color:var(--mint);border-color:#ffab5570;background:#ffab5510}
+.fuel-icon,.pair-symbols>.pair-fuel{background:none;overflow:visible}.fuel-icon img,.pair-fuel img{border-radius:0}

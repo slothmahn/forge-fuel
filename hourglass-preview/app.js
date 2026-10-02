@@ -281,3 +281,38 @@ $('match-fuel').onclick = () => {
 $('refresh-market').onclick = refreshMarket;
 refreshMarket();
 setInterval(() => { if (!document.hidden) refreshMarket(); }, 60000);
+
+// The visible orbit and token animation share the exact transformed path.
+const furnaceArt = document.querySelector('.liquidity-art');
+function sizeFurnaceOrbit() {
+  const width = furnaceArt.clientWidth, height = furnaceArt.clientHeight;
+  if (!width || !height) return;
+  const badges = [...furnaceArt.querySelectorAll('.art-asset')];
+  const badgeWidth = Math.max(...badges.map(b => b.offsetWidth));
+  const badgeHeight = Math.max(...badges.map(b => b.offsetHeight));
+  const tilt = -25 * Math.PI / 180, squash = .55;
+  const c = Math.cos(tilt), s = Math.sin(tilt), cy = 105;
+  const radius = Math.max(0, Math.min(
+    (width - badgeWidth - 16) / (2 * Math.hypot(c, squash * s)),
+    (cy - badgeHeight / 2 - 8) / Math.hypot(s, squash * c)
+  ));
+  const path = scale => Array.from({length:97}, (_,i) => {
+    const angle = i / 96 * Math.PI * 2;
+    const x = radius * scale * Math.cos(angle), y = radius * scale * squash * Math.sin(angle);
+    return `${i ? 'L' : 'M'} ${(width/2 + x*c - y*s).toFixed(2)} ${(cy + x*s + y*c).toFixed(2)}`;
+  }).join(' ') + ' Z';
+  const main = path(1);
+  furnaceArt.style.setProperty('--furnace-orbit-path', `path("${main}")`);
+  furnaceArt.querySelector('.orbit-main').setAttribute('d', main);
+  furnaceArt.querySelector('.orbit-inner').setAttribute('d', path(.8));
+  furnaceArt.querySelector('.orbit-outer').setAttribute('d', path(1.14));
+}
+new ResizeObserver(sizeFurnaceOrbit).observe(furnaceArt);
+sizeFurnaceOrbit();
+const flameFiles = {ember:'furnace-flame.svg',rising:'furnace-flame-rising.svg',spark:'furnace-flame-spark.svg'};
+document.querySelectorAll('[data-flame]').forEach(button => {
+  button.onclick = () => {
+    furnaceArt.querySelector('.furnace-emblem').src = `assets/${flameFiles[button.dataset.flame]}`;
+    document.querySelectorAll('[data-flame]').forEach(b => b.setAttribute('aria-pressed', String(b === button)));
+  };
+});
