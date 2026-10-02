@@ -46,3 +46,6 @@ body{background:radial-gradient(ellipse 760px 650px at 5% 0%,#97291b25,transpare
 @media(max-width:600px){.claim-card{padding:20px}.claim-heading{align-items:flex-start;flex-direction:column}.claim-totals{grid-template-columns:1fr}.claim-combined{align-items:flex-start;flex-direction:column;gap:8px}.claim-actions{flex-direction:column;align-items:stretch}.claim-totals strong{font-size:26px}}
 
 @media(min-width:801px){#burn-cards[data-count="2"]{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+/* Keep collapsed bonus content out of mobile overflow calculations. */
+.proposal:not([open]) > :not(summary){display:none}
