@@ -241,3 +241,13 @@
 .more-chain-select summary:focus-visible,.more-chain-select nav button:focus-visible{outline:2px solid #ffd08a;outline-offset:3px}
 .more-chain-select nav button:disabled{opacity:.5;cursor:wait}
 @media(max-width:600px){.more-chain-select nav{left:0;right:auto}.more-chain-select nav button{font-size:13px}.more-chain-select nav{width:290px}}
+
+/* Keep the companion Forge mark small, using each chain's existing logo treatment. */
+.site-header .header-links .fuel-forge-link{padding:0 8px}
+.fuel-forge-link img{display:block;width:110px;height:36px;object-fit:contain;filter:none}
+.fuel-forge-link .fuel-link-label{display:none}
+.fuel-forge-link[data-chain="pls"] img{filter:hue-rotate(175deg) saturate(1.05)}
+.fuel-forge-link[data-chain="eth"] img,.fuel-forge-link[data-chain="avax"] img{display:none}
+.fuel-forge-link[data-chain="eth"] .fuel-link-label,.fuel-forge-link[data-chain="avax"] .fuel-link-label{display:inline}
+@media(max-width:600px){.fuel-forge-link img{width:92px;height:28px}}
+@media(max-width:380px){.site-header .header-links .fuel-forge-link{padding:0 6px}.fuel-forge-link img{width:80px;height:28px}}
