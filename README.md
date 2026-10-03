@@ -23,3 +23,20 @@ Validation: desktop and 390px mobile layout, matching amount/Max dimensions,
 1,000-day preset and 5× preview, Forge/Foundry and section navigation, live
 manifest verification, pool/burn/price reads, and disconnected transaction
 controls. No live wallet transaction is submitted for visual regression checks.
+
+## Shared chain loading
+
+The Robinhood and PulseChain applications use `assets/forge-chain-reads.js` for
+parallel pool, portfolio, and reward reads. Deployment checks still validate
+every original contract, token, owner, routing, and schedule field. Independent
+verification groups run together, NFT scans use bounded batches, and refreshes
+are serialized so a wallet connection or confirmed transaction gets a fresh run.
+Burn checks and owner settings no longer delay the payout cards or fee previews.
+
+Validation: `node scripts/tests/fuel-chain-loading.mjs` compares pool, portfolio,
+and reward results against the previous application and rejects each corrupted
+deployment field. `node scripts/tests/fuel-loading-browser.cjs` compares both
+versions against live read-only RPC data through a local server on port 8765.
+Set `FUEL_LIVE=1` to smoke-test the published applications; no transactions are
+signed or sent. Ethereum and Avalanche previews have no deployed contract reads,
+and Fuel Furnace already batches its market/pool reads concurrently.
