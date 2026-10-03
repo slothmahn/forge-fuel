@@ -1,0 +1,102 @@
+/* Fuel Forge's typography and spacing, with MORE's existing ember colors. */
+body{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-size:16px}
+button,input,select,textarea{font-family:inherit}
+h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
+.wrap{width:min(1280px,calc(100% - 80px))}
+.card{padding:27px;border-radius:17px}
+.card h3{font-size:21px;font-weight:700;line-height:1.3;margin:0 0 10px}
+.eyebrow{font-size:9px;font-weight:700;letter-spacing:.17em;line-height:1.5;margin:0 0 10px}
+[role=tabpanel]{padding-top:30px}
+[role=tabpanel]>.section-heading{margin-bottom:25px;gap:30px}
+[role=tabpanel]>.section-heading .eyebrow{margin-bottom:12px}
+[role=tabpanel]>.section-heading h2{font-size:29px;font-weight:750;line-height:1.2;margin:0 0 7px}
+[role=tabpanel]>.section-heading p:not(.eyebrow){font-size:12px;line-height:1.7}
+.tabs{border-radius:14px;padding:5px;gap:5px}
+.tabs button{height:44px;min-height:44px;font-size:12px;font-weight:650;line-height:1.3;border-radius:9px;padding:10px 8px}
+.primary-button{min-height:43px;font-size:13px;font-weight:700;line-height:1.3;border-radius:9px;padding:12px 17px}
+.more-build,.buy-grid{gap:18px;align-items:start}
+.more-build>.card,.buy-grid>.card{padding:27px}
+.more-build .position-details>h3{font-size:21px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.field label,.form-card .field label{font-size:11px;font-weight:600;line-height:1.5}
+.field{margin-bottom:20px}
+.amount-field{min-height:53px;border-radius:9px}
+.amount-field input{font-size:17px;font-weight:600;letter-spacing:-.02em}
+.field-help,.action-note,.more-build .fee-policy,.more-build .estimate-explanation{font-size:12px;line-height:1.7}
+.more-build .fee-line{font-size:12px;padding:15px 0;line-height:1.5}
+.more-build .fee-line strong{font-size:14px;font-weight:650;line-height:1.5}
+.more-build .fee-line .usd-reference{font-size:11px}
+.more-build .term-estimate{padding:20px;border-radius:14px;margin-bottom:18px}
+.more-build .term-estimate h4{font-size:19px;font-weight:700;line-height:1.3;margin-bottom:10px}
+.more-build .term-subtitle{font-size:12px;line-height:1.7;margin-bottom:16px}
+.more-build .estimate-rows>div{padding:14px 0;gap:12px}
+.more-build .estimate-rows>div>b{font-size:12px;line-height:1.5;font-weight:600}
+.more-build .estimate-rows strong{font-size:14px!important;font-weight:650}
+.more-build .preview-breakdown>div,.power-breakdown dl>div{padding:13px 0;font-size:12px;line-height:1.5;gap:12px}
+.more-build .preview-breakdown dd,.power-breakdown dd{font-size:13px;font-weight:600}
+.more-power-preview{gap:18px 30px}
+.more-power-preview .more-power-ring{width:180px;height:180px;margin:10px auto 18px}
+.more-power-ring strong{font-size:48px;font-weight:600;letter-spacing:-.065em}
+.more-power-preview #power{font-size:26px;font-weight:650;line-height:1.3}
+.power-breakdown{padding:20px}
+.power-breakdown h4{font-size:19px;line-height:1.3;font-weight:700;margin-bottom:14px}
+.buy-guide>h3{font-size:24px;font-weight:700;line-height:1.3}
+.buy-guide>p,.buy-guide li{font-size:12px;line-height:1.7}
+#panel-rewards .positions-panel,.claim-card{padding:27px;border-radius:17px;margin:24px auto}
+#panel-rewards .positions-panel>h3,.claim-heading h3{font-size:24px;font-weight:750;line-height:1.2;margin:0 0 7px}
+.positions-panel>.eyebrow{margin-bottom:7px}
+.positions-intro,.claim-intro{font-size:12px;line-height:1.7;margin:9px 0 15px}
+.positions-panel .position-filters{gap:8px;padding-bottom:10px;margin:15px 0 17px}
+#position-controls .position-filters button{min-height:40px;padding:9px 12px;border-radius:8px;font-size:11px;font-weight:700;letter-spacing:.04em;line-height:1.4}
+.positions-panel .position-filters span{min-width:24px;height:24px}
+.positions-panel .position-empty{padding:25px 18px;border-radius:14px;font-size:14px;line-height:1.5}
+.positions-explanation{font-size:11px;line-height:1.7;margin:13px 3px 0}
+.position-card{padding:16px;border-radius:13px;margin:14px 0;background:#120f0c}
+.position-heading{align-items:center;gap:10px;margin-bottom:12px}
+.position-heading .eyebrow{font-size:9px;line-height:1.4;margin-bottom:4px}
+.position-heading h4{font-size:19px;font-weight:700;line-height:1.3;margin:0}
+.position-state{font-size:10px;font-weight:700;line-height:1.4;padding:5px 9px;border-radius:99px}
+.position-stats{gap:7px;margin-bottom:12px}
+.position-stats>div{padding:10px;border-radius:9px}
+.position-stats>div>span{font-size:10px;line-height:1.5;margin-bottom:4px}
+.position-stats strong{font-size:17px;font-weight:650;line-height:1.5}
+.position-stats strong>small{font-size:11px;margin-top:3px}
+.position-dates>div{padding:10px 0;gap:12px;font-size:12px;line-height:1.5}
+.position-dates dd{font-weight:600}
+.position-dates time>small{font-size:11px;line-height:1.5;margin-top:2px}
+.position-timeline{margin:14px 0}
+.position-timeline>div:first-child{font-size:11px;line-height:1.5;margin-bottom:7px}
+.position-timeline-track{height:7px}
+.position-stages{gap:8px;margin:12px 0 10px}
+.position-stages>span{font-size:11px;line-height:1.5;gap:6px}
+.position-countdown{font-size:11px;line-height:1.6}
+#position-controls .button-row{padding-top:12px;border-top:1px solid #ffffff18;gap:9px}
+#position-controls .button-row button{font-size:12px;min-height:43px;padding:10px 12px;border-radius:8px}
+.position-note{font-size:11px;line-height:1.7;margin:13px 0 0}
+.claim-heading{margin-bottom:15px}
+.claim-totals{gap:14px;margin:20px 0 16px}
+.claim-totals>div{padding:20px;border-radius:14px}
+.claim-totals strong{font-size:27px;font-weight:700;line-height:1.3}
+.claim-status,.claim-card .field-help{font-size:12px;line-height:1.7}
+@media(max-width:760px){
+ .wrap{width:calc(100% - 32px)}
+ .card,.more-build>.card,.buy-grid>.card{padding:23px}
+ [role=tabpanel]>.section-heading h2{font-size:27px}
+ [role=tabpanel]>.section-heading{gap:8px}
+ .tabs{padding:4px;gap:2px;border-radius:11px}
+ .tabs button{height:55px;min-height:55px;padding:9px 3px;border-radius:7px;font-size:10px;line-height:15px;gap:5px}
+ #panel-rewards .positions-panel,.claim-card{padding:20px}
+ .more-build .term-estimate{padding:18px}
+ .more-build .fee-line strong,.more-build .estimate-rows strong{font-size:13px!important}
+ .position-stats strong{font-size:14px}
+ .position-stats .position-amount{white-space:nowrap}
+ .position-stages>span{font-size:10px;gap:4px}
+ .power-breakdown{padding:18px}
+}
+@media(max-width:360px){
+ .more-build .term-estimate{padding:14px}
+ .position-stages>span{flex-direction:column;align-items:flex-start}
+}
+#position-controls .position-filters button{background:#ffffff03;border-color:#ffffff24;color:var(--muted)}
+#position-controls .position-filters button[aria-pressed=true]{background:#ffae5014;border-color:#ffae5066;color:#ffbe70}
+/* Orbit decorations stay inside their artwork during viewport changes. */
+.hero-art{overflow:clip}
