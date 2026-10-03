@@ -4,7 +4,7 @@ import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Posit
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=52';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
-import {installBuy} from './buy-ui-v2.js?v=52';
+import {installBuy} from './buy-ui-v2.js?v=54';
 import {displayAmount} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js';
@@ -29,7 +29,7 @@ function disable(){
  $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview;
  $('#review-confirm').disabled=busy||!canEnter();
  if(x?.preview&&account&&x.preview.total>x.balance)$('#build-submit').disabled=true;
- text('#build-submit',!x?.forgeReady?'V2 launch pending':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
+ text('#build-submit',!x?.forgeReady?'Launch pending':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
  $('#claim-open').disabled=busy||!account||!x?.dataLoaded||!x.claims.length;
  $('#claim-reset').hidden=true;$('#settle-due').disabled=busy||!account||!x?.dataLoaded||!x.due.length;
  $('#refresh-pools').disabled=busy||!x?.forgeReady;
@@ -39,15 +39,15 @@ function disable(){
 }
 function pending(){
  const future=!networks[$('#chain').value];
- const message=future?'This chain is planned for a later launch.':'V2 contracts are not deployed yet. No V2 funds or rewards are shown.';
- $('#pool-overview').innerHTML=`<div class="v2-empty"><strong>V2 pools open after deployment</strong>${message}<br><a class="legacy-link" href="legacy.html#pools">View existing V1 pools ↗</a></div>`;
- $('#pool-cards').innerHTML=[8,28,88,288].map((d,i)=>`<article class="card pool-card pool-tone-${i}"><div class="pool-top"><span>V2 · PLANNED</span><span>${(future?[28.48,24.03,18.69,17.8]:[26.88,22.68,17.64,16.8])[i]}% of fees</span></div><h3>${d}-Day ${i===3?'Bitcoin ':''}Pool</h3><div class="pending-value">Not launched</div><p>Balances and local deadlines appear after deployment.${i===3?' Bitcoin is purchased during entry.':''}</p></article>`).join('');
- $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>V2 buy-and-burn pools</strong>${message}<br><a class="legacy-link" href="legacy.html#burns">View existing V1 burns ↗</a></div>`;$('#burn-cards').replaceChildren();
- $('#claim-totals').innerHTML='<div><b>V2 rewards open after launch</b><p>Your V1 rewards remain on the existing-position page.</p><a class="legacy-link" href="legacy.html#rewards">Open V1 rewards ↗</a></div>';
+ const message=future?'This chain is planned for a later launch.':'Contracts are not deployed yet. No funds or rewards are shown.';
+ $('#pool-overview').innerHTML=`<div class="v2-empty"><strong>Pools open after deployment</strong>${message}<br><a class="legacy-link" href="legacy.html#pools">View existing V1 pools ↗</a></div>`;
+ $('#pool-cards').innerHTML=[8,28,88,288].map((d,i)=>`<article class="card pool-card pool-tone-${i}"><div class="pool-top"><span>PLANNED</span><span>${(future?[28.48,24.03,18.69,17.8]:[26.88,22.68,17.64,16.8])[i]}% of fees</span></div><h3>${d}-Day ${i===3?'Bitcoin ':''}Pool</h3><div class="pending-value">Not launched</div><p>Balances and local deadlines appear after deployment.${i===3?' Bitcoin is purchased during entry.':''}</p></article>`).join('');
+ $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>Buy-and-burn pools</strong>${message}</div>`;$('#burn-cards').replaceChildren();
+ $('#claim-totals').innerHTML='<div><b>Rewards open after launch</b></div>';
  for(const id of ['#claim-cycles','#position-controls'])$(id).replaceChildren();
- text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No V2 settlement is available before deployment.');
- text('#v2-launch-label',future?'Future chain · not available yet':'MORE Forge V2 · Preparing for launch');
- text('#v2-launch-copy','Explore the new lock and optional-burn model. V2 entries open after deployment; your existing V1 rewards remain available.');
+ text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No settlement is available before deployment.');
+ text('#v2-launch-label',future?'Future chain · not available yet':'MORE Forge · Preparing for launch');
+ text('#v2-launch-copy','Explore the lock and optional-burn model. Entries open after deployment.');
 }
 function updateLinks(){for(const a of $$('.legacy-link')){const dest=new URL(a.getAttribute('href'),location.href);dest.searchParams.set('chain',$('#chain').value);a.href=dest.href;}}
 async function load(){
@@ -59,7 +59,7 @@ async function load(){
  if(!n||!old||!m){status('This chain is planned for a future deployment.');await preview();return;}
  const r=new JsonRpcProvider(n.rpc,n.id,{staticNetwork:true});
  const x={key,n,r,m,old,ready:false,forgeReady:false,dataLoaded:false,paused:true,positions:[],owned:[],pools:[],claims:[],due:[],balance:0n,now:Math.floor(Date.now()/1000),feePolicy:{bps:m.feeBps,bounds:m.feeBoundsEnabled,min:m.minFeeWei,max:m.maxFeeWei}};
- // Markets use existing token/quote contracts only. Never route V2 actions to V1 positions.
+ // Markets use existing token/quote contracts only. Never route actions to V1 positions.
  x.m={...m,more:old.more,contracts:{...m.contracts,mainQuote:m.contracts?.mainQuote||old.contracts.mainQuote}};
  x.token=new Contract(old.more,erc20,r);ctx=x;buy.update();status('Loading MORE market…');
  try{
@@ -71,7 +71,7 @@ async function load(){
    await verify(x);if(e!==epoch)return;x.forgeReady=true;
   }
   buy.update();await refresh();
- }catch(err){if(e!==epoch)return;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('V2 unavailable: '+error(err));pending();await preview();disable();}
+ }catch(err){if(e!==epoch)return;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('Unavailable: '+error(err));pending();await preview();disable();}
 }
 async function verify(x){
  const {m,r,position:p}=x;
@@ -79,13 +79,13 @@ async function verify(x){
   Promise.all([m.position,m.helper,...m.vaults,...m.burners].map(a=>r.getCode(a))),p.name(),p.owner(),p.more(),p.priceOracle(),p.feeReceiver(),p.dayDuration(),x.helper.bitcoin(),
   ...x.vaults.map(async(v,i)=>{const [pos,anchor,duration]=await Promise.all([v.positions(),v.launchTime(),v.cycleDuration()]);return same(pos,m.position)&&Number(anchor)===m.launchTime&&Number(duration)===[8,28,88,288][i]*86400;})
  ]);
- if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,m.owner)||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('V2 contract verification failed.');
+ if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,m.owner)||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('Contract verification failed.');
  for(let i=0;i<3;i++)if(!same(await x.helper.vaults(i),m.vaults[i]))throw Error('Settlement helper mismatch.');
  if(!same(await x.vaults[3].rewardToken(),m.bitcoinToken))throw Error('Bitcoin token mismatch.');
  const router=new Contract(m.contracts.feeRouter,['function eightDayVault() view returns(address)','function twentyEightDayVault() view returns(address)','function eightyEightDayVault() view returns(address)','function bitcoinVault() view returns(address)','function fuelBurner() view returns(address)','function moreBurner() view returns(address)','function pampBurner() view returns(address)','function development() view returns(address)'],r);
  const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner','pampBurner','development'];
  const actual=await Promise.all(fields.map(k=>router[k]()));
- if(actual.some((a,i)=>!same(a,[...m.vaults,...m.burners,m.owner][i])))throw Error('V2 fee routing mismatch.');
+ if(actual.some((a,i)=>!same(a,[...m.vaults,...m.burners,m.owner][i])))throw Error('Fee routing mismatch.');
 }
 async function refresh(){
  const x=ctx;if(!x)return;
@@ -108,13 +108,13 @@ async function readChain(x){
    if(!current())return;
    Object.assign(x,{owner,paused,positions,owned,claims,pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[]),feePolicy:{bps,bounds,min,max},dataLoaded:true});
    const view=poolMarkup(x,Boolean(a));$('#pool-overview').innerHTML=view.overview;$('#pool-cards').innerHTML=view.cards;$('[data-pool-rewards]').onclick=event=>{event.preventDefault();tab('rewards');};
-   text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded V2 cycles are ready to settle.');
+   text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded cycles are ready to settle.');
    renderRewards(x);renderPositions(x);
-   text('#v2-launch-label',canEnter(x)?'MORE Forge V2 · Live':'MORE Forge V2 · Entries paused');
-   text('#v2-launch-copy',canEnter(x)?'Lock principal, add an optional burn, and earn from all four pools while eligible. Existing V1 rewards stay on the V1 page.':'The new contracts are deployed. Entries remain disabled until opening. Existing V1 rewards stay available.');
+   text('#v2-launch-label',canEnter(x)?'MORE Forge · Live':'MORE Forge · Entries paused');
+   text('#v2-launch-copy',canEnter(x)?'Lock principal, add an optional burn, and earn from all four pools while eligible.':'Entries are paused. Existing positions and rewards remain accessible.');
    renderBurns(x,a,current).catch(err=>{if(current())$('#burn-cards').textContent='Burn data unavailable: '+error(err);});
   }
-  status(x.forgeReady?'V2 · '+(a?'wallet connected':'connect wallet for your positions'):'V2 launch pending · live MORE purchases remain available');
+  status(x.forgeReady?'MORE Forge · '+(a?'wallet connected':'connect wallet for your positions'):'Launch pending · live MORE purchases remain available');
   buy.update();await preview();if(current()){refreshReferences(document,quotes);disable();}
  }catch(err){if(current()){x.dataLoaded=false;status('Unable to refresh: '+error(err));disable();}}
 }
@@ -129,13 +129,13 @@ async function preview(){
  $$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.days));$$('[data-boost]').forEach(b=>b.classList.toggle('active',v.burned===v.principal*BigInt(b.dataset.boost)));
  setReference($('#principal-usd'),{MORE:v.principal});setReference($('#burn-usd'),{MORE:v.burned});
  text('#native-fee','Loading quote…');text('#total-cost',display(v.total)+' MORE + fee + gas');
- text('#build-status',!x?.forgeReady?'Preview only · V2 entries open after deployment.':!canEnter(x)?'V2 entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
- if(!x?.forgeReady){$('#term-payouts').innerHTML='<p class="field-help">V2 funding and deadlines appear after deployment. Your preview does not create a position.</p>';text('#term-native-total','Available after V2 launch');text('#term-bitcoin-total','');text('#term-usd-total','');}
+ text('#build-status',!x?.forgeReady?'Preview only · entries open after deployment.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
+ if(!x?.forgeReady){$('#term-payouts').innerHTML='<p class="field-help">Funding and deadlines appear after deployment. Your preview does not create a position.</p>';text('#term-native-total','Available after launch');text('#term-bitcoin-total','');text('#term-usd-total','');}
  if(!x?.ready){text('#native-fee','Quote unavailable');return;}
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
   if(id!==previewId||x!==ctx)return;
-  x.preview={...v,fee};text('#native-fee',display(fee)+' '+x.n.unit);text('#fee-label',x.forgeReady?'Protocol fee · current on-chain policy':'Estimated V2 protocol fee · planned policy');
+  x.preview={...v,fee};text('#native-fee',display(fee)+' '+x.n.unit);text('#fee-label',x.forgeReady?'Protocol fee · current on-chain policy':'Estimated protocol fee · planned policy');
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value.${p.bounds?' Minimum '+display(BigInt(p.min))+' '+x.n.unit+'; maximum '+display(BigInt(p.max))+' '+x.n.unit+'.':''} Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
@@ -156,10 +156,10 @@ function renderRewards(x){
  $('#claim-totals').innerHTML=`<div><b>${display(native)} ${x.n.unit}</b>${referenceMarkup({NATIVE:native})}</div><div><b>${display(btc,8)} ${x.n.btc}</b>${referenceMarkup({BTC:btc})}</div>`;
  setReference($('#claim-usd'),{NATIVE:native,BTC:btc});
  $('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</div>`).join('');
- text('#claim-status',!account?'Connect wallet to load your V2 rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled V2 rewards for this wallet.');
+ text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
 }
 function renderPositions(x){
- $('#position-controls').innerHTML='<h3>Your positions &amp; withdrawals</h3>'+(!account?'<p>Connect wallet to see your principal and withdrawal dates.</p>':!x.owned.length?'<p>No V2 positions for this wallet. Existing V1 positions are on the V1 page.</p>':x.owned.map(p=>{
+ $('#position-controls').innerHTML='<h3>Your positions &amp; withdrawals</h3>'+(!account?'<p>Connect wallet to see your principal and withdrawal dates.</p>':!x.owned.length?'<p>No positions for this wallet.</p>':x.owned.map(p=>{
   const closed=p.closed!==0n,available=closed?0n:remaining(p.principal,p.maturity,BigInt(x.now)),mature=BigInt(x.now)>=p.maturity;
   const state=closed?'Closed · earned rewards remain claimable':!mature?'Principal locked':available===0n?'Fully decayed':BigInt(x.now)<=p.maturity+7n*DAY?'Full principal available':'Principal declining · withdraw now';
   return `<article class="position-card"><h4>Position #${p.id} · ${state}</h4><div class="fee-line"><span>Original principal</span><strong>${display(p.principal)} MORE</strong></div><div class="fee-line"><span>${closed?'Remaining principal':'Current principal'}</span><strong>${display(available)} MORE</strong></div><div class="fee-line"><span>Maturity</span><strong>${date(p.maturity)}</strong></div><div class="fee-line"><span>Full withdrawal through</span><strong>${date(p.maturity+7n*DAY)}</strong></div>${closed?'':`<div class="button-row"><button type="button" class="primary-button" data-withdraw="${p.id}" data-ready="${mature}" ${mature?'':'disabled'}>${available===0n?'Close expired position':mature?'Review withdrawal':'Locked until maturity'}</button><button type="button" class="review-cancel" data-transfer="${p.id}">Transfer position</button></div><small>Principal reaches zero at ${date(p.maturity+14n*DAY)}. Transferring this NFT transfers its principal and all unclaimed reward rights.</small>`}</article>`;
@@ -198,7 +198,7 @@ async function action(label,fn){
  return receipt?.status===1?receipt:null;
 }
 $('#build-form').onsubmit=async event=>{
- event.preventDefault();const x=ctx;if(!canEnter(x)||!account){text('#build-status','V2 entries are not open yet.');return;}
+ event.preventDefault();const x=ctx;if(!canEnter(x)||!account){text('#build-status','entries are not open yet.');return;}
  try{const v=valid(),who=account,fee=await x.position.requiredFee(v.principal);if(ctx!==x||account!==who)return;if(v.total>x.balance)throw Error('Not enough MORE for principal and optional burn.');
  review={...v,fee,x,account:who};const maturity=BigInt(x.now)+BigInt(v.days)*DAY;
  text('#review-title','Review your MORE position');text('#review-body',`Lock ${units(v.principal)} MORE for ${v.days} days.\nPermanently burn ${units(v.burned)} extra MORE.\nProtocol fee: ${units(fee)} ${x.n.unit}, plus gas.\n\nEstimated maturity: ${date(maturity)}. Withdraw by ${date(maturity+7n*DAY)} for full principal. It declines to zero over the next 7 days. Dates are finalized by your entry’s block.\n\nYour optional burn is never returned. Bitcoin is bought during this entry. Approval and entry are separate confirmations.`);$('#review').showModal();

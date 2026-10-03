@@ -71,7 +71,7 @@ async function websiteCheck(){
  if(m?.status==='deployed'&&m.entriesEnabled===true&&same(m.position,plan.contracts.position)&&same(m.helper,plan.contracts.settlementBatcher)&&m.launchTime===plan.anchor){
   for(const name of Object.keys(plan.contracts))if(!same(m.contracts?.[name],plan.contracts[name]))throw Error('Published website contract mismatch');
   const html=await fetch('../index.html?v='+Date.now(),{cache:'no-store'}).then(r=>r.text());
-  if(!html.includes('live-v2.js'))throw Error('Website V2 interface unavailable');
+  if(!html.includes('live-v2.js'))throw Error('Website interface unavailable');
   siteReady=true;
  }
 }

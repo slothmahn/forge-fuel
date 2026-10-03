@@ -17,7 +17,7 @@
   strip.innerHTML=entries.map(([symbol,id])=>{
    const pair=network.pairs[id==='NATIVE'?'BTC':id];
    return pair?`<a href="https://dexscreener.com/${network.chain}/${pair}" target="_blank" rel="noopener noreferrer"><b>${symbol}</b><span>${quotes[id]===undefined?(status.startsWith('Checking')?'Checking…':'Unavailable'):price(quotes[id])}</span></a>`:`<span><b>${symbol}</b> Market pending</span>`;
-  }).join('')+`<div class="market-status"><span>${status}</span><button class="refresh-prices" type="button">Refresh prices</button></div><p class="market-note">Live market reference prices. V2 previews use the planned fee policy until deployment.</p>`;
+  }).join('')+`<div class="market-status"><span>${status}</span><button class="refresh-prices" type="button">Refresh prices</button></div><p class="market-note">Live market reference prices. Protocol fees and pool balances are read from the chain.</p>`;
   strip.querySelector('.refresh-prices').onclick=()=>refresh(true);
  }
  async function refresh(force=false){
