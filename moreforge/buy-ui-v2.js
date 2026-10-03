@@ -1,4 +1,4 @@
-import {fitAmountInputs} from './input-sizing.js?v=more-forge-polish-33';
+import {fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
 import {displayAmount,amountText} from './amounts.js?v=more-forge-polish-33';
 import {Contract,parseUnits,formatUnits} from './vendor/ethers-6.15.0.js';
 import {quotePurchase,minimumReceived,purchaseTransaction,receivedMore} from './swaps.js';

@@ -5,9 +5,9 @@ import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Posit
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=52';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
-import {installBuy} from './buy-ui-v2.js?v=62';
+import {installBuy} from './buy-ui-v2.js?v=63';
 import {displayAmount,amountText} from './amounts.js';
-import {installInputSizing,fitAmountInputs} from './input-sizing.js';
+import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const networks={rh:{id:4663,rpc:'https://rpc.mainnet.chain.robinhood.com/',unit:'ETH',btc:'cbBTC',explorer:'https://explorer.robinhood.com'},pls:{id:369,rpc:'https://rpc.pulsechain.com',unit:'PLS',btc:'wBTC',explorer:'https://scan.pulsechain.com'}};
