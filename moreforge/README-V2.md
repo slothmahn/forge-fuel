@@ -38,3 +38,11 @@ The first two buttons request wallet confirmations for the helper and suite, usi
 After setup, the user copies or downloads a deployment report for independent verification and publication. Public page actions only request signing through the connected wallet; no server holds a wallet key. Refresh-and-resume uses the same browser storage. Do not clear site storage during deployment.
 
 `node scripts/tests/moreforge-v2-deploy.cjs` rehearsed all three wallet requests on refreshed isolated RH/PLS forks at a 390-pixel viewport, including refresh after the helper, exact suite deployment, bytecode/wiring checks, the website activation gate and rejection of corrupted saved calldata. Actual mobile Rabby signing remains to be performed by the owner.
+
+## PulseChain wallet RPC compatibility
+
+The 61,828-byte setup is an ordinary call to the confirmed helper. PulseChain Erigon 2.4.1 rejects this payload because its transaction pool applies the 49,152-byte initcode limit without checking whether the transaction creates a contract. Anvil fork execution does not exercise that public transaction-pool check. PublicNode’s endpoint, `https://pulsechain-rpc.publicnode.com`, reports Geth v3.2.0 and chain 369. The owner must change the wallet’s custom PulseChain RPC; changing the site’s read RPC alone cannot change wallet broadcasting.
+
+The signing page displays these instructions on PulseChain, checks the wallet client version before setup, blocks the known affected client and explains initcode-size errors. Existing confirmed helpers and committed plans are preserved. The signed setup explicitly includes its destination and chain ID. A missing client-version response is reported; it cannot prove compatibility.
+
+`MORE_CONFIRMED_PLAN=/path/to/verified-plan.json node scripts/tests/moreforge-v2-rpc-compat.cjs` is a targeted regression for the confirmed PulseChain helper at `0x2700F271082De265bDe9A837851Baa136ce6B284`. Serve the repository on port 8769. It reads the helper and chain state through PublicNode, resumes the saved plan, rejects the affected client and intercepts the Geth signing request to verify unchanged destination, calldata and nonce. It never broadcasts a public transaction. Actual Rabby retry remains an owner action.

@@ -5,6 +5,13 @@ const $=s=>document.querySelector(s),same=(a,b)=>String(a).toLowerCase()===Strin
 const status=t=>$('#status').textContent=t,log=t=>$('#log').textContent+=t+'\n',err=e=>e.shortMessage||e.message||String(e);
 const network={rh:{id:4663,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://explorer.robinhood.com'},pls:{id:369,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com'}};
 const providers=[];let wallet,chain,plan,run,artifacts,configs,busy=false,connected=false,verified,siteReady=false;
+const compatibleRpc='https://pulsechain-rpc.publicnode.com';
+async function checkSetupRpc(){
+ if(chain!=='pls')return;
+ let version;try{version=await rpc('web3_clientVersion');}catch(e){$('#rpc-status').textContent='Client version unavailable. Use the listed RPC if you see an initcode-size rejection.';return;}
+ $('#rpc-status').textContent='Wallet RPC client: '+version;
+ if(/erigon\/2\.4\.1(?:\/|$)/i.test(version))throw Error('This PulseChain RPC rejects the 62 KB setup call. In Rabby, change PulseChain’s custom RPC to '+compatibleRpc+', reconnect, and retry step 2. Your helper is already confirmed.');
+}
 const key=()=>`more-v2-launch-1-${chain}-${OWNER.toLowerCase()}`;
 const json=r=>{if(!r.ok)throw Error('Deployment file unavailable');return r.json();};
 function add(p,name){if(p&&!providers.some(x=>x.p===p))providers.push({p,name});}
@@ -19,7 +26,7 @@ function controls(){
  $('#results').hidden=!run?.hashes?.[1];
 }
 function render(){
- chain=$('#chain').value;const n=network[chain];
+ chain=$('#chain').value;const n=network[chain];$('#rpc-help').hidden=chain!=='pls';
  $('#fee').textContent=chain==='rh'?'100% of locked principal’s quoted value · 0.001–1 ETH':'100% of locked principal’s quoted value · 200,000–200,000,000 PLS';
  if(plan){
   $('#anchor').textContent=new Date(plan.anchor*1000).toLocaleString()+' · '+new Date(plan.anchor*1000).toISOString();
@@ -73,7 +80,7 @@ async function inspect(){
  run.confirmed=[true,true];run.manifest=verified.manifest;persist();await websiteCheck();render();
  status(verified.paused?(siteReady?'Setup and website verified. The third confirmation can open entries.':'Setup verified. Entries are paused. Copy the deployment details to Codex so the site can be connected.'):'Deployment verified. Entries are already open.');
 }
-async function action(fn){if(busy)return;busy=true;controls();try{await fn();}catch(e){status(err(e));log(err(e));}finally{busy=false;render();}}
+async function action(fn){if(busy)return;busy=true;controls();try{await fn();}catch(e){const message=err(e);status(chain==='pls'&&/initcode too large/i.test(message)?'PulseChain’s RPC rejected this setup call. Change the wallet’s custom RPC to '+compatibleRpc+' and retry step 2; your confirmed helper is reused.':message);log(message);}finally{busy=false;render();}}
 $('#connect').onclick=()=>action(async()=>{
  wallet=providers.find(x=>/rabby/i.test(x.name)||x.p.isRabby)?.p||providers[0]?.p||window.ethereum;
  if(!wallet)throw Error('No wallet detected. Open this public URL inside Rabby’s browser.');
@@ -103,13 +110,13 @@ $('#deploy').onclick=()=>action(async()=>{
  await assertWallet();await verifiedPlan();
  let n=run.hashes[0]?1:0;
  if(n===1&&!run.confirmed[0]){const r=await waitReceipt(run.hashes[0]);run.confirmed[0]=true;persist();}
- if(n===1)await verifyHelper();
+ if(n===1){await verifyHelper();await checkSetupRpc();}
  if(!run.hashes[n]){
   const nonce=await rpc('eth_getTransactionCount',[OWNER,'pending']);if(BigInt(nonce)!==BigInt(plan.transactions[n].nonce))throw Error('Owner nonce changed. Do not submit this plan. Return to the chat for review.');
   if(n===0){const now=Number(BigInt((await rpc('eth_getBlockByNumber',['latest',false])).timestamp));if(now>=plan.anchor)throw Error('Cycle anchor has passed. Prepare a fresh plan before signing.');}
   if(n===1){const now=Number(BigInt((await rpc('eth_getBlockByNumber',['latest',false])).timestamp));if(now>=plan.anchor)throw Error('The prepared cycle anchor has passed. Stop and return to the chat before deploying the suite.');}
   status('Review '+(n===0?'the helper deployment':'the full setup deployment')+' in Rabby.');
-  run.hashes[n]=await wallet.request({method:'eth_sendTransaction',params:[plan.transactions[n]]});persist();render();
+  run.hashes[n]=await wallet.request({method:'eth_sendTransaction',params:[{...plan.transactions[n],chainId:'0x'+network[chain].id.toString(16),...(n===1?{to:plan.helper}:{})}]});persist();render();
  }
  const receipt=await waitReceipt(run.hashes[n]);run.confirmed[n]=true;persist();log('Confirmed step '+(n+1)+': '+receipt.transactionHash);
  if(n===1)await inspect();else {await verifyHelper();status('Helper confirmed. The next transaction deploys and configures the entire suite.');}
@@ -125,5 +132,6 @@ $('#open').onclick=()=>action(async()=>{
 function report(){return {version:2,chain,helper:plan.helper,planHash:plan.planHash,anchor:plan.anchor,contracts:plan.contracts,run};}
 $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.stringify(report(),null,2));$('#copy-status').textContent='Copied. Paste the deployment details into this chat.';}catch(e){$('#copy-status').textContent='Copy unavailable in this browser. Use Save deployment report.';}};
 $('#download').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='more-forge-v2-'+chain+'-deployment.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('#copy-rpc').onclick=async()=>{try{await navigator.clipboard.writeText(compatibleRpc);$('#rpc-status').textContent='Copied. Paste into Rabby’s custom RPC setting for PulseChain.';}catch(e){$('#rpc-status').textContent='RPC URL: '+compatibleRpc;}};
 $('#chain').onchange=restore;
 try{[artifacts,configs]=await Promise.all(['artifacts.json','chains.json'].map(file=>fetch(file).then(json)));restore();}catch(e){status(err(e));$('#connect').disabled=true;}
