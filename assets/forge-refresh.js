@@ -91,9 +91,7 @@ if (app) {
     const moreForge = document.createElement('a');
     moreForge.className = 'litepaper-link more-forge-link';
     moreForge.href = '/moreforge/?chain=rh#build';
-    moreForge.target = '_blank';
-    moreForge.rel = 'noopener noreferrer';
-    moreForge.setAttribute('aria-label', 'MORE Forge on Robinhood Chain (opens in a new tab)');
+    moreForge.setAttribute('aria-label', 'MORE Forge on Robinhood Chain');
     const moreLogo = document.createElement('img');
     moreLogo.src = './moreforge/assets/more-forge-metal-wordmark.png';
     moreLogo.alt = 'MORE Forge';
