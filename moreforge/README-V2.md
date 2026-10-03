@@ -72,3 +72,17 @@ The corrected mobile deployment test on the Shanghai fork passed all three simul
 The Build power tab exposes Forge Position Fee settings only when the connected wallet matches the current on-chain position owner. Percentage (0.01–100%), native minimum/maximum, and bounds toggle are saved together via `setFeePolicy` after a review. Saving rechecks ownership and the reviewed prior policy through the signer; changed policies require a new review. Account/chain changes or unavailable data hide the panel and invalidate its review. Confirmed updates refresh entry quotes. No fee values are changed by publishing this UI. Pending chains expose no owner controls until their verified V2 manifest is connected.
 
 Validation: `scripts/tests/moreforge-owner-fees.cjs` covers input limits, owner visibility, exact transaction arguments, stale policy rejection, ETH/PLS units, mobile/desktop overflow, and review invalidation. A read-only browser check also loaded Robinhood’s live owner and fee policy without requesting a transaction.
+
+### PulseChain replacement accepted — October 3, 2026
+
+The Shanghai replacement has now been verified through read-only public RPC calls. Both receipts succeeded, despite the submitted browser report containing only one `confirmed` flag. Helper `0x58327031180c3b20c387a369fd72DD53c115BBD7` and all 20 suite runtimes match the reviewed Shanghai package; ownership, commitment, adapters, recipients, vault anchors/durations, fee policy and live `name()`/`requiredFee()` calls passed.
+
+- Helper receipt: `0xb107d641481eac582a5bbe58a0e5622417e1d1c21910daa10e6adb47483b502e`, 712,653 gas.
+- Suite receipt: `0xee4d3f5d9e581fbb5d07aba3fb0857b0a7439c45ef928bbd12282bc622f28840`, block 27,702,481, 19,027,483 gas.
+- Plan commitment: `0x5edc7acc5de05591b0e40c6f54358bb0c6ebd30107937b151ccde266b903ef59`.
+- Position: `0x0438743F2fd7C655CC40bD6C65226fe47AeDDCEc`.
+- Shared cycle anchor: 1,791,046,800 (October 3, 2026, 17:00 UTC).
+
+The public manifest now connects this replacement, with `entriesEnabled: true` authorizing the website gate; the live on-chain pause still blocks entries until the owner separately confirms opening. No opening transaction was submitted by the agent. Robinhood remains connected and open. The incompatible earlier PulseChain suite remains excluded. The V2.1 white paper replaces its unpublished old-address draft with the verified replacement appendix and updates owner fee-panel wording; all seven rendered pages were inspected.
+
+A read-only browser check against these actual contracts passed at 320/390/1440 widths across all five tabs, confirmed paused entries stay disabled, resumed the exact saved Shanghai plan, verified both receipts, and enabled the separate opening button after the website check. No wallet transaction was requested or broadcast during these checks.
