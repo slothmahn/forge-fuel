@@ -38,16 +38,18 @@ function disable(){
  $('#position-confirm').disabled=busy||!positionReview;
  buy.disable();ownerFees.render();
 }
-function pending(){
- const future=!networks[$('#chain').value];
- const message=future?'This chain is planned for a later launch.':'Contracts are not deployed yet. No funds or rewards are shown.';
- $('#pool-overview').innerHTML=`<div class="v2-empty"><strong>Pools open after deployment</strong>${message}<br><a class="legacy-link" href="legacy.html#pools">View existing V1 pools ↗</a></div>`;
- $('#pool-cards').innerHTML=[8,28,88,288].map((d,i)=>`<article class="card pool-card pool-tone-${i}"><div class="pool-top"><span>PLANNED</span><span>${(future?[28.48,24.03,18.69,17.8]:[26.88,22.68,17.64,16.8])[i]}% of fees</span></div><h3>${d}-Day ${i===3?'Bitcoin ':''}Pool</h3><div class="pending-value">Not launched</div><p>Balances and local deadlines appear after deployment.${i===3?' Bitcoin is purchased during entry.':''}</p></article>`).join('');
- $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>Buy-and-burn pools</strong>${message}</div>`;$('#burn-cards').replaceChildren();
- $('#claim-totals').innerHTML='<div><b>Rewards open after launch</b></div>';
+function pending(problem=''){
+ const key=$('#chain').value,future=!networks[key],planned=future||(manifests[key]&&manifests[key].status!=='deployed');
+ const title=problem?'Pool data unavailable':planned?'Pools are not available on this chain yet':'Loading payout pools…';
+ const message=problem?'Chain data could not be loaded. Refresh to retry.':planned?'This chain is planned for a later launch.':'Reading live balances and cycle deadlines from the selected chain.';
+ $('#pool-overview').innerHTML=`<div class="v2-empty" role="status"><strong>${title}</strong>${message}</div>`;
+ $('#pool-cards').replaceChildren();
+ $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>${problem?'Burn data unavailable':planned?'Buy-and-burn pools are not available yet':'Loading buy-and-burn pools…'}</strong>${message}</div>`;$('#burn-cards').replaceChildren();
+ $('#claim-totals').innerHTML=`<div><b>${problem?'Reward data unavailable':planned?'Rewards open after launch':'Loading rewards…'}</b></div>`;
  $('#claim-cycles').replaceChildren();$('#claim-cycles').tabIndex=-1;renderPositions(null);
- text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No settlement is available before deployment.');
+ text('#claim-usd','—');text('#claim-status',message);text('#settle-status',problem?'Settlement data unavailable. Refresh to retry.':planned?'Settlement is not available on this chain yet.':'Checking cycles ready to settle…');
 }
+
 function updateLinks(){for(const a of $$('.legacy-link')){const dest=new URL(a.getAttribute('href'),location.href);dest.searchParams.set('chain',$('#chain').value);a.href=dest.href;}}
 async function load(){
  if(busy)return;const e=++epoch,key=$('#chain').value;previewId++;ctx=null;review=null;positionReview=null;quotes={};
@@ -70,7 +72,7 @@ async function load(){
    await verify(x);if(e!==epoch)return;x.forgeReady=true;
   }
   buy.update();await refresh();
- }catch(err){if(e!==epoch)return;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('Unavailable: '+error(err));pending();await preview();disable();}
+ }catch(err){if(e!==epoch)return;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('Unavailable: '+error(err));pending(error(err));await preview();disable();}
 }
 async function verify(x){
  const {m,r,position:p}=x;
@@ -240,7 +242,7 @@ $('#max-boost').onclick=()=>{try{const principal=amount($('#amount').value,'Prin
 $('#max-term').onclick=()=>{$('#term').value='1000';preview();};$$('[data-term]').forEach(b=>b.onclick=()=>{$('#term').value=b.dataset.term;preview();});$$('[data-boost]').forEach(b=>b.onclick=()=>{try{$('#boost').value=units(amount($('#amount').value,'Principal')*BigInt(b.dataset.boost));preview();}catch(err){status(error(err));}});
 $('#chain').onchange=load;window.addEventListener('more-market-prices',event=>{if(event.detail.key===$('#chain').value){quotes=event.detail.quotes;refreshReferences(document,quotes);}});
 installInputSizing();pending();disable();
-try{[legacy,manifests]=await Promise.all(['deployments.json','deployments-v2.json'].map(file=>fetch(file,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Deployment data unavailable.');return r.json();})));await load();}catch(err){status(error(err));}
+try{[legacy,manifests]=await Promise.all(['deployments.json','deployments-v2.json'].map(file=>fetch(file,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Deployment data unavailable.');return r.json();})));await load();}catch(err){status(error(err));pending(error(err));}
 setInterval(()=>{if(!busy&&!document.hidden)refresh();},30000);
 
 setInterval(()=>{const x=ctx;if(busy||document.hidden||$('#panel-rewards').hidden||!account||!x?.dataLoaded)return;const now=positionTime(x);for(const card of $$('#position-controls [data-position-id]')){const p=x.owned.find(p=>String(p.id)===card.dataset.positionId);if(p)updatePositionCard(card,p,now,busy);}},1000);
