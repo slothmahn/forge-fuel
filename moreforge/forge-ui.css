@@ -123,3 +123,10 @@ h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
 #position-list>.position-card:last-child{margin-bottom:0}
 #position-list>.position-empty{margin:0}
 .claim-cycle-list:empty{padding:0}
+
+/* Keep the entry fee beside the position confirmation, on every chain. */
+#build-form .position-fee-note{margin:18px 0;padding:17px 18px;border:1px solid #b772354d;border-radius:12px;background:linear-gradient(120deg,#ff85300c,#ffc15b08)}
+#build-form .position-fee-line{margin:0;padding:0;border:0;align-items:start;gap:14px}
+#build-form .position-fee-line>span,#build-form .position-fee-line strong{color:#ffb969;font-size:15px;font-weight:700}
+#build-form .position-fee-note .fee-policy{font-size:12px;line-height:1.65;margin:12px 0 0;color:#b8a99d}
+#build-form .position-fee-line .usd-reference{font-size:11px;margin-top:5px}
