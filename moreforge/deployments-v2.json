@@ -1,0 +1,24 @@
+{
+  "rh": {
+    "version": 2,
+    "status": "pending",
+    "entriesEnabled": false,
+    "chainId": 4663,
+    "owner": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+    "feeBps": 10000,
+    "feeBoundsEnabled": true,
+    "minFeeWei": "1000000000000000",
+    "maxFeeWei": "1000000000000000000"
+  },
+  "pls": {
+    "version": 2,
+    "status": "pending",
+    "entriesEnabled": false,
+    "chainId": 369,
+    "owner": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+    "feeBps": 10000,
+    "feeBoundsEnabled": true,
+    "minFeeWei": "200000000000000000000000",
+    "maxFeeWei": "200000000000000000000000000"
+  }
+}

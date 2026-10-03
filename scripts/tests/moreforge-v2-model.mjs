@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict';
+import {inputs,remaining,powerAt,feeForValue,validateManifest,readV2Positions,readV2Claims,DAY,MAX} from '../../moreforge/v2-model.js';
+const unit=10n**18n;
+assert.equal(inputs('100','0','8').power,100n*unit);
+assert.equal(inputs('100','300','1000').power,500n*unit);
+assert.equal(inputs('100','0','1000').power,200n*unit);
+for(const args of [['0','0','8'],['1','3.000000000000000001','8'],['1','0','7'],['1','0','1001'],['1','0','8.5'],['1e3','0','8'],[MAX.toString(),'0','8']])assert.throws(()=>inputs(...args));
+const maturity=1000n*DAY,p={id:1n,principal:100n*unit,power:500n*unit,created:1n,maturity,closed:0n};
+assert.equal(powerAt(p,1n),0n);
+assert.equal(remaining(p.principal,maturity,maturity+7n*DAY),100n*unit);
+assert.equal(remaining(p.principal,maturity,maturity+10n*DAY+DAY/2n),50n*unit);
+assert.equal(powerAt(p,maturity+14n*DAY),0n);
+assert.equal(powerAt({...p,closed:maturity},maturity),500n*unit);
+assert.equal(powerAt({...p,closed:maturity},maturity+1n),0n);
+const policy={bps:10000,bounds:true,min:200000n*unit,max:200000000n*unit};
+assert.equal(feeForValue(1n,policy),policy.min);assert.equal(feeForValue(policy.max*10n,policy),policy.max);assert.throws(()=>feeForValue(0n,policy));
+// A closed NFT's historical claim must remain discoverable for its final owner.
+const claims=await readV2Claims({claimable:async()=>25n},{pool:{i:0,days:8},ids:[1n],states:[{settled:true}]},[{...p,closed:10n*DAY}],0,{});
+assert.equal(claims.length,1);assert.equal(claims[0].value,25n);
+const position={positions:async()=>({principal:p.principal,initialPower:p.power,createdAt:p.created,maturity,closedAt:maturity,beneficiary:'final-owner'}),rewardOwner:async()=>'final-owner'};
+const positions=await readV2Positions(position,2n,{});assert.equal(positions[0].closed,maturity);assert.equal(positions[0].owner,'final-owner');
+assert.throws(()=>validateManifest({version:1,status:'deployed'},{}),/V2 deployment/);
+console.log('V2 input, power, grace/decay, deadline, fee-bound, closed-position claim and version guard checks passed.');
