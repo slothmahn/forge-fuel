@@ -3,7 +3,7 @@ import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup} from './pool-ui-v2.js?v=52';
+import {poolMarkup} from './pool-ui-v2.js?v=68';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
 import {installBuy} from './buy-ui-v2.js?v=66';
 import {displayAmount,amountText} from './amounts.js';
@@ -30,7 +30,7 @@ function disable(){
  $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview;
  $('#review-confirm').disabled=busy||!canEnter();
  if(x?.preview&&account&&x.preview.total>x.balance)$('#build-submit').disabled=true;
- text('#build-submit',!x?.forgeReady?'Launch pending':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
+ text('#build-submit',!x?.forgeReady?(manifests[$('#chain').value]?.status==='deployed'?'Checking chain…':'Launch pending'):!x.dataLoaded?'Loading position data…':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
  $('#claim-open').disabled=busy||!account||!x?.dataLoaded||!x.claims.length;
  $('#claim-reset').hidden=true;$('#settle-due').disabled=busy||!account||!x?.dataLoaded||!x.due.length;
  $('#refresh-pools').disabled=busy||!x?.forgeReady;
@@ -64,35 +64,44 @@ async function load(){
  x.m={...m,more:old.more,contracts:{...m.contracts,mainQuote:m.contracts?.mainQuote||old.contracts.mainQuote}};
  x.token=new Contract(old.more,erc20,r);ctx=x;buy.update();status('Loading MORE market…');
  try{
-  const code=await r.getCode(old.contracts.mainQuote);if(code==='0x')throw Error('MORE market quote is unavailable.');
-  if(e!==epoch)return;x.ready=true;
   if(m.status==='deployed'){
    validateManifest(m,old);x.m=m;
    x.position=new Contract(m.position,positionAbi,r);x.vaults=m.vaults.map(a=>new Contract(a,vaultAbi,r));x.burners=m.burners.map(a=>new Contract(a,burnAbi,r));x.helper=new Contract(m.helper,helperAbi,r);
-   await verify(x);if(e!==epoch)return;x.forgeReady=true;
   }
+  // Purchases use their own verified market route; unrelated Forge reads must not delay them.
+  await Promise.all([
+   (async()=>{const code=await r.getCode(old.contracts.mainQuote);if(code==='0x')throw Error('MORE market quote is unavailable.');if(e!==epoch||x.loadFailed)return;x.ready=true;buy.update();disable();})(),
+   m.status==='deployed'?verify(x):Promise.resolve()
+  ]);
+  if(e!==epoch)return;x.forgeReady=m.status==='deployed';
   buy.update();await refresh();
- }catch(err){if(e!==epoch)return;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('Unavailable: '+error(err));pending(error(err));await preview();disable();}
+ }catch(err){if(e!==epoch)return;x.loadFailed=true;x.ready=false;x.forgeReady=false;x.dataLoaded=false;status('Unavailable: '+error(err));pending(error(err));await preview();disable();}
 }
 async function verify(x){
  const {m,r,position:p}=x;
- const [codes,name,owner,more,oracle,receiver,day,helperBtc,...vaultChecks]=await Promise.all([
-  Promise.all([m.position,m.helper,...m.vaults,...m.burners].map(a=>r.getCode(a))),p.name(),p.owner(),p.more(),p.priceOracle(),p.feeReceiver(),p.dayDuration(),x.helper.bitcoin(),
-  ...x.vaults.map(async(v,i)=>{const [pos,anchor,duration]=await Promise.all([v.positions(),v.launchTime(),v.cycleDuration()]);return same(pos,m.position)&&Number(anchor)===m.launchTime&&Number(duration)===[8,28,88,288][i]*86400;})
- ]);
- if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,m.owner)||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('Contract verification failed.');
- for(let i=0;i<3;i++)if(!same(await x.helper.vaults(i),m.vaults[i]))throw Error('Settlement helper mismatch.');
- if(!same(await x.vaults[3].rewardToken(),m.bitcoinToken))throw Error('Bitcoin token mismatch.');
  const router=new Contract(m.contracts.feeRouter,['function eightDayVault() view returns(address)','function twentyEightDayVault() view returns(address)','function eightyEightDayVault() view returns(address)','function bitcoinVault() view returns(address)','function fuelBurner() view returns(address)','function moreBurner() view returns(address)','function pampBurner() view returns(address)','function development() view returns(address)'],r);
  const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner','pampBurner','development'];
- const actual=await Promise.all(fields.map(k=>router[k]()));
+ const [codes,name,owner,more,oracle,receiver,day,helperBtc,vaultChecks,helperVaults,rewardToken,actual]=await Promise.all([
+  Promise.all([m.position,m.helper,...m.vaults,...m.burners].map(a=>r.getCode(a))),p.name(),p.owner(),p.more(),p.priceOracle(),p.feeReceiver(),p.dayDuration(),x.helper.bitcoin(),
+  Promise.all(x.vaults.map(async(v,i)=>{const [pos,anchor,duration]=await Promise.all([v.positions(),v.launchTime(),v.cycleDuration()]);return same(pos,m.position)&&Number(anchor)===m.launchTime&&Number(duration)===[8,28,88,288][i]*86400;})),
+  Promise.all([0,1,2].map(i=>x.helper.vaults(i))),x.vaults[3].rewardToken(),Promise.all(fields.map(k=>router[k]()))
+ ]);
+ if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,m.owner)||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('Contract verification failed.');
+ if(helperVaults.some((a,i)=>!same(a,m.vaults[i])))throw Error('Settlement helper mismatch.');
+ if(!same(rewardToken,m.bitcoinToken))throw Error('Bitcoin token mismatch.');
  if(actual.some((a,i)=>!same(a,[...m.vaults,...m.burners,m.owner][i])))throw Error('Fee routing mismatch.');
 }
+
 async function refresh(){
  const x=ctx;if(!x)return;
  const running=refreshes.get(x);if(running){running.again=true;return running.promise;}
  const entry={again:false};refreshes.set(x,entry);
  entry.promise=(async()=>{do{entry.again=false;await readChain(x);}while(entry.again&&ctx===x);})().finally(()=>refreshes.delete(x));return entry.promise;
+}
+function paintPools(x,a,estimatesReady=true){
+ const view=poolMarkup(x,Boolean(a),estimatesReady);$('#pool-overview').innerHTML=view.overview;$('#pool-cards').innerHTML=view.cards;$('[data-pool-rewards]').onclick=event=>{event.preventDefault();tab('rewards');};
+ text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded cycles are ready to settle.');
+ refreshReferences(document,quotes);
 }
 async function readChain(x){
  const e=epoch,a=account,current=()=>ctx===x&&e===epoch&&a===account;
@@ -102,14 +111,21 @@ async function readChain(x){
   text('#balance-help',a?'Wallet balance: '+display(balance)+' MORE':'Connect wallet to see your MORE balance.');
   if(x.forgeReady){
    const o={blockTag:block.number};
+   // Pools start at the same block as policy reads, rather than waiting for them.
+   const recordsPromise=Promise.all(x.vaults.map((v,i)=>readPool(v,i,x.now,o,async(v,amount,opts)=>{const q=await v.referenceQuote(opts);return(await new Contract(q,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(amount,opts))[0];}))).then(records=>{if(current()){Object.assign(x,{pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[])});paintPools(x,a,false);}return records;});
+   // Attach a handler immediately; the result is still awaited and errors are propagated below.
+   recordsPromise.catch(()=>{});
    const [paused,bps,bounds,min,max,next,owner]=await Promise.all([x.position.entriesPaused(o),x.position.feeBps(o),x.position.feeBoundsEnabled(o),x.position.minFeeWei(o),x.position.maxFeeWei(o),x.position.nextTokenId(o),x.position.owner(o)]);
-   const [positions,records]=await Promise.all([readV2Positions(x.position,next,o),Promise.all(x.vaults.map((v,i)=>readPool(v,i,x.now,o,async(v,amount,opts)=>{const q=await v.referenceQuote(opts);return(await new Contract(q,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(amount,opts))[0];})))]);
+   if(!current())return;
+   Object.assign(x,{owner,paused,feePolicy:{bps,bounds,min,max}});
+   // The fee quote can display while position history and pool data are still loading.
+   preview().catch(()=>{});
+   const [positions,records]=await Promise.all([readV2Positions(x.position,next,o),recordsPromise]);
    const owned=a?positions.filter(p=>same(p.owner,a)):[];
    const claims=(await Promise.all(records.map((record,i)=>readV2Claims(x.vaults[i],record,owned,x.m.launchTime,o)))).flat();
    if(!current())return;
    Object.assign(x,{owner,paused,positions,owned,claims,pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[]),feePolicy:{bps,bounds,min,max},dataLoaded:true});
-   const view=poolMarkup(x,Boolean(a));$('#pool-overview').innerHTML=view.overview;$('#pool-cards').innerHTML=view.cards;$('[data-pool-rewards]').onclick=event=>{event.preventDefault();tab('rewards');};
-   text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded cycles are ready to settle.');
+   paintPools(x,a);
    renderRewards(x);renderPositions(x);
    renderBurns(x,a,current).catch(err=>{if(current())$('#burn-cards').textContent='Burn data unavailable: '+error(err);});
   }
@@ -128,8 +144,8 @@ async function preview(){
  $$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.days));$$('[data-boost]').forEach(b=>b.classList.toggle('active',v.burned===v.principal*BigInt(b.dataset.boost)));
  setReference($('#principal-usd'),{MORE:v.principal});setReference($('#burn-usd'),{MORE:v.burned});
  text('#native-fee','Loading quote…');text('#total-cost',displayAmount(v.total,18,4)+' MORE + fee');
- text('#build-status',!x?.forgeReady?'Preview only · entries open after deployment.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
- if(!x?.forgeReady){$('#term-payouts').innerHTML='<p class="field-help">Funding and deadlines appear after deployment. Your preview does not create a position.</p>';text('#term-native-total','Available after launch');text('#term-bitcoin-total','');text('#term-usd-total','');}
+ text('#build-status',!x?.forgeReady?'Checking position availability…':!x.dataLoaded?'Loading position data. Your fee quote is available separately.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
+ if(!x?.forgeReady||!x.dataLoaded){$('#term-payouts').innerHTML='<p class="field-help">Loading current funding and eligible power…</p>';text('#term-native-total','Loading reward estimate…');text('#term-bitcoin-total','');text('#term-usd-total','');}
  if(!x?.ready){text('#native-fee','Quote unavailable');return;}
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
@@ -138,7 +154,7 @@ async function preview(){
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value.${p.bounds?' Minimum '+display(BigInt(p.min))+' '+x.n.unit+'; maximum '+display(BigInt(p.max))+' '+x.n.unit+'.':''} Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
-  if(x.forgeReady){
+  if(x.forgeReady&&x.dataLoaded){
    let native=0n,btc=0n;const prospective={created:BigInt(x.now),maturity,power:v.power,closed:0n};
    const rows=x.pools.map(p=>{const own=powerAt(prospective,p.deadline),total=x.positions.reduce((n,z)=>n+powerAt(z,p.deadline),0n)+own;
     // Current funds only; neither native nor Bitcoin estimates invent future contributions.
