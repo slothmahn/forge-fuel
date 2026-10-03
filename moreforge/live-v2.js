@@ -4,7 +4,7 @@ import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddres
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=70';
-import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
+import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-burn-clock-76';
 import {installBuy} from './buy-ui-v2.js?v=71';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
