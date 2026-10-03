@@ -3,9 +3,9 @@ import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup} from './pool-ui-v2.js?v=68';
+import {poolMarkup} from './pool-ui-v2.js?v=70';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
-import {installBuy} from './buy-ui-v2.js?v=66';
+import {installBuy} from './buy-ui-v2.js?v=71';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js';
@@ -171,7 +171,7 @@ function renderRewards(x){
  let native=0n,btc=0n;for(const c of x.claims)c.pool===3?btc+=c.value:native+=c.value;
  $('#claim-totals').innerHTML=`<div><b>${display(native)} ${x.n.unit}</b>${referenceMarkup({NATIVE:native})}</div><div><b>${display(btc,8)} ${x.n.btc}</b>${referenceMarkup({BTC:btc})}</div>`;
  setReference($('#claim-usd'),{NATIVE:native,BTC:btc});
- $('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</div>`).join('');
+ $('#claim-cycles').innerHTML=x.claims.map(c=>`<div class="claim-record"><div><b>${[8,28,88,288][c.pool]}-day pool · Cycle ${c.cycle}</b><small>MORE NFT #${c.id}</small></div><strong title="Exact reward: ${formatUnits(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}">${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</strong></div>`).join('');
  $('#claim-cycles').scrollTop=scrollTop;
  $('#claim-cycles').tabIndex=x.claims.length?0:-1;
  text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
@@ -183,7 +183,7 @@ function renderPositions(x){
  const loaded=Boolean(x?.dataLoaded&&account),empty=!account?'Connect a wallet to see your MORE Forge positions.':!loaded?'Loading your positions…':`No ${positionFilter} MORE position NFTs for this wallet.`;
  $('#position-controls').innerHTML=`<p class="eyebrow">YOUR NFTS</p><h3>Your MORE Forge Positions</h3><p class="positions-intro">Browse active positions or switch to Ended for your position history.</p><div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${loaded?active.length:'—'}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${loaded?ended.length:'—'}</span></button></div><div id="position-list" class="forge-scroll-list" tabindex="0" role="region" aria-label="${positionFilter==='active'?'Active':'Ended'} MORE positions">`+(loaded&&visible.length?visible.map(p=>positionMarkup(p,positionTime(x))).join(''):`<p class="position-empty">${empty}</p>`)+`</div><p class="positions-explanation">Principal stays whole through the 7-day grace period, then principal and power decay over 7 days. The on-screen estimate updates each second; the amount returned uses the transaction’s block time. Maturity and decay do not close an NFT automatically. Ended positions can still have earned rewards to claim in the claims panel.</p>`;
  $('#position-list').scrollTop=scrollTop;
- $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;$('#position-list').scrollTop=0;renderPositions(ctx);});
+ $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;$('#position-list').scrollTop=0;renderPositions(ctx);$('[data-position-filter="'+positionFilter+'"]').focus({preventScroll:true});});
  $$('[data-withdraw]').forEach(b=>b.onclick=()=>reviewWithdrawal(BigInt(b.dataset.withdraw)));
  $$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));
 }

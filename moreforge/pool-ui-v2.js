@@ -2,7 +2,7 @@ import {displayAmount} from './amounts.js?v=more-forge-polish-33';
 import {referenceMarkup} from './usd-reference.js';
 
 const format=(n,d=18)=>displayAmount(n,d,d===8?8:6);
-const deadlineDate=n=>new Intl.DateTimeFormat(undefined,{year:'numeric',month:'numeric',day:'numeric',hour:'numeric',minute:'2-digit',second:'2-digit',timeZoneName:'short'}).format(new Date(Number(n)*1000));
+const deadlineDate=n=>{const d=new Date(Number(n)*1000);return `<time datetime="${d.toISOString()}"><span>${new Intl.DateTimeFormat(undefined,{dateStyle:'medium'}).format(d)}</span><small>${new Intl.DateTimeFormat(undefined,{hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(d)}</small></time>`;};
 import {powerAt} from './v2-model.js';
 const eligiblePower=(positions,deadline)=>positions.reduce((total,p)=>total+powerAt(p,deadline),0n);
 export function poolEstimate(pool,positions,owned,now,launchTime){

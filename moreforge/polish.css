@@ -1,0 +1,66 @@
+/* Protocol-wide finishing pass: shared Forge geometry, MORE's ember palette. */
+:root{--forge-border:#ffffff20;--forge-highlight:#ffb969}
+button,a,input,select,summary{ -webkit-tap-highlight-color:transparent }
+button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{outline:2px solid #ffbb70;outline-offset:4px}
+.tabs{z-index:15;background:#17110ff5;box-shadow:0 8px 22px #0002}
+.tabs button{transition:background .15s,color .15s;cursor:pointer}
+.tabs button:not([aria-selected=true]):hover{background:#ffb9690a;color:#ffe2bd}
+.tabs button:disabled{cursor:wait}
+[role=tabpanel]{scroll-margin-top:85px}
+#build-form{scroll-margin-top:85px}
+#panel-build .form-card,#panel-build .position-details,.rewards-layout>.card{border-color:#70503966;background:radial-gradient(ellipse at 0 0,#ff8b2c08,transparent 60%),linear-gradient(145deg,#211812,#171310);box-shadow:inset 0 1px #ffffff05}
+#panel-build .card-heading{margin-bottom:24px}
+#panel-build .card-heading h3{font-size:22px;line-height:1.35;max-width:400px}
+#panel-build .card-heading p:not(.eyebrow){color:var(--muted);font-size:12px;line-height:1.75}
+#panel-build .amount-field{border-color:#61442f70;background:#100d0b;min-height:58px;border-radius:12px}
+#panel-build .amount-field input{font-size:21px;font-variant-numeric:tabular-nums}
+#panel-build .amount-field:focus-within{border-color:#ffb969;box-shadow:0 0 0 3px #ffb96912}
+#panel-build .amount-field input:focus{outline:0}
+#panel-build .amount-field button{color:#e9c6a3;background:#2b1d1455;border-color:#68462e66;border-radius:8px;font-size:10px}
+#panel-build .term-presets{gap:7px}
+#panel-build .term-presets button{min-height:38px;padding:8px 6px;border-radius:8px;border:1px solid #77513250;background:#ffb96904;color:#c8b5a5;font-size:11px;line-height:1.5;cursor:pointer}
+#panel-build .term-presets button:hover{border-color:#ffb96966;color:#ffe2bd}
+#panel-build .term-presets button.active{border-color:#ffb96970;background:#ffb96916;color:#ffc47b;box-shadow:inset 0 1px #ffcc7f0a}
+#panel-build .withdrawal-notice{border-color:#a76e3a55;background:#ffb96906;border-radius:12px;padding:17px}
+#panel-build .withdrawal-notice strong{font-size:14px}
+#panel-build .withdrawal-notice p{font-size:12px;line-height:1.75;color:#baaa9b}
+#panel-build .position-details .term-estimate{border-color:#91613855;background:radial-gradient(ellipse at 100% 0,#ff8b2c0a,transparent 70%),#1c1510}
+#pool-cards .pool-row time{display:block;line-height:1.55;font-variant-numeric:tabular-nums}
+#pool-cards .pool-row time>span,#pool-cards .pool-row time>small{display:block}
+#pool-cards .pool-row time>small{font-size:11px;font-weight:500;color:var(--muted);margin-top:3px}
+#pool-cards .pool-card{display:flex;flex-direction:column}
+#pool-cards .progress-track{margin-top:24px}
+#pool-cards .pool-card>.field-help{font-size:11px;line-height:1.7;margin:12px 0 0}
+.pool-value,.burn-balance strong,.claim-totals strong{letter-spacing:-.035em}
+#burn-cards .burn-actions{align-items:stretch;flex-direction:column;gap:12px}
+#burn-cards .burn-actions button{width:100%;min-height:44px;border-radius:10px}
+#burn-cards .burn-actions a{text-align:center;text-decoration:none;color:var(--muted)}
+#burn-cards .burn-actions a:hover{color:#ffe2bd;text-decoration:underline}
+#burn-cards .burn-row{min-height:84px}
+#burn-cards .burn-balance+.burn-row{min-height:90px}
+#burn-cards .burn-row>strong{min-width:0}
+.legacy-access{margin:0 0 22px}
+.legacy-link{font-size:12px;line-height:1.6;text-underline-offset:4px}
+.rewards-layout .claim-heading{gap:12px}
+.rewards-layout .claim-heading h3,#panel-rewards .positions-panel>h3{font-size:25px}
+.rewards-layout .claim-combined{display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.rewards-layout .claim-combined strong{text-align:left}
+.rewards-layout .claim-actions button{width:100%;min-height:46px}
+#position-controls .position-empty{padding:32px 20px;background:#100d0b66}
+#position-controls .position-card{background:linear-gradient(135deg,#17120f,#100d0b);border-color:#69462e55}
+#position-controls .position-stats>div{border-color:#77513240;background:#ffb96904}
+#position-controls .position-timeline-track{height:7px}
+#position-controls .position-stages{margin-top:14px}
+#position-controls .position-countdown{margin-top:14px}
+.owner-fees{border-color:#9b6b3950;background:#21170f}
+.forge-review{max-height:calc(100dvh - 32px);overflow-y:auto}
+@media(max-width:1050px) and (min-width:801px){#burn-cards{grid-template-columns:repeat(2,minmax(0,1fr))}#burn-cards .burn-card:last-child{grid-column:1/-1;max-width:calc(50% - 9px);width:100%;justify-self:center}}
+@media(max-width:760px){#panel-build .amount-field{min-height:58px}#panel-build .card-heading h3{font-size:21px}.rewards-layout .claim-heading h3,#panel-rewards .positions-panel>h3{font-size:23px}#panel-build .term-presets button{min-height:40px}#pool-cards .pool-row{gap:12px}.tabs button{min-height:58px}.pool-overview>div{padding:21px}.legacy-access{margin-bottom:18px}}
+@media(max-width:360px){#panel-build .term-presets button{font-size:10px}#pool-cards .pool-row{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:8px}#pool-cards .pool-row strong{font-size:12px}.rewards-layout>.card{padding:18px!important}#panel-rewards .positions-panel>h3{font-size:21px}}
+@media(prefers-reduced-motion:reduce){.tabs button{transition:none}}
+
+#claim-cycles .claim-record{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:start;gap:12px;padding:16px 0}
+.claim-record b{font-size:12px;font-weight:600;color:#e1c6ad}
+#claim-cycles .claim-record strong{font-size:13px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#claim-cycles .claim-record small{font-size:11px;color:var(--muted);margin-top:4px}
+@media(max-width:360px){#claim-cycles .claim-record{grid-template-columns:1fr;gap:7px}#claim-cycles .claim-record strong{text-align:left}}
