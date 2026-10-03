@@ -64,3 +64,40 @@ button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{
 #claim-cycles .claim-record strong{font-size:13px;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 #claim-cycles .claim-record small{font-size:11px;color:var(--muted);margin-top:4px}
 @media(max-width:360px){#claim-cycles .claim-record{grid-template-columns:1fr;gap:7px}#claim-cycles .claim-record strong{text-align:left}}
+
+/* Align each label with the first line of its value, including multiline amounts. */
+#pool-cards .pool-row,#burn-cards .burn-row{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);
+ align-items:first baseline;gap:12px;line-height:1.5;
+}
+#pool-cards .pool-row>span,#burn-cards .burn-row>span{min-width:0;overflow-wrap:break-word}
+#pool-cards .pool-row>strong,#burn-cards .burn-row>strong{
+ min-width:0;max-width:none;width:100%;text-align:right;line-height:1.5;
+ font-variant-numeric:tabular-nums;overflow-wrap:anywhere;
+}
+#pool-cards .pool-row time{line-height:1.5}
+.more-build .fee-line,.more-build .preview-breakdown>div,.power-breakdown dl>div,
+.position-dates>div,.more-build .estimate-rows>div,#claim-cycles .claim-record{
+ align-items:first baseline;
+}
+#panel-buy .buy-quote-details .fee-line{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);
+ align-items:first baseline;gap:12px;
+}
+#panel-buy .buy-quote-details .fee-line>span{min-width:0;line-height:1.5}
+#panel-buy .buy-quote-details .fee-line>strong,
+#panel-buy .buy-quote-details .value-reference{width:100%;max-width:none;min-width:0;line-height:1.5;text-align:right}
+#panel-buy .buy-guide>.fee-line{
+ display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ align-items:first baseline;gap:12px;
+}
+#panel-buy .buy-guide>.fee-line .value-reference,
+#panel-buy .buy-guide>.fee-line strong{min-width:0;max-width:none;width:100%;text-align:right;line-height:1.5}
+#claim-cycles .claim-record>div{font-size:12px;line-height:1.5}
+#claim-cycles .claim-record b{display:block}
+#claim-cycles .claim-record b,#claim-cycles .claim-record strong{line-height:1.5}
+@media(max-width:360px){
+ #pool-cards .pool-row,#burn-cards .burn-row{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:10px}
+ #panel-buy .buy-guide>.fee-line{grid-template-columns:1fr;gap:8px}
+ #panel-buy .buy-guide>.fee-line .value-reference,#panel-buy .buy-guide>.fee-line strong{text-align:left}
+}
