@@ -1,6 +1,7 @@
 import {displayAmount} from './amounts.js?v=more-forge-polish-33';
 import {Interface,formatUnits,parseUnits} from './vendor/ethers-6.15.0.js';
-import {referenceMarkup} from './usd-reference.js?v=more-forge-burns-32';
+import {referenceMarkup as fullReferenceMarkup} from './usd-reference.js?v=burn-layout-79';
+const referenceMarkup=parts=>fullReferenceMarkup(parts).replace('class="usd-reference"','class="usd-reference" data-usd-compact');
 
 export const burnAbi=[
  'function owner() view returns(address)','function dailyPoolBps() view returns(uint256)',

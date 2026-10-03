@@ -107,3 +107,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,select:focus-visible{
 #panel-buy .buy-guide li{display:grid;grid-template-columns:26px minmax(0,1fr);align-items:first baseline;column-gap:12px;padding:0;min-height:26px}
 #panel-buy .buy-guide li::before{position:static;line-height:1;width:26px;height:26px}
 #panel-buy .buy-guide li>span{min-width:0;font-size:13px;line-height:1.7}
+
+/* Ready state occupies the same right-aligned value column as amounts. */
+#burn-cards .burn-row>strong.burn-readiness.is-ready{justify-content:flex-end;gap:6px}
+#burn-cards .burn-row>strong .usd-reference{font-size:11px;line-height:1.5}

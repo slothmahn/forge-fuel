@@ -13,8 +13,9 @@ export function referenceValue(parts,prices){
   }
   return Number.isFinite(total)?total:null;
 }
-export function referenceText(value){
+export function referenceText(value,compact=false){
   if(value===null)return 'USD reference unavailable';
+  if(compact&&value>0&&value<0.01)return '< $0.01 USD reference';
   if(value>0&&value<0.000001)return '< $0.000001 USD reference';
   return '≈ '+value.toLocaleString(undefined,{style:'currency',currency:'USD',minimumFractionDigits:2,maximumFractionDigits:value>0&&value<0.01?6:2})+' USD reference';
 }
@@ -32,7 +33,9 @@ export function setReference(element,parts){
 export function refreshReferences(root,prices){
   for(const element of root.querySelectorAll('[data-usd-fuel],[data-usd-pamp],[data-usd-more],[data-usd-native],[data-usd-btc]')){
     const parts={};for(const [key,asset] of Object.entries(assets))if(element.hasAttribute(asset.attribute))parts[key]=element.getAttribute(asset.attribute);
-    element.textContent=referenceText(referenceValue(parts,prices));
+    const value=referenceValue(parts,prices);
+    element.textContent=referenceText(value,element.hasAttribute('data-usd-compact'));
+    if(element.hasAttribute('data-usd-compact'))element.title=referenceText(value);
   }
 }
 export function clearReferences(root){
