@@ -67,5 +67,5 @@ for (const [target,name] of [[position,'MoreForgePositionV2'],[bitcoin,'MoreBitc
 const planHash = keccak256(AbiCoder.defaultAbiCoder().encode(['uint256','address','bytes[]','tuple(uint256 templateIndex,bytes constructorArgs,address expectedAddress)[]','tuple(address target,bytes data)[]'],[c.id,helper,templates,creations,setup]));
 const helperCode = initCode('MoreForgeDeployerV2',[owner,planHash]);
 const batchData = iface('MoreForgeDeployerV2').encodeFunctionData('deploy',[templates,creations,setup]);
-return {version:2,chain,chainId:c.id,owner,startNonce,helper,planHash,anchor,entriesPaused:true,contracts,templates,templateNames,creations,setup,transactions:[{from:owner,data:helperCode,nonce:toBeHex(startNonce),gas:toBeHex(815000),value:'0x0'},{from:owner,to:helper,data:batchData,nonce:toBeHex(startNonce+1),gas:toBeHex(chain==='rh'?21673774:21847671),value:'0x0'}],sizes};
+return {version:2,chain,chainId:c.id,owner,startNonce,helper,planHash,anchor,entriesPaused:true,contracts,templates,templateNames,creations,setup,transactions:[{from:owner,data:helperCode,nonce:toBeHex(startNonce),gas:toBeHex(chain==='pls'?825000:815000),value:'0x0'},{from:owner,to:helper,data:batchData,nonce:toBeHex(startNonce+1),gas:toBeHex(chain==='rh'?21673774:21900000),value:'0x0'}],sizes};
 }

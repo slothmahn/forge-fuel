@@ -8,7 +8,8 @@ async function rpc(chain,method,params=[]){assert(new URL(rpcUrls[chain]).hostna
 (async()=>{
  const browser=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});
  const reports=[];
- try{for(const chain of ['rh','pls']){
+ const testChains=process.env.MORE_TEST_CHAIN?[process.env.MORE_TEST_CHAIN]:['rh','pls'];assert(testChains.every(c=>['rh','pls'].includes(c)));
+ try{for(const chain of testChains){
   const snapshot=await rpc(chain,'evm_snapshot');
   const ctx=await browser.newContext({viewport:{width:390,height:844}}),page=await ctx.newPage(),errors=[],sent=[];page.on('pageerror',e=>{errors.push(e.message);console.log(chain,'page error',e.message);});page.on('console',m=>console.log(chain,m.text()));
   await page.exposeFunction('testWalletRPC',async(method,params)=>{if(method==='eth_requestAccounts'||method==='eth_accounts')return[owner];if(method==='eth_sendTransaction')sent.push(params[0]);return rpc(chain,method,params);});
@@ -21,7 +22,7 @@ async function rpc(chain,method,params=[]){assert(new URL(rpcUrls[chain]).hostna
   await page.reload();await page.locator('#connect').click();await page.waitForFunction(()=>!document.querySelector('#deploy').disabled,{}, {timeout:60000});
   await page.locator('#deploy').click();await page.waitForFunction(()=>document.querySelector('#status').textContent.startsWith('Setup verified.'),{}, {timeout:180000});
   assert.equal(sent.length,2);assert(await page.locator('#open').isDisabled());
-  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem(Object.keys(localStorage).find(k=>k.startsWith('more-v2-launch-1-')))));
+  const saved=await page.evaluate(()=>JSON.parse(localStorage.getItem(Object.keys(localStorage).find(k=>k.startsWith('more-v2-launch-')))));
   assert(saved.run.confirmed.every(Boolean));assert.equal(saved.run.manifest.entriesEnabled,false);
   const i=(await import(pathToFileURL(path.join(root,'forge-fuel-site/moreforge/vendor/ethers-6.15.0.js')).href)).Interface;
   const position=new i(['function entriesPaused() view returns(bool)']);
@@ -32,7 +33,7 @@ async function rpc(chain,method,params=[]){assert(new URL(rpcUrls[chain]).hostna
   assert.equal(sent.length,3);assert.equal(errors.length,0,errors.join('; '));assert(!(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth+1)),'Confirmed transaction hashes must fit mobile cards');
   await page.screenshot({path:path.join(root,'output/more-v2-ui',chain+'-hosted-deploy.png'),fullPage:true});
   // Corrupted saved calldata must never reach a wallet request.
-  await page.evaluate(()=>{const key=Object.keys(localStorage).find(k=>k.startsWith('more-v2-launch-1-'));const s=JSON.parse(localStorage.getItem(key));s.plan.transactions[1].data='0x1234';localStorage.setItem(key,JSON.stringify(s));});
+  await page.evaluate(()=>{const key=Object.keys(localStorage).find(k=>k.startsWith('more-v2-launch-'));const s=JSON.parse(localStorage.getItem(key));s.plan.transactions[1].data='0x1234';localStorage.setItem(key,JSON.stringify(s));});
   await page.reload();await page.locator('#connect').click();await page.waitForFunction(()=>document.querySelector('#status').textContent.includes('does not match'),{}, {timeout:60000});assert.equal(sent.length,3);
   reports.push({chain,mobileLayout:'PASS',refreshResume:'PASS',exactBatchDeployment:'PASS',runtimeAndWiringVerification:'PASS',openingWebsiteGate:'PASS',activation:'PASS',tamperedPlanBlocked:'PASS',transactions:sent.length});
   await ctx.close();await rpc(chain,'evm_revert',[snapshot]);

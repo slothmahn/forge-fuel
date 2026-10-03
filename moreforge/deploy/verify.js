@@ -52,6 +52,8 @@ export async function verifyDeployment(plan,artifacts,rpc,hashes){
  const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner','pampBurner','development'];
  const expected=[...vaults,...controllers.slice(0,3),plan.owner];
  for(let n=0;n<fields.length;n++)assert(same((await read(c.feeRouter,'MoreFeeRouter',fields[n]))[0],expected[n]),'Fee recipient mismatch');
+ assert((await read(c.position,'MoreForgePositionV2','name'))[0]==='MORE Forge Position V2','Position metadata call failed');
+ await read(c.position,'MoreForgePositionV2','requiredFee',[10n**18n]);
  const paused=(await read(c.position,'MoreForgePositionV2','entriesPaused'))[0];
  return {receipts,paused,manifest:{version:2,status:'deployed',entriesEnabled:false,chainId:plan.chainId,owner:plan.owner,more:plan.more,bitcoinToken:plan.bitcoinToken,position:c.position,helper:c.settlementBatcher,contracts:c,vaults,burners:controllers.slice(0,3),launchTime:plan.anchor,siteOpeningTime:1,deploymentBlock:Number(BigInt(receipts[1].blockNumber)),feeBps:10000,feeBoundsEnabled:true,minFeeWei:plan.minFeeWei,maxFeeWei:plan.maxFeeWei}};
 }

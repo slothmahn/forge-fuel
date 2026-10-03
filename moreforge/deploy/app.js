@@ -1,10 +1,10 @@
 import {Interface,toBeHex} from '../vendor/ethers-6.15.0.js';
-import {OWNER,buildPlan} from './plan.js?v=1';
-import {verifyDeployment} from './verify.js?v=1';
+import {OWNER,buildPlan} from './plan.js?v=2';
+import {verifyDeployment} from './verify.js?v=2';
 const $=s=>document.querySelector(s),same=(a,b)=>String(a).toLowerCase()===String(b).toLowerCase();
 const status=t=>$('#status').textContent=t,log=t=>$('#log').textContent+=t+'\n',err=e=>e.shortMessage||e.message||String(e);
 const network={rh:{id:4663,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://explorer.robinhood.com'},pls:{id:369,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com'}};
-const providers=[];let wallet,chain,plan,run,artifacts,configs,busy=false,connected=false,verified,siteReady=false;
+const providers=[];let wallet,chain,plan,run,artifacts,configs,packages,busy=false,connected=false,verified,siteReady=false;
 const compatibleRpc='https://pulsechain-rpc.publicnode.com';
 async function checkSetupRpc(){
  if(chain!=='pls')return;
@@ -12,7 +12,7 @@ async function checkSetupRpc(){
  $('#rpc-status').textContent='Wallet RPC client: '+version;
  if(/erigon\/2\.4\.1(?:\/|$)/i.test(version))throw Error('This PulseChain RPC rejects the 62 KB setup call. In Rabby, change PulseChain’s custom RPC to '+compatibleRpc+', reconnect, and retry step 2. Your helper is already confirmed.');
 }
-const key=()=>`more-v2-launch-1-${chain}-${OWNER.toLowerCase()}`;
+const key=()=>`more-v2-launch-${chain==='pls'?'2':'1'}-${chain}-${OWNER.toLowerCase()}`;
 const json=r=>{if(!r.ok)throw Error('Deployment file unavailable');return r.json();};
 function add(p,name){if(p&&!providers.some(x=>x.p===p))providers.push({p,name});}
 window.addEventListener('eip6963:announceProvider',e=>add(e.detail.provider,e.detail.info.name));window.dispatchEvent(new Event('eip6963:requestProvider'));
@@ -26,7 +26,7 @@ function controls(){
  $('#results').hidden=!run?.hashes?.[1];
 }
 function render(){
- chain=$('#chain').value;const n=network[chain];$('#rpc-help').hidden=chain!=='pls';
+ chain=$('#chain').value;const n=network[chain];$('#rpc-help').hidden=chain!=='pls';$('#compatibility-help').hidden=chain!=='pls';
  $('#fee').textContent=chain==='rh'?'100% of locked principal’s quoted value · 0.001–1 ETH':'100% of locked principal’s quoted value · 200,000–200,000,000 PLS';
  if(plan){
   $('#anchor').textContent=new Date(plan.anchor*1000).toLocaleString()+' · '+new Date(plan.anchor*1000).toISOString();
@@ -37,7 +37,7 @@ function render(){
  for(let i=0;i<2;i++)$('#step-'+i).textContent=run?.hashes?.[i]?`${run.confirmed?.[i]?'Confirmed':'Submitted'}: ${run.hashes[i]}`:'Not submitted';
  $('#step-2').textContent=run?.openHash?'Opening transaction: '+run.openHash:siteReady?'Website verified · ready to open':'Website connection required first';controls();
 }
-function restore(){chain=$('#chain').value;plan=run=verified=null;siteReady=false;connected=false;
+function restore(){chain=$('#chain').value;artifacts=packages[chain];plan=run=verified=null;siteReady=false;connected=false;
  const saved=JSON.parse(localStorage.getItem(key())||'null');if(saved){plan=saved.plan;run=saved.run;status('Saved deployment found. Connect the owner wallet to resume.');}else status('Connect the owner wallet to prepare the setup.');render();}
 async function assertWallet(){
  if(!wallet)throw Error('Open this page in your Rabby browser.');
@@ -134,4 +134,4 @@ $('#copy').onclick=async()=>{try{await navigator.clipboard.writeText(JSON.string
 $('#download').onclick=()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(report(),null,2)],{type:'application/json'})),a=document.createElement('a');a.href=url;a.download='more-forge-v2-'+chain+'-deployment.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 $('#copy-rpc').onclick=async()=>{try{await navigator.clipboard.writeText(compatibleRpc);$('#rpc-status').textContent='Copied. Paste into Rabby’s custom RPC setting for PulseChain.';}catch(e){$('#rpc-status').textContent='RPC URL: '+compatibleRpc;}};
 $('#chain').onchange=restore;
-try{[artifacts,configs]=await Promise.all(['artifacts.json','chains.json'].map(file=>fetch(file).then(json)));restore();}catch(e){status(err(e));$('#connect').disabled=true;}
+try{const [rh,pls,c]=await Promise.all(['artifacts.json','artifacts-pulsechain-shanghai.json','chains.json'].map(file=>fetch(file).then(json)));packages={rh,pls};configs=c;restore();}catch(e){status(err(e));$('#connect').disabled=true;}
