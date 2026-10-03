@@ -1,0 +1,74 @@
+/* A restrained copper/amber system, matching the Pulse Forge surface hierarchy. */
+:root{
+ --bg:#100d0c;--surface:#201916;--surface2:#271e19;--text:#fff5ee;--muted:#b9aaa0;
+ --line:#ffffff18;--line-strong:#ffffff26;--accent:#f7aa73;--accent-two:#e7bd83;
+ --forge-border:#ffffff26;--forge-highlight:#f7aa73;
+ --more-gradient:linear-gradient(105deg,#ed8255,#e8b875);
+ --more-surface:linear-gradient(125deg,#231b17,#191411 80%);
+ --more-glow:0 4px 22px #cc75451d;
+}
+body{color:var(--text);background:radial-gradient(ellipse 760px 650px at 5% 0%,#763a2230,transparent 70%),radial-gradient(ellipse 740px 550px at 83% 0%,#63502c20,transparent 76%),var(--bg)}
+.card,#panel-build .form-card,#panel-build .position-details,.rewards-layout>.card,
+#pool-cards .pool-card,#burn-cards .burn-card{
+ border-color:var(--forge-border);background:var(--more-surface);box-shadow:inset 0 1px #ffffff04;
+}
+.tabs{background:#17120feF;border-color:var(--forge-border);box-shadow:0 8px 22px #0002}
+.tabs button[aria-selected=true],.primary-button,.wallet-button,#panel-buy .buy-swap>.primary-button{
+ background:var(--more-gradient);color:#29170e;border-color:transparent;box-shadow:var(--more-glow);
+}
+.tabs button:not([aria-selected=true]){color:#b9aaa0}
+.tabs button:not([aria-selected=true]):hover{color:#ffe4cc;background:#f7aa7309}
+.primary-button:hover:not(:disabled),.wallet-button:hover:not(:disabled){filter:brightness(1.06);box-shadow:0 5px 24px #cc75452b}
+.network,.header-links a,.more-chain-options{background:#1c1612;border-color:var(--forge-border);color:#e9d6c8}
+.network-dot{background:var(--more-gradient);box-shadow:0 0 10px #e8a16440}
+.market-strip strong,.market-price,.eyebrow,.legacy-link{color:var(--accent)}
+.hero h1 em,#panel-buy .buy-hero h2 span{background-image:linear-gradient(105deg,#ffa578 10%,#edbd84 65%,#f0d4a6);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.burn-summary,.pool-overview>div,.burn-total,.burn-flow{background:linear-gradient(110deg,#2b1d1688,#1a171280);border-color:var(--forge-border);box-shadow:none}
+#panel-build .position-details .term-estimate,.more-power-preview{
+ background:radial-gradient(ellipse at 80% 0%,#81502d21,transparent 65%),var(--more-surface);border-color:var(--forge-border);
+}
+#panel-build .amount-field,.power-breakdown,#position-controls .position-card{background:#15110e;border-color:#ffffff21}
+#panel-build .amount-field button{color:#edc5a3;background:#2b1e164f;border-color:#b9815540}
+#panel-build .term-presets button{background:#ffffff03;border-color:#ffffff24;color:var(--muted)}
+#panel-build .term-presets button.active{background:#e8a16414;border-color:#e8a16466;color:#f1bf94;box-shadow:none}
+#panel-build .withdrawal-notice,#build-form .position-fee-note{background:#e8a16406;border-color:#e8a16435}
+#build-form .position-fee-line>span,#build-form .position-fee-line strong{color:#f1b17c}
+.more-power-ring{background:conic-gradient(from -90deg,#ef946c 0deg,#e5b782 calc(var(--power-angle,0deg)*.65),#edd2a0 var(--power-angle,0deg),#ffffff0b var(--power-angle,0deg) 360deg);box-shadow:0 0 45px #ad76321b}
+.more-power-ring>div{background:#211912;box-shadow:inset 0 0 35px #ae773714}
+#pool-cards .pool-tone-0{--pool-accent:#f3a081}
+#pool-cards .pool-tone-1{--pool-accent:#e9b883}
+#pool-cards .pool-tone-2{--pool-accent:#e6c99a}
+#pool-cards .pool-tone-3{--pool-accent:#efb49c}
+#burn-cards .burn-card:nth-child(1){--burn-accent:#f3a081}
+#burn-cards .burn-card:nth-child(2){--burn-accent:#e9b883}
+#burn-cards .burn-card:nth-child(3){--burn-accent:#e6c99a}
+#pool-cards .pool-row,#burn-cards .burn-row{border-color:#ffffff18}
+#pool-cards .pool-value small,#pool-cards .pool-top,#pool-cards .usd-reference{color:var(--pool-accent)}
+#pool-cards .pool-live{color:var(--muted)}
+#pool-cards .progress-track span{background:linear-gradient(100deg,#d08765,var(--pool-accent))}
+#burn-cards .burn-actions .primary-button{background:color-mix(in srgb,var(--burn-accent) 10%,transparent);color:var(--burn-accent);border:1px solid color-mix(in srgb,var(--burn-accent) 40%,transparent);box-shadow:none}
+.claim-totals>div{background:linear-gradient(125deg,#d4915310,#e6bd7807);border-color:#e5aa6833}
+.claim-combined strong,#position-controls .position-stats strong{color:#edbd84}
+#position-controls .position-stats>div{background:#ffffff03;border-color:#ffffff18}
+#position-controls .position-filters button[aria-pressed=true]{background:#e8a16414;border-color:#e8a16466;color:#efbd94}
+.position-state{background:#e8a1640b;border-color:#e8a16438;color:#efbd94}
+.position-timeline-track>span{background:var(--more-gradient)}
+.owner-fees,.forge-review,#position-review.forge-review{background:var(--more-surface);border-color:var(--forge-border)}
+#panel-buy .buy-swap{background:radial-gradient(ellipse at 0 0,#8050301b,transparent 55%),var(--more-surface);border-color:#e5aa6847;box-shadow:0 24px 60px #0004,inset 0 1px #ffffff08}
+#panel-buy .buy-swap:before{opacity:.6;background:linear-gradient(90deg,transparent,#d78f63,#e8bc84,transparent)}
+.buy-token-panel{background:linear-gradient(145deg,#17120f,#120f0c);border-color:#ffffff24;box-shadow:inset 0 1px #ffffff03}
+.buy-receive{background:radial-gradient(ellipse at 100% 100%,#9b6b2b12,transparent 75%),#1b1510;border-color:#d9a27440}
+.buy-direction{background:var(--more-gradient);box-shadow:0 4px 18px #bf82441b}
+.buy-coin{background:#251b14;border-color:#ffffff24;color:#f0d3b5}
+.buy-quote-details,#panel-buy .buy-guide{background:#1a1511;border-color:var(--forge-border)}
+#panel-buy .buy-quote-details .fee-line{border-color:#ffffff18}
+.buy-settings summary{background:#e8a1640b;border-color:#e8a16435;color:#efbd94}
+.buy-brand img{filter:drop-shadow(0 0 24px #dd98522b)}
+.market-strip{color:var(--accent)}
+.more-build .term-total strong,.more-power-preview #power,.more-build .estimate-rows .usd-reference{color:#edbd84}
+#pool-overview .usd-reference,#pool-overview b{color:#edbd84}
+#panel-buy .buy-card-kicker,#panel-buy .buy-brand .eyebrow{color:#edbd84}
+.hero .token-pill{background:#2b1e16cc;border-color:#b981553d;color:#f0d3b5}
+#review .review-actions .primary-button,#buy-review .review-actions .primary-button,
+#bitcoin-review .review-actions .primary-button,#position-review .review-actions .primary-button,
+#claim-review .primary-button{background:var(--more-gradient);color:#29170e;border-color:transparent;box-shadow:var(--more-glow)}
