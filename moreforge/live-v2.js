@@ -1,4 +1,4 @@
-import {positionMarkup,dateMarkup} from './position-ui.js?v=57';
+import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=58';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
@@ -45,7 +45,7 @@ function pending(){
  $('#pool-cards').innerHTML=[8,28,88,288].map((d,i)=>`<article class="card pool-card pool-tone-${i}"><div class="pool-top"><span>PLANNED</span><span>${(future?[28.48,24.03,18.69,17.8]:[26.88,22.68,17.64,16.8])[i]}% of fees</span></div><h3>${d}-Day ${i===3?'Bitcoin ':''}Pool</h3><div class="pending-value">Not launched</div><p>Balances and local deadlines appear after deployment.${i===3?' Bitcoin is purchased during entry.':''}</p></article>`).join('');
  $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>Buy-and-burn pools</strong>${message}</div>`;$('#burn-cards').replaceChildren();
  $('#claim-totals').innerHTML='<div><b>Rewards open after launch</b></div>';
- for(const id of ['#claim-cycles','#position-controls'])$(id).replaceChildren();
+ $('#claim-cycles').replaceChildren();renderPositions(null);
  text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No settlement is available before deployment.');
  text('#v2-launch-label',future?'Future chain · not available yet':'MORE Forge · Preparing for launch');
  text('#v2-launch-copy','Explore the lock and optional-burn model. Entries open after deployment.');
@@ -98,7 +98,7 @@ async function readChain(x){
  const e=epoch,a=account,current=()=>ctx===x&&e===epoch&&a===account;
  try{
   const [block,balance]=await Promise.all([x.r.getBlock('latest'),a?x.token.balanceOf(a):0n]);if(!current())return;
-  x.now=block.timestamp;x.block=block.number;x.balance=balance;
+  x.now=block.timestamp;x.nowReadAt=Date.now();x.block=block.number;x.balance=balance;
   text('#balance-help',a?'Wallet balance: '+display(balance)+' MORE':'Connect wallet to see your MORE balance.');
   if(x.forgeReady){
    const o={blockTag:block.number};
@@ -159,10 +159,12 @@ function renderRewards(x){
  $('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</div>`).join('');
  text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
 }
+function positionTime(x){return BigInt(x.now+Math.max(0,Math.floor((Date.now()-(x.nowReadAt||Date.now()))/1000)));}
 function renderPositions(x){
- const active=x.owned.filter(p=>p.closed===0n),ended=x.owned.filter(p=>p.closed!==0n),visible=positionFilter==='active'?active:ended;
- $('#position-controls').innerHTML='<h3>Your position NFTs</h3><p class="positions-intro">Principal, power and withdrawal dates for the NFTs you own.</p>'+(!account?'<p>Connect wallet to see your principal and withdrawal dates.</p>':`<div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${active.length}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${ended.length}</span></button></div>`+(visible.length?visible.map(p=>positionMarkup(p,x.now)).join(''):`<p class="position-empty">No ${positionFilter} MORE position NFTs for this wallet.</p>`));
- $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;renderPositions(x);});
+ const owned=x?.owned||[],active=owned.filter(p=>p.closed===0n),ended=owned.filter(p=>p.closed!==0n),visible=positionFilter==='active'?active:ended;
+ const loaded=Boolean(x?.dataLoaded&&account),empty=!account?'Connect a wallet to see your MORE Forge positions.':!loaded?'Loading your positions…':`No ${positionFilter} MORE position NFTs for this wallet.`;
+ $('#position-controls').innerHTML=`<p class="eyebrow">YOUR NFTS</p><h3>Your MORE Forge Positions</h3><p class="positions-intro">Browse active positions or switch to Ended for your position history.</p><div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${loaded?active.length:'—'}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${loaded?ended.length:'—'}</span></button></div>`+(loaded&&visible.length?visible.map(p=>positionMarkup(p,positionTime(x))).join(''):`<p class="position-empty">${empty}</p>`)+`<p class="positions-explanation">Principal stays whole through the 7-day grace period, then principal and power decay over 7 days. The on-screen estimate updates each second; the amount returned uses the transaction’s block time. Maturity and decay do not close an NFT automatically. Ended positions can still have earned rewards to claim below.</p>`;
+ $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;renderPositions(ctx);});
  $$('[data-withdraw]').forEach(b=>b.onclick=()=>reviewWithdrawal(BigInt(b.dataset.withdraw)));
  $$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));
 }
@@ -178,7 +180,7 @@ async function renderBurns(x,a,current){
 }
 function addProvider(p,info={}){if(typeof p?.request!=='function')return;const old=discovered.find(x=>x.p===p);if(old)Object.assign(old.info,info);else discovered.push({p,info});}
 window.addEventListener('eip6963:announceProvider',e=>addProvider(e.detail?.provider,e.detail?.info));window.dispatchEvent(new Event('eip6963:requestProvider'));
-function changed(accounts){account=accounts[0]||null;review=null;positionReview=null;for(const d of $$('dialog[open]'))d.close();if(ctx){ctx.dataLoaded=false;ctx.balance=0n;}text('#connect-wallet',account?account.slice(0,6)+'…'+account.slice(-4):'Connect wallet');buy.update();disable();if(!busy)refresh();}
+function changed(accounts){account=accounts[0]||null;review=null;positionReview=null;for(const d of $$('dialog[open]'))d.close();if(ctx){ctx.dataLoaded=false;ctx.balance=0n;}text('#connect-wallet',account?account.slice(0,6)+'…'+account.slice(-4):'Connect wallet');renderPositions(ctx);buy.update();disable();if(!busy)refresh();}
 $('#connect-wallet').onclick=async()=>{try{
  window.dispatchEvent(new Event('eip6963:requestProvider'));addProvider(window.ethereum);addProvider(window.rabby);for(const p of window.ethereum?.providers||[])addProvider(p);
  provider=discovered.find(x=>x.info.rdns==='io.rabby'||x.p.isRabby)?.p||window.ethereum||discovered[0]?.p;if(!provider)throw Error('Open this page in Rabby or another compatible wallet browser.');
@@ -239,3 +241,5 @@ $('#chain').onchange=load;window.addEventListener('more-market-prices',event=>{i
 installInputSizing();pending();disable();
 try{[legacy,manifests]=await Promise.all(['deployments.json','deployments-v2.json'].map(file=>fetch(file,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Deployment data unavailable.');return r.json();})));await load();}catch(err){status(error(err));}
 setInterval(()=>{if(!busy&&!document.hidden)refresh();},30000);
+
+setInterval(()=>{const x=ctx;if(busy||document.hidden||$('#panel-rewards').hidden||!account||!x?.dataLoaded)return;const now=positionTime(x);for(const card of $$('#position-controls [data-position-id]')){const p=x.owned.find(p=>String(p.id)===card.dataset.positionId);if(p)updatePositionCard(card,p,now,busy);}},1000);

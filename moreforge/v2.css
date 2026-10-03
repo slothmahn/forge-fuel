@@ -98,3 +98,20 @@
 #position-review .review-actions .primary-button{width:100%;border:1px solid #ffc47b50;background:linear-gradient(110deg,#ff683e,#ffb74e);color:#241208;box-shadow:inset 0 1px 0 #ffffff20,0 3px 12px #ff752412}
 @media(max-width:480px){#position-review.forge-review{padding:24px}}
 @media(max-width:360px){#position-review.forge-review{padding:20px}}
+#panel-rewards .positions-panel{max-width:900px;margin:24px auto 28px;padding:30px}
+.positions-panel>h3{font-size:27px;line-height:1.3;margin:0 0 12px}
+.positions-panel .position-filters{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid #ffffff20;padding-bottom:16px;gap:12px}
+.positions-panel .position-filters button{min-height:44px;text-transform:uppercase;letter-spacing:.05em;font-weight:700}
+.positions-panel .position-filters span{display:grid;place-items:center;min-width:25px;height:25px;border:1px solid currentColor;border-radius:999px}
+.positions-panel .position-empty{text-align:center;padding:30px 20px;font-size:16px;line-height:1.6;border-radius:16px}
+.position-stages{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:14px 0 12px}
+.position-stages>span{display:flex;align-items:center;gap:6px;color:var(--muted);font-size:10px;line-height:1.5}
+.position-stages i{display:grid;place-items:center;width:18px;height:18px;border:1px solid #ffffff30;border-radius:50%;flex:none;font-style:normal;font-size:10px}
+.position-stages .current{color:#ffc374;font-weight:700}
+.position-stages .current i{border-color:#ffc374;background:#ffae5020}
+.position-stages .completed{color:#d0b392}
+.position-card[data-phase=decay] .position-timeline-track>span,.position-card[data-phase=expired] .position-timeline-track>span{background:linear-gradient(90deg,#ffb652,#ff633d)}
+.position-countdown{font-size:12px;color:#ffbd70;margin:0;font-variant-numeric:tabular-nums;line-height:1.6}
+.positions-explanation{font-size:12px;line-height:1.8;color:var(--muted);margin:22px 0 0}
+@media(max-width:600px){#panel-rewards .positions-panel{padding:20px}.positions-panel>h3{font-size:23px}.position-stages{gap:5px}.position-stages>span{gap:4px;font-size:9px}}
+@media(max-width:360px){.position-stages>span{flex-direction:column;align-items:flex-start}}
