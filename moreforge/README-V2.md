@@ -86,3 +86,9 @@ The Shanghai replacement has now been verified through read-only public RPC call
 The public manifest now connects this replacement, with `entriesEnabled: true` authorizing the website gate; the live on-chain pause still blocks entries until the owner separately confirms opening. No opening transaction was submitted by the agent. Robinhood remains connected and open. The incompatible earlier PulseChain suite remains excluded. The V2.1 white paper replaces its unpublished old-address draft with the verified replacement appendix and updates owner fee-panel wording; all seven rendered pages were inspected.
 
 A read-only browser check against these actual contracts passed at 320/390/1440 widths across all five tabs, confirmed paused entries stay disabled, resumed the exact saved Shanghai plan, verified both receipts, and enabled the separate opening button after the website check. No wallet transaction was requested or broadcast during these checks.
+
+### Independent buy-page native balance
+
+Buy-page ETH/PLS balances start loading on wallet connection as soon as the selected-chain context exists, before market verification, position/pool scans, swap quotes or gas estimates. Updates deduplicate in-flight reads and reuse a successful read for ten seconds; quotes, half-balance actions and confirmed purchases request a fresh read. Late replies are scoped to the original context and wallet. Failed reads expose a Refresh balance action. Quote errors do not erase a successful balance.
+
+Validation: `scripts/tests/moreforge-buy-balance.cjs` covers early loading without an amount/quote, market-readiness independence, deduplication, quote errors, delayed wallet/chain replies, failure retry, zero balances, disconnect and mobile fit. A read-only live Robinhood browser check showed ETH in approximately 1.9 seconds with an empty purchase input; no transaction was requested.
