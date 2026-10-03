@@ -4,7 +4,7 @@ import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup} from './pool-ui-v2.js?v=70';
+import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-clock-80';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-layout-79';
 import {installBuy} from './buy-ui-v2.js?v=71';
 import {displayAmount,amountText} from './amounts.js';
@@ -289,3 +289,5 @@ try{[legacy,manifests]=await Promise.all(['deployments.json','deployments-v2.jso
 setInterval(()=>{if(!busy&&!document.hidden)refresh();},30000);
 
 setInterval(()=>{const x=ctx;if(busy||document.hidden||$('#panel-rewards').hidden||!account||!x?.dataLoaded)return;const now=positionTime(x);for(const card of $$('#position-controls [data-position-id]')){const p=x.owned.find(p=>String(p.id)===card.dataset.positionId);if(p)updatePositionCard(card,p,now,busy);}},1000);
+
+setInterval(()=>{const x=ctx;if(document.hidden||$('#panel-pools').hidden||!x?.pools||!x.now)return;updatePoolProgress($('#pool-cards'),positionTime(x));},1000);
