@@ -2,7 +2,7 @@
 
 The main MORE Forge page is the V2 interface. `legacy.html` preserves the paused-entry V1 application, including current rewards, settlement, Bitcoin conversion, burn pools and the V1 white paper. `deployments.json`, `live.js`, and their V1 modules are unchanged. Do not remove legacy access when V2 opens.
 
-`deployments-v2.json` intentionally contains **no deployment addresses** and has `status: pending` plus `entriesEnabled: false` for both chains. No fork address may be copied into this public file. In this state the builder previews the candidate lock/optional-burn mechanics and explicitly labels planned fee settings. Swap purchases use existing MORE markets; no V1 position function is called by the V2 interface. V2 pool funding is shown as unavailable, not as fabricated balances.
+`deployments-v2.json` contains the independently verified Robinhood V2 deployment. Its website activation flag is ready, while the contract remains paused until the owner approves opening. PulseChain remains `status: pending` with `entriesEnabled: false`; no unconfirmed suite addresses are published. No fork address may be copied into this public file. In this state the builder previews the candidate lock/optional-burn mechanics and explicitly labels planned fee settings. Swap purchases use existing MORE markets; no V1 position function is called by the V2 interface. V2 pool funding is shown as unavailable, not as fabricated balances.
 
 ## Activation after a real deployment
 
@@ -46,3 +46,11 @@ The 61,828-byte setup is an ordinary call to the confirmed helper. PulseChain Er
 The signing page displays these instructions on PulseChain, checks the wallet client version before setup, blocks the known affected client and explains initcode-size errors. Existing confirmed helpers and committed plans are preserved. The signed setup explicitly includes its destination and chain ID. A missing client-version response is reported; it cannot prove compatibility.
 
 `MORE_CONFIRMED_PLAN=/path/to/verified-plan.json node scripts/tests/moreforge-v2-rpc-compat.cjs` is a targeted regression for the confirmed PulseChain helper at `0x2700F271082De265bDe9A837851Baa136ce6B284`. Serve the repository on port 8769. It reads the helper and chain state through PublicNode, resumes the saved plan, rejects the affected client and intercepts the Geth signing request to verify unchanged destination, calldata and nonce. It never broadcasts a public transaction. Actual Rabby retry remains an owner action.
+
+## Robinhood deployment verified October 3, 2026
+
+Helper transaction: `0xcb181709370a2ff908de3ad9e55cbfe147408c2a04a9859e57c155cd91ec1cf3`. Suite transaction: `0xad1ba7c794a54358693be79859af54ef527dc9585418e38527df0c8cfd8c76d3`, block 79018317. Both succeeded. Reconstruction from the actual helper nonce and block time produced the same initcode, full setup calldata and plan hash. Runtime bytes for the helper and all 19 suite contracts matched pinned artifacts, with immutable slots masked; immutable identities and wiring were checked separately. Ownership, fee percentage/bounds, four vaults, adapters, fee recipients and 17:00 UTC cycle anchor all passed. Entry pause was true.
+
+The owner opening transaction is still separate. `entriesEnabled: true` is the website readiness gate, not evidence that the contract has opened. The live application also reads the contract pause before allowing entry. `MORE_Forge_White_Paper_V2.0.pdf` documents V2 mechanics and verified Robinhood addresses; PulseChain is explicitly pending. V1 application, manifests and white paper are retained.
+
+A read-only browser check against the real Robinhood deployment confirmed pool loading, the on-chain paused-entry guard, 320/390/1440-pixel layouts, the white-paper link and successful saved-plan verification with the owner opening gate ready. No transaction was requested or broadcast during this check. The six-page PDF was rendered and visually inspected; text extraction confirmed all six pages and the four first deadline dates.
