@@ -47,8 +47,6 @@ function pending(){
  $('#claim-totals').innerHTML='<div><b>Rewards open after launch</b></div>';
  $('#claim-cycles').replaceChildren();$('#claim-cycles').tabIndex=-1;renderPositions(null);
  text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No settlement is available before deployment.');
- text('#v2-launch-label',future?'Future chain · not available yet':'MORE Forge · Preparing for launch');
- text('#v2-launch-copy','Explore the lock and optional-burn model. Entries open after deployment.');
 }
 function updateLinks(){for(const a of $$('.legacy-link')){const dest=new URL(a.getAttribute('href'),location.href);dest.searchParams.set('chain',$('#chain').value);a.href=dest.href;}}
 async function load(){
@@ -111,8 +109,6 @@ async function readChain(x){
    const view=poolMarkup(x,Boolean(a));$('#pool-overview').innerHTML=view.overview;$('#pool-cards').innerHTML=view.cards;$('[data-pool-rewards]').onclick=event=>{event.preventDefault();tab('rewards');};
    text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded cycles are ready to settle.');
    renderRewards(x);renderPositions(x);
-   text('#v2-launch-label',canEnter(x)?'MORE Forge · Live':'MORE Forge · Entries paused');
-   text('#v2-launch-copy',canEnter(x)?'Lock principal, add an optional burn, and earn from all four pools while eligible.':'Entries are paused. Existing positions and rewards remain accessible.');
    renderBurns(x,a,current).catch(err=>{if(current())$('#burn-cards').textContent='Burn data unavailable: '+error(err);});
   }
   status(x.forgeReady?'MORE Forge · '+(a?'wallet connected':'connect wallet for your positions'):'Launch pending · live MORE purchases remain available');
