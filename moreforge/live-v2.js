@@ -1,4 +1,4 @@
-import {estimateTermRewards} from './term-rewards.js?v=1';
+import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=61';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
@@ -137,7 +137,8 @@ async function readChain(x){
 async function preview(){
  fitAmountInputs();const id=++previewId,x=ctx;
  if(x)x.preview=null;disable();let v;
- try{v=valid();}catch(err){text('#build-status',error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost','#power-principal','#power-burned','#term-bonus','#detail-principal','#detail-burned','#detail-term','#detail-grace','#detail-expiry']){text(s,'—');$(s).removeAttribute('title');}$('.more-power-ring').style.setProperty('--power-angle','0deg');$('#term-payouts').innerHTML='';text('#term-native-total','Check your inputs');text('#term-bitcoin-total','');clearReferences($('#panel-build'));return;}
+ try{v=valid();}catch(err){text('#build-status',error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost','#power-principal','#power-burned','#term-bonus','#detail-principal','#detail-burned','#detail-term','#detail-grace','#detail-expiry']){text(s,'—');$(s).removeAttribute('title');}$('.more-power-ring').style.setProperty('--power-angle','0deg');$('#term-payouts').innerHTML='';text('#term-native-total','Check your inputs');text('#term-bitcoin-total','');text('#build-burn-max','—');text('#current-preview-share','Check inputs');$('#current-payouts').innerHTML='';clearReferences($('#panel-build'));return;}
+ text('#build-burn-max',displayAmount(v.principal*3n,18,4));
  text('#term-estimate-title',`Estimated rewards over your ${v.days.toLocaleString()}-day term`);
  const now=x?.now||Math.floor(Date.now()/1000),maturity=BigInt(now)+BigInt(v.days)*DAY;
  amountText($('#power'),v.power,'power',4);text('#multiplier',(Number(v.power*10000n/v.principal)/10000).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+'×');$('.more-power-ring').style.setProperty('--power-angle',Math.min(360,Number(v.power*36000n/v.principal)/500)+'deg');amountText($('#power-principal'),v.principal,'power',4);amountText($('#power-burned'),v.burned,'power',4);
@@ -147,7 +148,7 @@ async function preview(){
  setReference($('#principal-usd'),{MORE:v.principal});setReference($('#burn-usd'),{MORE:v.burned});
  text('#native-fee','Loading quote…');text('#total-cost',displayAmount(v.total,18,4)+' MORE + fee');
  text('#build-status',!x?.forgeReady?'Checking position availability…':!x.dataLoaded?'Loading position data. Your fee quote is available separately.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
- { $('#term-payouts').innerHTML='<p class="field-help">Loading current funding and eligible power…</p>';text('#term-native-total','Loading reward estimate…');text('#term-bitcoin-total','');text('#term-usd-total','');}
+ { $('#term-payouts').innerHTML='<p class="field-help">Loading current funding and eligible power…</p>';text('#term-native-total','Loading reward estimate…');text('#term-bitcoin-total','');text('#term-usd-total','');text('#current-preview-share','Loading…');$('#current-payouts').innerHTML='<p>Loading current funding and eligible power…</p>';}
  if(!x?.ready){text('#native-fee','Quote unavailable');return;}
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
@@ -161,12 +162,23 @@ async function preview(){
    const bitcoinCycles=Math.floor(v.days/288);
    let bitcoinEntry=0n;
    // A failed Bitcoin quote must remain unavailable, never become a zero reward.
-   if(bitcoinCycles>0){
+   if(bitcoinCycles>0||powerAt({created:BigInt(x.now),maturity,power:v.power,closed:0n},x.pools[3].deadline)>0n){
     try{bitcoinEntry=(await new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(fee*1680n/10000n))[0];}
     catch{bitcoinEntry=null;}
    }
    if(id!==previewId||x!==ctx)return;
    const estimates=estimateTermRewards({days:v.days,power:v.power,existingPower,fee,pools:x.pools,bitcoinEntry});
+   const totalPower=existingPower+v.power;
+   text('#current-preview-share',`${(Number(v.power*1000000n/totalPower)/10000).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:4})}%`);
+   const proposed={created:BigInt(x.now),maturity,power:v.power,closed:0n};
+   $('#current-payouts').innerHTML=x.pools.map(p=>{
+    const own=powerAt(proposed,p.deadline),total=x.positions.reduce((sum,z)=>sum+powerAt(z,p.deadline),0n)+own;
+    const bitcoin=p.i===3,entry=bitcoin?bitcoinEntry:fee*[2688n,2268n,1764n][p.i]/10000n;
+    const balance=p.balance+(bitcoin?(p.btcQuote||0n):0n);
+    const payout=estimateCurrentReward({balance,entry,power:own,existingPower:total-own});
+    const symbol=bitcoin?x.n.btc:x.n.unit;
+    return `<div><b title="Closes ${date(p.deadline)}">${p.days} Day${bitcoin?' · Bitcoin':''}</b><div><strong>${payout===null?'Quote unavailable':`≈ ${displayAmount(payout,bitcoin?8:18,bitcoin?8:x.key==='pls'?2:6)} ${symbol}`}</strong>${payout===null?'<small>Refresh to retry</small>':referenceMarkup({[bitcoin?'BTC':'NATIVE']:payout})}</div></div>`;
+   }).join('');
    let native=0n,btc=0n,bitcoinReady=true;
    $('#term-payouts').innerHTML=estimates.map(p=>{
     const bitcoin=p.i===3,decimals=bitcoin?8:18,symbol=bitcoin?x.n.btc:x.n.unit;

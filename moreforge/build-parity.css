@@ -1,0 +1,83 @@
+/* Fuel Forge Build geometry, scoped to MORE with its ember palette. */
+#panel-build .more-build{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:stretch}
+#panel-build .more-build>.card{padding:27px;border-radius:17px;min-width:0}
+#panel-build .more-build>.position-details{padding:28px}
+#panel-build .card-heading{margin-bottom:24px}
+#panel-build .card-heading h3{font-size:21px;line-height:1.3;letter-spacing:-.035em;margin:0 0 10px}
+#panel-build .card-heading p:not(.eyebrow){font-size:12px;line-height:1.7;margin:0}
+#panel-build .more-build-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+#panel-build .field{margin:0;min-width:0}
+#panel-build .field label{display:block;font-size:11px;line-height:1.5;margin:0}
+#panel-build .term-field,#panel-build .term-presets{grid-column:1/-1}
+#panel-build .amount-field{height:54px;min-height:54px;margin-top:8px;padding:5px;gap:5px;border-radius:9px}
+#panel-build .amount-field input{width:100%;min-width:0;height:auto;padding:4px 8px;font-size:17px;font-weight:600;line-height:1.4}
+#panel-build .amount-field button{flex:0 0 52px;margin:0;min-height:0;padding:0 8px;border-radius:6px;font-size:11px}
+#panel-build .term-presets{display:flex;flex-wrap:nowrap;gap:7px;margin:0}
+#panel-build .term-presets button{flex:1 1 0;min-width:0;min-height:28px;padding:7px 4px;font-size:10px;line-height:1.3;border-radius:6px}
+#panel-build #build-burn-limit,#panel-build #balance-help{font-size:11px;line-height:1.7;margin:12px 0 0}
+#panel-build #build-burn-limit strong{font-weight:600;color:var(--text)}
+#panel-build #build-status{font-size:11px;line-height:1.7;margin:12px 0}
+#panel-build .position-fee-note{margin:23px 0 14px;padding:18px 0 0;border-top:1px solid var(--line-strong);background:none}
+#panel-build .position-fee-line{display:flex;justify-content:flex-start;align-items:baseline;flex-wrap:wrap;gap:4px 6px;padding:0;margin:0;border:0;font-size:11px;font-weight:700}
+#panel-build .position-fee-line>span{color:var(--accent)}
+#panel-build .position-fee-line>span:after{content:':'}
+#panel-build .position-fee-line .value-reference{text-align:left;width:auto}
+#panel-build .position-fee-line strong{color:var(--accent);font-size:11px}
+#panel-build .position-fee-line small{font-size:10px}
+#panel-build .fee-policy{font-size:10px;line-height:1.7;margin:10px 0 0}
+#panel-build #build-submit{width:100%;min-height:43px;font-size:13px;border-radius:9px}
+#panel-build .action-note{font-size:10px;line-height:1.7;text-align:center;margin:12px 0 0}
+#panel-build .position-details>h3{font-size:15px;line-height:1.4;margin:0 0 6px;color:var(--text)}
+#panel-build .term-estimate{padding:20px;margin:16px 0 20px;border-radius:14px}
+#panel-build .term-estimate h4{font-size:18px;line-height:1.4;margin:0 0 6px;color:var(--accent)}
+#panel-build .term-subtitle,#panel-build .estimate-explanation{font-size:12px;line-height:1.6;margin:0}
+#panel-build .estimate-rows{margin:16px 0 0}
+#panel-build .estimate-rows>div{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+#panel-build .estimate-rows>div>b{font-size:13px;font-weight:600;line-height:1.5;flex-shrink:0}
+#panel-build .estimate-rows>div>div{min-width:0;text-align:right}
+#panel-build .estimate-rows strong{font-size:14px!important;line-height:1.5}
+#panel-build .estimate-rows small{font-size:12px;line-height:1.5}
+#panel-build .estimate-rows b>small{font-size:11px;margin:0;font-weight:400}
+#panel-build .term-total{padding:16px 0 0;gap:0}
+#panel-build .term-total>span{font-size:12px;margin:0}
+#panel-build .term-total>strong{font-size:clamp(20px,4vw,27px);line-height:1.4;margin:0}
+#panel-build .term-total>.btc-total{font-size:19px}
+#panel-build .term-total>small{font-size:13px;line-height:1.5}
+#panel-build .estimate-explanation{margin-top:14px}
+#panel-build .position-facts{margin:0;font-size:11px}
+#panel-build .position-facts>div{padding:12px 0;line-height:1.5}
+#panel-build .position-facts dd{font-size:12px;max-width:60%}
+#panel-build .build-commitment{font-size:11px;line-height:1.7;margin-top:16px}
+#panel-build .build-commitment summary{cursor:pointer;color:var(--accent);font-weight:600}
+#panel-build .build-commitment .withdrawal-notice{margin:12px 0 0}
+#panel-build .more-power-preview{grid-column:1/-1;display:grid;grid-template-columns:minmax(220px,.65fr) minmax(0,1.35fr);gap:0 32px;align-items:center}
+#panel-build .more-power-preview>.eyebrow{grid-column:1/-1;margin:0}
+#panel-build .power-visual{margin:12px 0 16px;text-align:center}
+#panel-build .more-power-ring{width:180px;height:180px;padding:6px;margin:12px auto}
+#panel-build .more-power-ring strong{font-size:43px;font-weight:600;letter-spacing:-.055em}
+#panel-build .more-power-ring span{font-size:9px}
+#panel-build #power{font-size:22px;line-height:1.3;margin:0;letter-spacing:-.035em}
+#panel-build .power-visual>p{font-size:10px;margin:9px 0 0}
+#panel-build .more-current-preview{margin:12px 0 0;padding:20px;border:1px solid #ffac5040;border-radius:14px;background:#ffac500a;text-align:center;min-width:0}
+#panel-build .more-current-preview>span{display:block;font-size:14px;font-weight:600;line-height:1.5}
+#panel-build .more-current-preview>strong{display:block;margin:8px 0;font-size:clamp(25px,4vw,34px);line-height:1.2;color:var(--accent);font-variant-numeric:tabular-nums}
+#panel-build .more-current-preview>p{font-size:13px;line-height:1.6;text-align:left;color:var(--muted);margin:12px 0 0}
+#panel-build .proposal .power-breakdown{margin:0 0 20px}
+@media(max-width:760px){
+ #panel-build .more-build{grid-template-columns:1fr}
+ #panel-build .more-build>.card,#panel-build .more-build>.position-details{padding:23px}
+ #panel-build .more-build-fields{grid-template-columns:1fr}
+ #panel-build .amount-field{height:56px;min-height:56px}
+ #panel-build .amount-field input{font-size:18px}
+ #panel-build .term-estimate{padding:18px 14px}
+ #panel-build .more-power-preview{display:flex;flex-direction:column;align-items:stretch;gap:0}
+ #panel-build .more-current-preview{padding:18px 14px}
+ #panel-build .estimate-rows>div>b{font-size:12px}
+ #panel-build .more-current-preview .estimate-rows b time{font-size:10px}
+}
+@media(max-width:360px){#panel-build .estimate-rows>div{gap:8px}#panel-build .estimate-rows strong{font-size:12px!important}#panel-build .estimate-rows>div>b{font-size:11px}}
+#panel-build #build-form .position-fee-note{border:0;border-top:1px solid var(--line-strong);border-radius:0;background:none;padding:18px 0 0;margin:23px 0 14px}
+#panel-build #build-form .position-fee-line{gap:4px 6px;align-items:baseline}
+#panel-build #build-form .position-fee-line>span,#panel-build #build-form .position-fee-line strong{font-size:11px}
+#panel-build #build-form .position-fee-note .fee-policy{font-size:10px;line-height:1.7;margin:10px 0 0}
+#panel-build #build-form .position-fee-line .usd-reference{font-size:10px;margin-top:3px}

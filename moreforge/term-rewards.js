@@ -14,3 +14,10 @@ export function estimateTermRewards({days,power,existingPower,fee,pools,bitcoinE
   return {i:p.i,days:durations[p.i],cycles,amount:perCycle*BigInt(cycles)+payout(balance+entry)-perCycle};
  });
 }
+
+export function estimateCurrentReward({balance,entry,power,existingPower}) {
+ if(power===0n)return 0n;
+ if(entry===null)return null;
+ const funded=balance+entry;
+ return (funded-funded*25n/10000n)*power/(existingPower+power);
+}
