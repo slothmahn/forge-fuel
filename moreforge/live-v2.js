@@ -1,5 +1,6 @@
+import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
-import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=52';
+import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=52';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
@@ -19,6 +20,7 @@ const tab=k=>window.moreForgeTabs.select(k),text=(id,t)=>$(id).textContent=t;
 let legacy={},manifests={},ctx=null,epoch=0,previewId=0,account=null,provider=null,busy=false,quotes={},review=null,positionReview=null;
 const listening=new WeakSet(),discovered=[],refreshes=new WeakMap();
 const buy=installBuy({context:()=>ctx,account:()=>account,isBusy:()=>busy,marketPrices:()=>quotes,action,tab,status});
+const ownerFees=installFeeSettings({context:()=>ctx,account:()=>account,isBusy:()=>busy,action,status});
 function valid(){return inputs($('#amount').value,$('#boost').value||'0',$('#term').value);}
 function canEnter(x=ctx){return Boolean(x?.forgeReady&&x.dataLoaded&&x.m.entriesEnabled===true&&!x.paused&&x.now>=x.m.siteOpeningTime);}
 function disable(){
@@ -33,7 +35,7 @@ function disable(){
  $('#refresh-pools').disabled=busy||!x?.forgeReady;
  $$('[data-withdraw],[data-transfer],[data-execute],[data-save-burn]').forEach(b=>b.disabled=busy||!account||!x?.dataLoaded||b.dataset.ready==='false');
  $('#position-confirm').disabled=busy||!positionReview;
- buy.disable();
+ buy.disable();ownerFees.render();
 }
 function pending(){
  const future=!networks[$('#chain').value];
@@ -99,12 +101,12 @@ async function readChain(x){
   text('#balance-help',a?'Wallet balance: '+display(balance)+' MORE':'Connect wallet to see your MORE balance.');
   if(x.forgeReady){
    const o={blockTag:block.number};
-   const [paused,bps,bounds,min,max,next]=await Promise.all([x.position.entriesPaused(o),x.position.feeBps(o),x.position.feeBoundsEnabled(o),x.position.minFeeWei(o),x.position.maxFeeWei(o),x.position.nextTokenId(o)]);
+   const [paused,bps,bounds,min,max,next,owner]=await Promise.all([x.position.entriesPaused(o),x.position.feeBps(o),x.position.feeBoundsEnabled(o),x.position.minFeeWei(o),x.position.maxFeeWei(o),x.position.nextTokenId(o),x.position.owner(o)]);
    const [positions,records]=await Promise.all([readV2Positions(x.position,next,o),Promise.all(x.vaults.map((v,i)=>readPool(v,i,x.now,o,async(v,amount,opts)=>{const q=await v.referenceQuote(opts);return(await new Contract(q,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(amount,opts))[0];})))]);
    const owned=a?positions.filter(p=>same(p.owner,a)):[];
    const claims=(await Promise.all(records.map((record,i)=>readV2Claims(x.vaults[i],record,owned,x.m.launchTime,o)))).flat();
    if(!current())return;
-   Object.assign(x,{paused,positions,owned,claims,pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[]),feePolicy:{bps,bounds,min,max},dataLoaded:true});
+   Object.assign(x,{owner,paused,positions,owned,claims,pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[]),feePolicy:{bps,bounds,min,max},dataLoaded:true});
    const view=poolMarkup(x,Boolean(a));$('#pool-overview').innerHTML=view.overview;$('#pool-cards').innerHTML=view.cards;$('[data-pool-rewards]').onclick=event=>{event.preventDefault();tab('rewards');};
    text('#settle-status',x.due.length?`${x.due.length} funded cycles ready. One transaction processes up to 15 position records per pool and pays the caller 0.25% of the processed rewards.`:'No funded V2 cycles are ready to settle.');
    renderRewards(x);renderPositions(x);

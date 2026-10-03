@@ -10,6 +10,7 @@ export const positionAbi=[
  'function currentPrincipal(uint256) view returns(uint256)','function withdraw(uint256)','function finalizeExpired(uint256)',
  'function safeTransferFrom(address,address,uint256)','function entriesPaused() view returns(bool)',
  'function feeBps() view returns(uint256)','function feeBoundsEnabled() view returns(bool)',
+ 'function setFeePolicy(uint256,bool,uint256,uint256)',
  'function minFeeWei() view returns(uint256)','function maxFeeWei() view returns(uint256)'
 ];
 export function amount(raw,label){

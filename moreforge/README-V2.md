@@ -66,3 +66,9 @@ The replacement batch passed on an isolated PulseChain fork running Shanghai: he
 Before publishing a replacement manifest, verify its new real receipts and runtime, plus successful name and required-fee calls. Publish the revised white paper with replacement addresses before the owner opens entries. The original V2.0 white paper continues to mark PulseChain pending; the unpublished dual-chain draft must not be used for the incompatible suite.
 
 The corrected mobile deployment test on the Shanghai fork passed all three simulated confirmations, refresh/resume, exact suite verification, the website activation gate, opening and tampered-plan rejection. Read-only live checks confirmed the incompatible original PulseChain suite remained paused with nextTokenId 1 and zero locked MORE. No replacement transaction has been submitted publicly.
+
+### Owner position fee controls
+
+The Build power tab exposes Forge Position Fee settings only when the connected wallet matches the current on-chain position owner. Percentage (0.01–100%), native minimum/maximum, and bounds toggle are saved together via `setFeePolicy` after a review. Saving rechecks ownership and the reviewed prior policy through the signer; changed policies require a new review. Account/chain changes or unavailable data hide the panel and invalidate its review. Confirmed updates refresh entry quotes. No fee values are changed by publishing this UI. Pending chains expose no owner controls until their verified V2 manifest is connected.
+
+Validation: `scripts/tests/moreforge-owner-fees.cjs` covers input limits, owner visibility, exact transaction arguments, stale policy rejection, ETH/PLS units, mobile/desktop overflow, and review invalidation. A read-only browser check also loaded Robinhood’s live owner and fee policy without requesting a transaction.
