@@ -1,0 +1,19 @@
+const assert=require('assert/strict');const {chromium}=require('/Users/codylane/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules/playwright');
+(async()=>{const b=await chromium.launch({executablePath:'/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',headless:true});try{
+ const page=await b.newPage({viewport:{width:390,height:844}});await page.route('**/live-v2.js*',r=>r.fulfill({contentType:'text/javascript',body:''}));await page.route('https://**/*',r=>r.fulfill({json:{pairs:[]}}));await page.goto('http://127.0.0.1:8769/moreforge/#rewards');
+ await page.evaluate(async()=>{const {positionMarkup}=await import('/moreforge/position-ui.js');const DAY=86400n,created=1791046800n,maturity=created+288n*DAY;const position={id:42n,principal:214031158543896256999547n,power:1070155792719481284997735n,created,maturity,closed:0n};const variants=[['locked',maturity-DAY],['grace',maturity+7n*DAY],['decay',maturity+10n*DAY],['expired',maturity+14n*DAY],['closed',maturity+15n*DAY]];document.querySelector('#position-controls').innerHTML=variants.map(([state,now])=>positionMarkup({...position,id:position.id+BigInt(variants.findIndex(v=>v[0]===state)),closed:state==='closed'?maturity:0n},now)).join('');});
+ assert.equal(await page.locator('.position-card').count(),5);
+ assert(await page.locator('[data-phase=locked] [data-withdraw]').isDisabled());
+ for(const state of ['grace','decay','expired'])assert(!(await page.locator(`[data-phase=${state}] [data-withdraw]`).isDisabled()));
+ assert.equal(await page.locator('[data-phase=closed] button').count(),0);
+ assert.match(await page.locator('[data-phase=grace] .position-stats').innerText(),/214,031\.16/);
+ assert.match(await page.locator('[data-phase=expired] .position-stats').innerText(),/0\s*MORE/);
+ assert.match(await page.locator('[data-phase=closed] .position-note').innerText(),/remain claimable/);
+ assert.equal(await page.locator('time').count(),15);
+ for(const width of [320,390,430,768,1440]){await page.setViewportSize({width,height:844});assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));const overflowing=await page.locator('#position-controls').evaluate(root=>[...root.querySelectorAll('strong,dd,button')].filter(e=>e.getBoundingClientRect().width&&e.scrollWidth>e.clientWidth+2).map(e=>e.className));assert.deepEqual(overflowing,[],'overflow at '+width);assert(await page.locator('.position-stats .position-amount').evaluateAll(elements=>elements.every(e=>e.getBoundingClientRect().height<=parseFloat(getComputedStyle(e).lineHeight)+1)),'numeric amounts split at '+width);}
+ await page.setViewportSize({width:390,height:844});await page.addStyleTag({content:'.tabs{position:static!important}'});await page.locator('#position-controls').screenshot({path:'/tmp/more-position-lifecycle-fixtures.png'});
+ await page.locator('.position-card').first().screenshot({path:'/tmp/more-position-card-final.png'});
+ await page.evaluate(()=>{document.querySelector('#position-review-title').textContent='Withdraw your principal';document.querySelector('#position-review-body').textContent='Position #42\nCurrently returnable: 214031.158543896256999547 MORE.\nForfeited principal: 0 MORE.\n\nWithdrawal closes the position and ends future reward power. Already-earned rewards remain claimable.';document.querySelector('#position-review').showModal();});
+ for(const width of [320,390,1440]){await page.setViewportSize({width,height:844});assert(await page.locator('#position-review').evaluate(e=>e.scrollWidth<=e.clientWidth+1));assert(await page.locator('#position-confirm').isVisible());}
+ console.log('PASS: locked/grace/decay/expired/closed NFT states, exact values, action availability, date markup and layout from 320 to 1440px.');
+}finally{await b.close()}})().catch(e=>{console.error(e);process.exitCode=1});

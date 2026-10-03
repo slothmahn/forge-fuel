@@ -1,3 +1,4 @@
+import {positionMarkup,dateMarkup} from './position-ui.js?v=57';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
@@ -5,7 +6,7 @@ import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=52';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
 import {installBuy} from './buy-ui-v2.js?v=56';
-import {displayAmount} from './amounts.js';
+import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
@@ -17,7 +18,7 @@ const date=t=>new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'s
 const display=(v,d=18)=>displayAmount(v,d,d===8?8:6),units=n=>formatUnits(n,18),same=(a,b)=>a?.toLowerCase()===b?.toLowerCase();
 const error=e=>e.shortMessage||e.message||String(e),status=t=>$('#connection-status').textContent=t;
 const tab=k=>window.moreForgeTabs.select(k),text=(id,t)=>$(id).textContent=t;
-let legacy={},manifests={},ctx=null,epoch=0,previewId=0,account=null,provider=null,busy=false,quotes={},review=null,positionReview=null;
+let legacy={},manifests={},ctx=null,epoch=0,previewId=0,account=null,provider=null,busy=false,quotes={},review=null,positionReview=null,positionFilter='active';
 const listening=new WeakSet(),discovered=[],refreshes=new WeakMap();
 const buy=installBuy({context:()=>ctx,account:()=>account,isBusy:()=>busy,marketPrices:()=>quotes,action,tab,status});
 const ownerFees=installFeeSettings({context:()=>ctx,account:()=>account,isBusy:()=>busy,action,status});
@@ -121,21 +122,21 @@ async function readChain(x){
 async function preview(){
  fitAmountInputs();const id=++previewId,x=ctx;
  if(x)x.preview=null;disable();let v;
- try{v=valid();}catch(err){text('#build-status',error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost'])text(s,'—');clearReferences($('#panel-build'));return;}
+ try{v=valid();}catch(err){text('#build-status',error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost','#power-principal','#power-burned','#term-bonus','#detail-principal','#detail-burned','#detail-term','#detail-grace','#detail-expiry']){text(s,'—');$(s).removeAttribute('title');}$('.more-power-ring').style.setProperty('--power-angle','0deg');$('#term-payouts').innerHTML='';text('#term-native-total','Check your inputs');text('#term-bitcoin-total','');clearReferences($('#panel-build'));return;}
  const now=x?.now||Math.floor(Date.now()/1000),maturity=BigInt(now)+BigInt(v.days)*DAY;
- text('#power',display(v.power)+' power');text('#multiplier',(Number(v.power*10000n/v.principal)/10000).toLocaleString(undefined,{maximumFractionDigits:4})+'× power per locked MORE');
- for(const [sel,n] of [['#principal-value',v.principal],['#burn-value',v.burned],['#detail-principal',v.principal],['#detail-burned',v.burned]])text(sel,display(n)+' MORE');
- text('#term-bonus','+'+display(v.power-v.principal-v.burned)+' power');text('#detail-term',date(maturity));text('#detail-grace',date(maturity+7n*DAY));text('#detail-expiry',date(maturity+14n*DAY));
+ amountText($('#power'),v.power,'power',4);text('#multiplier',(Number(v.power*10000n/v.principal)/10000).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2})+'×');$('.more-power-ring').style.setProperty('--power-angle',Math.min(360,Number(v.power*36000n/v.principal)/500)+'deg');amountText($('#power-principal'),v.principal,'power',4);amountText($('#power-burned'),v.burned,'power',4);
+ for(const [sel,n] of [['#principal-value',v.principal],['#burn-value',v.burned],['#detail-principal',v.principal],['#detail-burned',v.burned]])amountText($(sel),n,'MORE',4);
+ amountText($('#term-bonus'),v.power-v.principal-v.burned,'power',4,18,'+');$('#detail-term').innerHTML=dateMarkup(maturity);$('#detail-grace').innerHTML=dateMarkup(maturity+7n*DAY);$('#detail-expiry').innerHTML=dateMarkup(maturity+14n*DAY);
  $$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.days));$$('[data-boost]').forEach(b=>b.classList.toggle('active',v.burned===v.principal*BigInt(b.dataset.boost)));
  setReference($('#principal-usd'),{MORE:v.principal});setReference($('#burn-usd'),{MORE:v.burned});
- text('#native-fee','Loading quote…');text('#total-cost',display(v.total)+' MORE + fee + gas');
+ text('#native-fee','Loading quote…');text('#total-cost',displayAmount(v.total,18,4)+' MORE + fee');
  text('#build-status',!x?.forgeReady?'Preview only · entries open after deployment.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
  if(!x?.forgeReady){$('#term-payouts').innerHTML='<p class="field-help">Funding and deadlines appear after deployment. Your preview does not create a position.</p>';text('#term-native-total','Available after launch');text('#term-bitcoin-total','');text('#term-usd-total','');}
  if(!x?.ready){text('#native-fee','Quote unavailable');return;}
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
   if(id!==previewId||x!==ctx)return;
-  x.preview={...v,fee};text('#native-fee',display(fee)+' '+x.n.unit);text('#fee-label',x.forgeReady?'Protocol fee · current on-chain policy':'Estimated protocol fee · planned policy');
+  x.preview={...v,fee};amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Protocol fee':'Estimated protocol fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value.${p.bounds?' Minimum '+display(BigInt(p.min))+' '+x.n.unit+'; maximum '+display(BigInt(p.max))+' '+x.n.unit+'.':''} Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
@@ -145,8 +146,8 @@ async function preview(){
     // Current funds only; neither native nor Bitcoin estimates invent future contributions.
     const payout=total?(p.balance-p.balance*25n/10000n)*own/total:0n;
     p.i===3?btc+=payout:native+=payout;
-    return `<div><b>${p.days} Day<small>${date(p.deadline)}</small></b><div><strong>${own?display(payout,p.i===3?8:18)+' '+(p.i===3?x.n.btc:x.n.unit):'No eligible power at this deadline'}</strong>${own?referenceMarkup({[p.i===3?'BTC':'NATIVE']:payout}):''}</div></div>`;});
-   $('#term-payouts').innerHTML=rows.join('');text('#term-native-total',display(native)+' '+x.n.unit);text('#term-bitcoin-total','+ '+display(btc,8)+' '+x.n.btc);setReference($('#term-usd-total'),{NATIVE:native,BTC:btc});
+    return `<div><b>${p.days}-day pool<small>${dateMarkup(p.deadline)}</small></b><div><strong title="Exact payout: ${formatUnits(payout,p.i===3?8:18)} ${p.i===3?x.n.btc:x.n.unit}">${own?displayAmount(payout,p.i===3?8:18,p.i===3?8:x.key==='pls'?2:6)+' '+(p.i===3?x.n.btc:x.n.unit):'No eligible power at this deadline'}</strong>${own?referenceMarkup({[p.i===3?'BTC':'NATIVE']:payout}):''}</div></div>`;});
+   $('#term-payouts').innerHTML=rows.join('');amountText($('#term-native-total'),native,x.n.unit,x.key==='pls'?2:6);amountText($('#term-bitcoin-total'),btc,x.n.btc,8,8,'+ ');setReference($('#term-usd-total'),{NATIVE:native,BTC:btc});
   }
   refreshReferences(document,quotes);disable();
  }catch(err){if(id===previewId){x.preview=null;text('#native-fee','Quote unavailable');text('#build-status',error(err));clearReferences($('#fee-usd').parentElement);disable();}}
@@ -159,14 +160,13 @@ function renderRewards(x){
  text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
 }
 function renderPositions(x){
- $('#position-controls').innerHTML='<h3>Your positions &amp; withdrawals</h3>'+(!account?'<p>Connect wallet to see your principal and withdrawal dates.</p>':!x.owned.length?'<p>No positions for this wallet.</p>':x.owned.map(p=>{
-  const closed=p.closed!==0n,available=closed?0n:remaining(p.principal,p.maturity,BigInt(x.now)),mature=BigInt(x.now)>=p.maturity;
-  const state=closed?'Closed · earned rewards remain claimable':!mature?'Principal locked':available===0n?'Fully decayed':BigInt(x.now)<=p.maturity+7n*DAY?'Full principal available':'Principal declining · withdraw now';
-  return `<article class="position-card"><h4>Position #${p.id} · ${state}</h4><div class="fee-line"><span>Original principal</span><strong>${display(p.principal)} MORE</strong></div><div class="fee-line"><span>${closed?'Remaining principal':'Current principal'}</span><strong>${display(available)} MORE</strong></div><div class="fee-line"><span>Maturity</span><strong>${date(p.maturity)}</strong></div><div class="fee-line"><span>Full withdrawal through</span><strong>${date(p.maturity+7n*DAY)}</strong></div>${closed?'':`<div class="button-row"><button type="button" class="primary-button" data-withdraw="${p.id}" data-ready="${mature}" ${mature?'':'disabled'}>${available===0n?'Close expired position':mature?'Review withdrawal':'Locked until maturity'}</button><button type="button" class="review-cancel" data-transfer="${p.id}">Transfer position</button></div><small>Principal reaches zero at ${date(p.maturity+14n*DAY)}. Transferring this NFT transfers its principal and all unclaimed reward rights.</small>`}</article>`;
- }).join(''));
+ const active=x.owned.filter(p=>p.closed===0n),ended=x.owned.filter(p=>p.closed!==0n),visible=positionFilter==='active'?active:ended;
+ $('#position-controls').innerHTML='<h3>Your position NFTs</h3><p class="positions-intro">Principal, power and withdrawal dates for the NFTs you own.</p>'+(!account?'<p>Connect wallet to see your principal and withdrawal dates.</p>':`<div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${active.length}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${ended.length}</span></button></div>`+(visible.length?visible.map(p=>positionMarkup(p,x.now)).join(''):`<p class="position-empty">No ${positionFilter} MORE position NFTs for this wallet.</p>`));
+ $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;renderPositions(x);});
  $$('[data-withdraw]').forEach(b=>b.onclick=()=>reviewWithdrawal(BigInt(b.dataset.withdraw)));
  $$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));
 }
+
 async function renderBurns(x,a,current){
  const rows=await Promise.all(x.burners.map((b,i)=>readBurn(b,x.r,x.m.burners[i],a||x.m.owner,x.now)));if(!current())return;
  const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
