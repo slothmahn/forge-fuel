@@ -10,10 +10,10 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
   const display=n=>displayAmount(n,18,8);
   const err=e=>e.shortMessage||e.message||String(e);
   function valid(q=quote){const x=context();return q&&x?.ready&&q.context===x&&q.wallet===(account()||'').toLowerCase()&&Date.now()-q.at<60000;}
-  function disable(){const x=context();for(const id of ['#buy-amount','#buy-slippage','#buy-refresh'])$(id).disabled=isBusy()||!x?.ready;$('#buy-submit').disabled=isBusy()||!account()||!valid()||!quote.affordable;$('#buy-half').disabled=isBusy()||!account()||!x?.ready||balanceState?.x!==x||balanceState?.wallet!==(account()||'').toLowerCase()||balanceState?.value===undefined;$('#buy-use').disabled=isBusy()||!x?.ready||!$('#buy-use').dataset.amount||Number($('#buy-use').dataset.amount)<=0;}
+  function disable(){const x=context();$('#buy-connect').hidden=!!account();$('#buy-connect').disabled=isBusy()||!x?.ready;$('#buy-submit').hidden=!account();for(const id of ['#buy-amount','#buy-slippage','#buy-refresh'])$(id).disabled=isBusy()||!x?.ready;$('#buy-submit').disabled=isBusy()||!account()||!valid()||!quote.affordable;$('#buy-half').disabled=isBusy()||!account()||!x?.ready||balanceState?.x!==x||balanceState?.wallet!==(account()||'').toLowerCase()||balanceState?.value===undefined;$('#buy-use').disabled=isBusy()||!x?.ready||!$('#buy-use').dataset.amount||Number($('#buy-use').dataset.amount)<=0;}
   function clear(message='Enter an amount to see your purchase.'){
     quote=null;review=null;request++;$('#buy-review').close();clearReferences($('#panel-buy'));
-    for(const s of ['#buy-output','#buy-minimum','#buy-impact','#buy-entry-fee','#buy-gas']){text(s,'—');$(s).removeAttribute('title');}text('#buy-status',message);disable();
+    for(const s of ['#buy-rate','#buy-output','#buy-minimum','#buy-impact','#buy-entry-fee','#buy-gas']){text(s,'—');$(s).removeAttribute('title');}text('#buy-status',message);disable();
   }
   function paintBalance(state){
     if(context()!==state.x||(account()||'').toLowerCase()!==state.wallet)return;
@@ -40,7 +40,7 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
   }
   function update(){const x=context(),id=(x?.key||'')+':'+(account()||'').toLowerCase();
     if(id!==identity){identity=id;balanceState=null;$('#buy-balance-refresh').hidden=true;$('#buy-balance').removeAttribute('title');clear(x?.ready?'Enter an amount to see your purchase.':'Purchases are not available on this chain yet.');$('#buy-result').hidden=true;}
-    const unit=x?.n.unit||($('#chain').value==='pls'?'PLS':'ETH');text('#buy-native-unit',unit);if(!account()){text('#buy-balance','Connect wallet to see your balance');$('#buy-balance').removeAttribute('title');}else if(x)readBalance().catch(()=>{});else text('#buy-balance','Loading '+unit+' balance…');text('#buy-unit-label',unit+' to spend');text('#buy-chain',x?.key==='pls'?'PulseChain · MORE / WPLS':'Robinhood · MORE / WETH');
+    const unit=x?.n.unit||($('#chain').value==='pls'?'PLS':'ETH');text('#buy-native-unit',unit);if(!account()){text('#buy-balance','Connect wallet to see your balance');$('#buy-balance').removeAttribute('title');}else if(x)readBalance().catch(()=>{});else text('#buy-balance','Loading '+unit+' balance…');text('#buy-unit-label','You pay');text('#buy-route',unit+' → MORE · '+(x?.key==='pls'?'PulseX V2':'Uniswap V4'));$('#buy-form').dataset.chain=x?.key||$('#chain').value;text('#buy-chain',x?.key==='pls'?'PulseChain · MORE / WPLS':'Robinhood · MORE / WETH');
     disable();
   }
   async function preview(){fitAmountInputs();clearTimeout(timer);clear('Getting a live swap quote…');const x=context(),id=request,wallet=(account()||'').toLowerCase();if(!x?.ready){text('#buy-status','Purchases are not available on this chain yet.');return;}
@@ -52,14 +52,15 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
       if(id!==request||context()!==x||wallet!==(account()||'').toLowerCase())return;
       const spotOutput=amount*spot[0]/10n**18n;const impact=spotOutput>out?Number((spotOutput-out)*1000000n/spotOutput)/10000:0;
       quote={context:x,wallet,amount,out,min,bps,entryFee,gas,gasCost,balance,affordable:!wallet||balance>=amount+gasCost,at:Date.now()};
-      amountText($('#buy-output'),out,'MORE',6,18,'≈ ');amountText($('#buy-minimum'),min,'MORE',6,18,'≈ ');text('#buy-impact',impact.toFixed(3)+'%');text('#buy-entry-fee','≈ '+display(entryFee)+' '+x.n.unit);text('#buy-gas',gas?'≈ '+display(gasCost)+' '+x.n.unit:'Connect wallet for gas estimate');
+      amountText($('#buy-output'),out,'',6,18,'≈ ');$('#buy-output').title='Exact amount: '+units(out)+' MORE';text('#buy-rate',displayAmount(out*10n**18n/amount,18,6)+' MORE / '+x.n.unit);amountText($('#buy-minimum'),min,'MORE',6,18,'≈ ');text('#buy-impact',impact.toFixed(3)+'%');text('#buy-entry-fee','≈ '+display(entryFee)+' '+x.n.unit);text('#buy-gas',gas?'≈ '+display(gasCost)+' '+x.n.unit:'Connect wallet for gas estimate');
       for(const [id,parts] of [['#buy-spend-usd',{NATIVE:amount}],['#buy-output-usd',{MORE:out}],['#buy-minimum-usd',{MORE:min}],['#buy-entry-usd',{NATIVE:entryFee}]])setReference($(id),parts);if(gas)setReference($('#buy-gas-usd'),{NATIVE:gasCost});refreshReferences(document,marketPrices());
       text('#buy-status',!wallet?'Connect wallet to review your purchase.':!quote.affordable?'Insufficient '+x.n.unit+' for this purchase and estimated gas.':balance<amount+gasCost+entryFee?'Quote ready. Your remaining '+x.n.unit+' may not cover a later position’s protocol fee.':'Quote ready. Buying sends MORE to your wallet; it does not burn it.');disable();
     }catch(e){if(id===request){clear(err(e));}}
   }
-  function schedule(){clear();clearTimeout(timer);if($('#buy-amount').value)timer=setTimeout(preview,400);}
+  function schedule(){text('#buy-slippage-value',Number($('#buy-slippage').value)/100+'% slippage');clear();clearTimeout(timer);if($('#buy-amount').value)timer=setTimeout(preview,400);}
   $('#buy-amount').oninput=$('#buy-slippage').onchange=schedule;
   $('#buy-refresh').onclick=preview;
+  $('#buy-connect').onclick=()=>$('#connect-wallet').click();
   $('#buy-balance-refresh').onclick=()=>readBalance(true).catch(()=>{});
   $('#buy-half').onclick=async()=>{const x=context(),wallet=account();if(!x||!wallet)return;try{const balance=await readBalance(true);if(context()!==x||account()!==wallet)return;$('#buy-amount').value=units(balance/2n);await preview();}catch(e){text('#buy-status',err(e));}};
   $('#buy-form').onsubmit=async e=>{e.preventDefault();if(!valid()){await preview();text('#buy-status','Quote refreshed. Review your purchase again.');return;}review={...quote};const q=review,x=q.context;text('#buy-review-body',`Spend ${units(q.amount)} ${x.n.unit} to buy an estimated ${units(q.out)} MORE on ${x.key==='rh'?'Robinhood':'PulseChain'}. Minimum received: ${units(q.min)} MORE (${q.bps/100}% slippage). Estimated gas: ${display(q.gasCost)} ${x.n.unit}. MORE goes to ${account()}. This purchase does not create a Forge position or burn any MORE. A later position requires a separate protocol fee and wallet confirmation. Entry availability is shown on Build power.`);$('#buy-review').showModal();};

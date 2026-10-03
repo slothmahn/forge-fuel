@@ -5,7 +5,7 @@ import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Posit
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup} from './pool-ui-v2.js?v=52';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=more-forge-polish-33';
-import {installBuy} from './buy-ui-v2.js?v=56';
+import {installBuy} from './buy-ui-v2.js?v=62';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js';

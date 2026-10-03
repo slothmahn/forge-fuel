@@ -25,7 +25,7 @@ const {chromium}=require('/Users/codylane/.cache/codex-runtimes/codex-primary-ru
   for(const input of ['.003','0.003']){
    await page.locator('#buy-amount').fill(input);
    await page.waitForFunction(()=>document.querySelector('#buy-status').textContent.startsWith('Quote ready'));
-   assert.match(await page.locator('#buy-output').innerText(),/3 MORE/);
+   assert.match(await page.locator('#buy-output').innerText(),/^≈ 3\s*$/);
    assert.equal(await page.evaluate(()=>fixture.calls.at(-1).toString()),'3000000000000000');
    assert.equal(await page.evaluate(()=>fixture.tx.value.toString()),'3000000000000000');
    assert(!(await page.locator('#buy-submit').isDisabled()));
