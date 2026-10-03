@@ -112,3 +112,14 @@ h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
  .rewards-layout .claim-combined{align-items:flex-start;flex-direction:column;gap:8px}
  .rewards-layout .claim-heading{align-items:flex-start;flex-wrap:wrap}
 }
+
+/* The content lists scroll independently, matching Fuel Forge's NFT lists. */
+.forge-scroll-list{max-height:540px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#9c754e #201711;padding:2px 8px 2px 2px;-webkit-overflow-scrolling:touch}
+.forge-scroll-list:focus-visible{outline:2px solid #ffbd70;outline-offset:4px;border-radius:10px}
+.forge-scroll-list::-webkit-scrollbar{width:6px}
+.forge-scroll-list::-webkit-scrollbar-track{background:#201711;border-radius:99px}
+.forge-scroll-list::-webkit-scrollbar-thumb{background:#9c754e;border-radius:99px}
+#position-list>.position-card:first-child{margin-top:0}
+#position-list>.position-card:last-child{margin-bottom:0}
+#position-list>.position-empty{margin:0}
+.claim-cycle-list:empty{padding:0}

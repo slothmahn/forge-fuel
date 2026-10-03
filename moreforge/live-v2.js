@@ -1,4 +1,4 @@
-import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=58';
+import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=61';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
@@ -45,7 +45,7 @@ function pending(){
  $('#pool-cards').innerHTML=[8,28,88,288].map((d,i)=>`<article class="card pool-card pool-tone-${i}"><div class="pool-top"><span>PLANNED</span><span>${(future?[28.48,24.03,18.69,17.8]:[26.88,22.68,17.64,16.8])[i]}% of fees</span></div><h3>${d}-Day ${i===3?'Bitcoin ':''}Pool</h3><div class="pending-value">Not launched</div><p>Balances and local deadlines appear after deployment.${i===3?' Bitcoin is purchased during entry.':''}</p></article>`).join('');
  $('#burn-overview').innerHTML=`<div class="v2-empty"><strong>Buy-and-burn pools</strong>${message}</div>`;$('#burn-cards').replaceChildren();
  $('#claim-totals').innerHTML='<div><b>Rewards open after launch</b></div>';
- $('#claim-cycles').replaceChildren();renderPositions(null);
+ $('#claim-cycles').replaceChildren();$('#claim-cycles').tabIndex=-1;renderPositions(null);
  text('#claim-usd','—');text('#claim-status',message);text('#settle-status','No settlement is available before deployment.');
  text('#v2-launch-label',future?'Future chain · not available yet':'MORE Forge · Preparing for launch');
  text('#v2-launch-copy','Explore the lock and optional-burn model. Entries open after deployment.');
@@ -153,18 +153,23 @@ async function preview(){
  }catch(err){if(id===previewId){x.preview=null;text('#native-fee','Quote unavailable');text('#build-status',error(err));clearReferences($('#fee-usd').parentElement);disable();}}
 }
 function renderRewards(x){
+ const scrollTop=$('#claim-cycles').scrollTop;
  let native=0n,btc=0n;for(const c of x.claims)c.pool===3?btc+=c.value:native+=c.value;
  $('#claim-totals').innerHTML=`<div><b>${display(native)} ${x.n.unit}</b>${referenceMarkup({NATIVE:native})}</div><div><b>${display(btc,8)} ${x.n.btc}</b>${referenceMarkup({BTC:btc})}</div>`;
  setReference($('#claim-usd'),{NATIVE:native,BTC:btc});
  $('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</div>`).join('');
+ $('#claim-cycles').scrollTop=scrollTop;
+ $('#claim-cycles').tabIndex=x.claims.length?0:-1;
  text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
 }
 function positionTime(x){return BigInt(x.now+Math.max(0,Math.floor((Date.now()-(x.nowReadAt||Date.now()))/1000)));}
 function renderPositions(x){
+ const scrollTop=$('#position-list')?.scrollTop||0;
  const owned=x?.owned||[],active=owned.filter(p=>p.closed===0n),ended=owned.filter(p=>p.closed!==0n),visible=positionFilter==='active'?active:ended;
  const loaded=Boolean(x?.dataLoaded&&account),empty=!account?'Connect a wallet to see your MORE Forge positions.':!loaded?'Loading your positions…':`No ${positionFilter} MORE position NFTs for this wallet.`;
- $('#position-controls').innerHTML=`<p class="eyebrow">YOUR NFTS</p><h3>Your MORE Forge Positions</h3><p class="positions-intro">Browse active positions or switch to Ended for your position history.</p><div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${loaded?active.length:'—'}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${loaded?ended.length:'—'}</span></button></div>`+(loaded&&visible.length?visible.map(p=>positionMarkup(p,positionTime(x))).join(''):`<p class="position-empty">${empty}</p>`)+`<p class="positions-explanation">Principal stays whole through the 7-day grace period, then principal and power decay over 7 days. The on-screen estimate updates each second; the amount returned uses the transaction’s block time. Maturity and decay do not close an NFT automatically. Ended positions can still have earned rewards to claim below.</p>`;
- $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;renderPositions(ctx);});
+ $('#position-controls').innerHTML=`<p class="eyebrow">YOUR NFTS</p><h3>Your MORE Forge Positions</h3><p class="positions-intro">Browse active positions or switch to Ended for your position history.</p><div class="position-filters" aria-label="Position status"><button type="button" data-position-filter="active" aria-pressed="${positionFilter==='active'}">Active <span>${loaded?active.length:'—'}</span></button><button type="button" data-position-filter="ended" aria-pressed="${positionFilter==='ended'}">Ended <span>${loaded?ended.length:'—'}</span></button></div><div id="position-list" class="forge-scroll-list" tabindex="0" role="region" aria-label="${positionFilter==='active'?'Active':'Ended'} MORE positions">`+(loaded&&visible.length?visible.map(p=>positionMarkup(p,positionTime(x))).join(''):`<p class="position-empty">${empty}</p>`)+`</div><p class="positions-explanation">Principal stays whole through the 7-day grace period, then principal and power decay over 7 days. The on-screen estimate updates each second; the amount returned uses the transaction’s block time. Maturity and decay do not close an NFT automatically. Ended positions can still have earned rewards to claim in the claims panel.</p>`;
+ $('#position-list').scrollTop=scrollTop;
+ $$('[data-position-filter]').forEach(b=>b.onclick=()=>{positionFilter=b.dataset.positionFilter;$('#position-list').scrollTop=0;renderPositions(ctx);});
  $$('[data-withdraw]').forEach(b=>b.onclick=()=>reviewWithdrawal(BigInt(b.dataset.withdraw)));
  $$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));
 }
