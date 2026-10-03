@@ -1,0 +1,4 @@
+Ethereum diamond: https://ethereum.org/assets/
+Asset: https://ethereum.org/images/assets/svgs/eth-diamond-purple.svg
+PulseChain logo: https://pulsechain.com/Branding.zip
+Archive member: Branding/Logo/LogoVector.svg

@@ -21,8 +21,7 @@
 .buy-token-panel:focus-within{border-color:#ffad56;box-shadow:0 0 0 2px #ffad5620}
 .buy-coin{display:inline-flex;align-items:center;justify-content:center;gap:7px;flex-shrink:0;padding:7px 10px;border:1px solid #47372b;border-radius:22px;background:#271d17;color:#ffe1b7;font-size:14px;font-weight:700}
 .buy-coin img{border-radius:50%;object-fit:cover}
-.buy-native-mark{display:grid;place-items:center;font-size:22px;width:24px;height:24px;color:#d1c4ff}
-[data-chain="pls"] .buy-native-mark{background:linear-gradient(140deg,#f60091,#6635ff);color:#fff;border-radius:50%;font-size:19px}
+.buy-coin .buy-native-mark{display:block;width:24px;height:24px;object-fit:contain;border-radius:0}
 .buy-token-panel>.usd-reference{display:block;margin-top:8px;font-size:12px}
 #panel-buy .buy-balance-line{margin:14px 0 0;display:flex;align-items:center;gap:8px;justify-content:space-between}
 #panel-buy .buy-balance-line .field-help{font-size:11px;margin:0;line-height:1.5}
