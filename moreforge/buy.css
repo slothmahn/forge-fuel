@@ -43,3 +43,32 @@
 #panel-buy .buy-guide ol{padding-left:20px;margin-bottom:0}
 @media(max-width:600px){#panel-buy .section-heading h2{font-size:30px}#panel-buy .buy-swap{padding:16px}#panel-buy .buy-guide{padding:21px}.buy-swap-heading{gap:8px}.buy-settings summary{padding:8px 10px;font-size:11px}.buy-token-panel{padding:15px}#panel-buy #buy-amount{font-size:30px}#panel-buy #buy-output{font-size:28px}.buy-coin{padding:6px 8px;font-size:12px;gap:5px}.buy-swap-heading h3{font-size:20px}}
 @media(prefers-reduced-motion:no-preference){.buy-token-panel{transition:border-color .15s,box-shadow .15s}}
+
+/* MORE's ember and metal identity, using existing artwork and CSS only. */
+#panel-buy{position:relative;isolation:isolate}
+#panel-buy .buy-hero{max-width:720px;margin-bottom:32px}
+.buy-brand{display:flex;flex-direction:column;align-items:center;gap:12px}
+.buy-brand img{object-fit:contain;filter:drop-shadow(0 0 24px #ff681b40)}
+#panel-buy .buy-brand .eyebrow{margin:0;color:#ffb05a;font-size:11px;letter-spacing:.2em}
+#panel-buy .buy-hero h2{font-size:clamp(36px,5vw,58px);line-height:1.08;letter-spacing:-.045em;margin:16px 0}
+.buy-hero h2 span{color:#ffac50;background:linear-gradient(100deg,#ff713d,#ffc66b);background-clip:text;-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#panel-buy .buy-hero>div>p{font-size:15px;line-height:1.75;color:#bcafa5;max-width:440px}
+#panel-buy .buy-swap{position:relative;border-radius:24px;background:radial-gradient(ellipse at 0 0,#6d331d38,transparent 55%),linear-gradient(150deg,#2b1d17,#17120f 70%);border-color:#865134;box-shadow:0 0 65px #ff762012,0 24px 60px #0005,inset 0 1px #ffc47b25}
+#panel-buy .buy-swap:before{content:"";position:absolute;top:-1px;left:12%;right:12%;height:2px;background:linear-gradient(90deg,transparent,#ff793f,#ffd28a,transparent);pointer-events:none}
+#panel-buy .buy-card-kicker{font-size:9px;font-weight:700;letter-spacing:.17em;color:#f5ad6b;margin:0 0 8px}
+.buy-swap-heading h3{font-size:25px;letter-spacing:-.03em}
+.buy-token-panel{background:linear-gradient(145deg,#17120f,#100d0b);border-color:#514034;border-radius:18px;box-shadow:inset 0 1px #ffffff04}
+.buy-receive{background:radial-gradient(ellipse at 100% 100%,#a7471724,transparent 75%),#1b140f;border-color:#7c4e2e}
+.buy-receive>span{color:#e5b887}
+.buy-direction{width:38px;height:38px;border-radius:12px;border-color:#221711;background:linear-gradient(135deg,#ff7034,#ffbc59);color:#24150b;box-shadow:0 4px 18px #ff7d2525}
+#panel-buy .buy-swap>.primary-button{background:linear-gradient(105deg,#ff6936,#ffc65e);color:#28160c;box-shadow:0 5px 24px #ff792529;font-weight:750}
+#panel-buy .buy-swap>.primary-button:hover{box-shadow:0 6px 30px #ff792543;filter:brightness(1.06)}
+#panel-buy .buy-guide{border-radius:22px;border-color:#503523;background:linear-gradient(140deg,#2a1b132c,#17120f)}
+#panel-buy .buy-guide .eyebrow{color:#ffb05a;font-size:10px}
+#panel-buy .buy-guide h3{letter-spacing:-.025em}
+#panel-buy .buy-guide ol{list-style:none;counter-reset:buy-step;padding:0;display:grid;gap:14px;margin-top:24px}
+.buy-guide li{counter-increment:buy-step;position:relative;padding-left:38px;font-size:13px;line-height:1.7;color:#c2b1a3}
+.buy-guide li:before{content:counter(buy-step,decimal-leading-zero);position:absolute;left:0;top:0;color:#ffb56f;font-size:11px;font-weight:700;border:1px solid #754728;border-radius:8px;width:26px;height:26px;display:grid;place-items:center;background:#352116}
+@media(min-width:960px){#panel-buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:32px 64px;max-width:1100px;margin:0 auto;align-items:start}#panel-buy[hidden]{display:none}#panel-buy .buy-grid{display:contents}#panel-buy .buy-hero{grid-column:1;grid-row:1;text-align:left;justify-content:flex-start;margin:24px 0 0}#panel-buy .buy-hero p{margin-left:0;margin-right:0}.buy-brand{align-items:flex-start;gap:20px}.buy-brand img{width:100px;height:100px}#panel-buy .buy-swap{grid-column:2;grid-row:1 / span 2}#panel-buy .buy-guide{grid-column:1;grid-row:2}}
+@media(max-width:600px){#panel-buy .buy-hero{margin-bottom:24px}.buy-brand{gap:10px}.buy-brand img{width:64px;height:64px}#panel-buy .buy-hero h2{font-size:36px;margin:14px 0}#panel-buy .buy-hero>div>p{font-size:13px;max-width:310px}#panel-buy .buy-swap{border-radius:21px}.buy-swap-heading h3{font-size:22px}#panel-buy .buy-card-kicker{font-size:8px;letter-spacing:.12em}}
+@media(max-width:360px){#panel-buy .buy-hero h2{font-size:31px}.buy-swap-heading h3{font-size:20px}.buy-settings summary{padding:8px;font-size:10px}}
