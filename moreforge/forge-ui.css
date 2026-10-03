@@ -100,3 +100,15 @@ h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
 #position-controls .position-filters button[aria-pressed=true]{background:#ffae5014;border-color:#ffae5066;color:#ffbe70}
 /* Orbit decorations stay inside their artwork during viewport changes. */
 .hero-art{overflow:clip}
+
+/* Claims lead on mobile; desktop pairs positions with claims on the right. */
+.rewards-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin:24px 0}
+#panel-rewards .rewards-layout>.card{min-width:0;width:100%;max-width:none;margin:0}
+@media(min-width:1001px){
+ .rewards-layout{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr);grid-template-areas:"positions claims";align-items:start;gap:18px}
+ .rewards-layout>.positions-panel{grid-area:positions}
+ .rewards-layout>.claim-card{grid-area:claims}
+ .rewards-layout .claim-totals{grid-template-columns:minmax(0,1fr)}
+ .rewards-layout .claim-combined{align-items:flex-start;flex-direction:column;gap:8px}
+ .rewards-layout .claim-heading{align-items:flex-start;flex-wrap:wrap}
+}
