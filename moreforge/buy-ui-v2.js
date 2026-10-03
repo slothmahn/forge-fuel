@@ -45,7 +45,7 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
   }
   async function preview(){fitAmountInputs();clearTimeout(timer);clear('Getting a live swap quote…');const x=context(),id=request,wallet=(account()||'').toLowerCase();if(!x?.ready){text('#buy-status','Purchases are not available on this chain yet.');return;}
     try{
-      const raw=$('#buy-amount').value;if(!/^\d+(?:\.\d{0,18})?$/.test(raw))throw Error('Enter an amount with up to 18 decimals.');const amount=parseUnits(raw,18);if(amount<=0n)throw Error('Enter a positive purchase amount.');const bps=Number($('#buy-slippage').value);
+      const raw=$('#buy-amount').value.trim();if(!/^(?:\d+(?:\.\d{0,18})?|\.\d{1,18})$/.test(raw))throw Error('Enter an amount with up to 18 decimals.');const amount=parseUnits(raw.startsWith('.')?'0'+raw:raw,18);if(amount<=0n)throw Error('Enter a positive purchase amount.');const bps=Number($('#buy-slippage').value);
       const [out,spot,balance,fees]=await Promise.all([quotePurchase(x.key,x.r,amount),new Contract(x.m.contracts.mainQuote,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(10n**18n),wallet?readBalance(true):0n,x.r.getFeeData()]);
       const min=minimumReceived(out,bps);const policy=x.feePolicy;let entryFee=out*10n**18n/spot[0];if(policy){entryFee=entryFee*BigInt(policy.bps)/10000n;if(policy.bounds)entryFee=entryFee<BigInt(policy.min)?BigInt(policy.min):entryFee>BigInt(policy.max)?BigInt(policy.max):entryFee;}let gas=null,gasCost=0n;
       if(wallet){const tx=purchaseTransaction(x.key,amount,min,wallet,(await x.r.getBlock('latest')).timestamp+600);gas=await x.r.estimateGas({...tx,from:wallet});gasCost=gas*120n/100n*(fees.maxFeePerGas||fees.gasPrice||0n);}
