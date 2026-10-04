@@ -18,6 +18,7 @@
 .compact-asset-card[data-phase="grace"] .position-progress-fill,.compact-asset-card[data-phase="grace"] .position-timeline-track>span{background:#f0b54a!important}
 .compact-asset-card[data-phase="decay"] .position-progress-fill,.compact-asset-card[data-phase="decay"] .position-timeline-track>span,.compact-asset-card[data-phase="expired"] .position-progress-fill,.compact-asset-card[data-phase="expired"] .position-timeline-track>span{background:#ed6d63!important}
 @media(max-width:760px){.compact-position>summary{padding:14px}.compact-position-heading>strong{font-size:14px}.compact-position-details{padding:0 14px 14px}}
+.position-expand-hint{display:block;margin-top:5px;font-size:12px;line-height:1.5;color:inherit;opacity:.8}
 .compact-position[open] .position-expand-hint{display:none}
 /* Keep payout and burn guidance beside its title instead of across the page above the cards. */
 #app.forge-refresh :is(#pools,#burns)>.section-heading,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading{display:flex;justify-content:flex-start;align-items:flex-end;gap:32px}
