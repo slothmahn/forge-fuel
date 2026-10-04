@@ -1,0 +1,15 @@
+/* Shared desktop geometry for both Fuel Forge chains; colours remain in their themes. */
+@media(min-width:761px){
+ #app.forge-refresh .site-tabs{margin-top:0;margin-bottom:0}
+ #app.forge-refresh .top-actions .pill,#app.forge-refresh .top-actions .button,#app.forge-refresh .top-actions .litepaper-link{font-size:13px}
+ #app.forge-refresh .section-heading h2,#app.forge-refresh .build-intro .section-heading h2{font-size:30px;line-height:1.2;font-weight:750}
+ #app.forge-refresh .nft-layout .section-heading h2{font-size:24px}
+ #app.forge-refresh #burns .section-heading h2{font-size:34px}
+ #app.forge-refresh .pool-card .pool-value{font-size:35px;font-weight:750}
+ #app.forge-refresh .pool-card .pool-row{font-size:13px;line-height:1.5}
+ #app.forge-refresh .pool-card .pool-row strong{font-size:13px}
+ #app.forge-refresh .pool-card .progress-track{height:7px}
+ #app.forge-refresh .ff-hero{min-height:340px;padding-top:30px;padding-bottom:26px}
+ #app.forge-refresh .ff-hero h1{margin-bottom:20px}
+ #app.forge-refresh .ff-hero-copy>p:not(.eyebrow){font-size:14px;line-height:1.8;margin-bottom:22px}
+}
