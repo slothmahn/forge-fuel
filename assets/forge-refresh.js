@@ -1,6 +1,6 @@
 import './chain-navigation.js?v=chain-dropdown-43';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
-import './mainnet-white-paper-v1.js?v=public-data-86';
+import './mainnet-white-paper-v1.js?v=rpc-recovery-90';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
@@ -171,28 +171,8 @@ if (app) {
     launch?.classList.toggle('ff-cycles-live', live);
     app.classList.toggle('ff-live', live);
   }
-  // A brief public-RPC failure can occur during the initial contract check.
-  // Retry only transport failures; contract mismatches remain locked.
-  if (status) {
-    const retryKey = 'forge-mainnet-rpc-retries';
-    let retryTimer;
-    function recoverTransientRpcFailure() {
-      const message = status.textContent || '';
-      if (message.includes('verified on-chain.')) {
-        sessionStorage.removeItem(retryKey);
-        return;
-      }
-      if (!message.includes('Mainnet build is locked') || !message.includes('Failed to fetch') || retryTimer) return;
-      const attempt = Number(sessionStorage.getItem(retryKey) || 0);
-      if (attempt >= 3) return;
-      sessionStorage.setItem(retryKey, String(attempt + 1));
-      status.querySelector('span')?.append(' Retrying connection…');
-      retryTimer = window.setTimeout(() => location.reload(), [1500, 3500, 7000][attempt]);
-    }
-    new MutationObserver(() => { refreshStatus(); recoverTransientRpcFailure(); })
-      .observe(status, {childList:true, subtree:true, characterData:true});
-    recoverTransientRpcFailure();
-  }
+  if (status) new MutationObserver(refreshStatus)
+    .observe(status, {childList:true, subtree:true, characterData:true});
   if (launch) new MutationObserver(refreshStatus).observe(launch, {childList:true, subtree:true, characterData:true});
   refreshStatus();
   hero.querySelector('.ff-explore').addEventListener('click', event => {

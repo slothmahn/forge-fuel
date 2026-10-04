@@ -8,7 +8,7 @@ const tick=()=>new Promise(resolve=>setImmediate(resolve));
 for(const fails of [false,true]){
  const verification=deferred(),reads=deferred(),events=[];
  const state={ready:false,block:null};
- const ctx=vm.createContext({Z:state,fetch:async()=>({ok:true,json:async()=>({contracts:{}})}),Vd:()=>[],tf:()=>{},of:{},hf:()=>verification.promise,Rf:()=>{events.push('reads started');return reads.promise;},cf:()=>{},pf:()=>{events.push(state.ready?'actions eligible':'actions locked');},xf:()=>events.push('fees'),uf:()=>{},Zd:String,_f:()=>events.push('cleared'),forgeSharePreview:{refresh:()=>{}},Error});
+ const ctx=vm.createContext({Z:state,fetch:async()=>({ok:true,json:async()=>({contracts:{}})}),Vd:()=>[],tf:()=>{},of:{},hf:()=>verification.promise,Rf:()=>{events.push('reads started');return reads.promise;},cf:()=>{},pf:()=>{events.push(state.ready?'actions eligible':'actions locked');},xf:()=>events.push('fees'),uf:()=>{},Zd:String,_f:()=>events.push('cleared'),forgeSharePreview:{refresh:()=>{}},Error,isTemporaryRpcFailure:()=>false});
  vm.runInContext(extract('let fuelPublicReadsAllowed=false;','function _f()'),ctx);
  const pending=ctx.gf();await tick();
  assert(events.includes('reads started'),'Public reads begin without waiting for verification');
