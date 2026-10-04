@@ -74,37 +74,17 @@ $('.builder-grid').insertBefore(scenario,$('.power-card'));
 $('.builder-grid').classList.add('wide-forge-layout');
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 2700, sampleBtcUsd = 83000;
-  const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
+  const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd},{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}];
   const rows = balances.map(p=>({...p,payout:p.balance*.9975*share}));
   payoutRows.innerHTML=rows.map(p=>`<div><b>${p.days} Day</b><div><strong>≈ ${fmt(p.payout,p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*p.usd)} USD</small></div></div>`).join('');
   $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
   scenario.hidden=foundry;
-  const total=rows.reduce((sum,p)=>sum+p.payout*Math.floor(term/p.days),0);
-  scenario.innerHTML=`<h4>Estimated rewards over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),6)} ETH</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*sampleEthUsd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ ${fmt(total,6)} ETH</strong><small>≈ $${fmt(total*sampleEthUsd)} USD</small></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
+  const total=rows.reduce((sum,p)=>sum+p.payout*Math.floor(term/p.days)*p.usd,0);
+  scenario.innerHTML=`<h4>Estimated rewards over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*p.usd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ $${fmt(total)} USD</strong></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
 }
 function updatePreview() {
   const { principal, burn, term } = formValues();
   $$('[data-term]').forEach(button => button.classList.toggle('active', Number(button.dataset.term) === term));
-  if (mode === 'foundry') {
-    const quantity = Math.max(1, Math.min(10, Math.floor(val('#quantity'))));
-    $('#power-ring').style.setProperty('--power-angle', '288deg');
-    $('#power-multiplier').textContent = String(quantity);
-    $('#power-caption').textContent = quantity === 1 ? 'Foundry NFT' : 'Foundry NFTs';
-    $('#power-total').textContent = '288-day wBTC reward cycle';
-    $('#power-limit').textContent = 'Equal shares within the same mint cycle';
-    $('#demo-share').textContent = `${(100*quantity/(12+quantity)).toFixed(2)}%`;
-    $('.power-card').append(detailBlock);
-    $('.builder-grid').classList.remove('wide-forge-layout');
-    updateEstimates(quantity/(12+quantity),288,true);
-    $('#preview-principal').textContent = 'No principal locked';
-    $('#preview-duration').textContent = '288-day cycle';
-    $('#preview-burn').textContent = `${fmt(quantity * 100000000)} FUEL`;
-    $('#foundry-burn').textContent = `${fmt(quantity * 100000000)} FUEL`;
-    const labels = $$('.preview-breakdown dt');
-    labels[1].lastChild.textContent = 'Reward cycle'; labels[2].lastChild.textContent = 'Permanent burn';
-    $('#timeline-note').textContent = 'The FUEL burn is permanent. A Foundry NFT participates in its mint cycle, and unclaimed rewards follow the NFT when transferred.';
-    return;
-  }
   scenario.append(detailBlock);
   $('.builder-grid').classList.add('wide-forge-layout');
   const durationBonus = principal * (term - 8) / 992;
@@ -143,20 +123,8 @@ $('#forge-form').addEventListener('submit', event => {
   event.preventDefault(); clampFuel(); $('#term').value = formValues().term; updatePreview();
   const { principal, burn, term } = formValues();
   if (principal <= 0) { notify('Enter some principal FUEL to preview a position.'); $('#principal').focus(); return; }
-  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. Ethereum fees, limits, token contracts and routes are pending. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
+  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The entry fee is 100% of the quoted principal value, with no minimum or maximum. Token contracts and routes are pending. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
 });
-function setMode(next) {
-  mode = next;
-  $('#forge-form').hidden = mode !== 'forge'; $('#foundry-form').hidden = mode !== 'foundry';
-  $('#forge-mode').setAttribute('aria-pressed', String(mode === 'forge')); $('#foundry-mode').setAttribute('aria-pressed', String(mode === 'foundry'));
-  updatePreview();
-}
-$('#forge-mode').addEventListener('click', () => setMode('forge'));
-$('#foundry-mode').addEventListener('click', () => setMode('foundry'));
-$('#quantity').addEventListener('input', () => { cleanInput($('#quantity'), true); if (val('#quantity') > 10) $('#quantity').value = '10'; updatePreview(); });
-$('#quantity').addEventListener('blur', () => { $('#quantity').value = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); updatePreview(); });
-$('#quantity-max').addEventListener('click', () => { $('#quantity').value = '10'; updatePreview(); });
-$('#foundry-form').addEventListener('submit', event => { event.preventDefault(); const n = Math.max(1, Math.min(10, Math.floor(val('#quantity')))); $('#quantity').value = n; updatePreview(); showModal('Your Foundry mint', `${n} ${n === 1 ? 'NFT' : 'NFTs'} · ${fmt(n * 100000000)} FUEL permanently burned.\n\nThis is a sample of the Foundry flow. Ethereum mint fees, burn requirements and swap routes are pending. This is an illustration of the existing Foundry flow. No transaction has been submitted.`); });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
   $('#wallet-label').textContent = walletVisible ? 'Demo wallet' : 'Show demo wallet';
@@ -168,13 +136,12 @@ const pools = [
   {days:8, name:'ETH reward pool', balance:.84, unit:'ETH', elapsed:62, left:'3d 1h left', share:1.25},
   {days:28, name:'ETH reward pool', balance:1.2, unit:'ETH', elapsed:43, left:'15d 23h left', share:.84},
   {days:88, name:'ETH reward pool', balance:2.4, unit:'ETH', elapsed:26, left:'65d 3h left', share:.62},
-  {days:288, name:'Foundry reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:.8}
+  {days:288, name:'Bitcoin reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:.8}
 ];
-$('#pool-grid').innerHTML = pools.map(p => `<article class="card pool-card"><div class="pool-top"><span class="pool-number"><b>${p.days}</b> DAY</span><span class="sample-pill">SAMPLE CYCLE</span></div><div class="pool-amount">${fmt(p.balance, 8)}<small>${p.unit}</small></div><h3>${p.name}</h3><div class="progress-label"><span>${p.elapsed}% of cycle elapsed</span><b>${p.left}</b></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-detail"><div><span>Your estimated share</span><strong>${p.share}%</strong></div><div><span>Estimated payout</span><strong>${fmt(p.balance * .9975 * p.share / 100, p.unit === 'ETH' ? 6 : 8)} ${p.unit}</strong></div></div></article>`).join('');
+$('#pool-grid').innerHTML = pools.map(p => `<article class="card pool-card"><div class="pool-top"><span class="pool-number"><b>${p.days}</b> DAY</span><span class="sample-pill">SAMPLE CYCLE</span></div><div class="pool-amount">${fmt(p.balance, 8)}<small>${p.unit}</small></div><h3>${p.name}</h3><div class="progress-label"><span>${p.elapsed.toFixed(2)}% of cycle elapsed</span><b>${p.left}</b></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-detail"><div><span>Your estimated share</span><strong>${p.share}%</strong></div><div><span>Estimated payout</span><strong>${fmt(p.balance * .9975 * p.share / 100, p.unit === 'ETH' ? 6 : 8)} ${p.unit}</strong></div></div></article>`).join('');
 const burns = [
-  {symbol:'FUEL',image:'fuel-token.jpg',share:28,drip:1,balance:.28,total:82400000},
-  {symbol:'MORE',image:'more-token.jpg',share:20,drip:1,balance:.20,total:18920000},
-  {symbol:'PAMP',image:'pamp-token.jpg',share:10,drip:1,balance:.10,total:3840000}
+  {symbol:'FUEL',image:'fuel-token.jpg',share:15,drip:1,balance:.28,total:82400000},
+  {symbol:'MORE',image:'more-token.jpg',share:10,drip:1,balance:.20,total:18920000}
 ];
 $('#burn-grid').innerHTML = burns.map(b => {
   const next = b.balance * b.drip / 100 / 144;
@@ -188,7 +155,10 @@ function drawPositions(ended = false) {
     {id:'0017',status:'Grace period',principal:'50,000,000 FUEL',power:'51,008,065',elapsed:100,label:'Maturity reached',remaining:'4 days of grace left',decay:0,decayLabel:'Principal decay',decayRight:'Not started'},
     {id:'0009',status:'Decaying',principal:'20,000,000 FUEL',power:'20,000,000',elapsed:100,label:'Maturity reached',remaining:'Grace period ended',decay:50,decayLabel:'Principal decay',decayRight:'50% of principal remains'}
   ];
-  $('#position-list').innerHTML = items.map(p => `<article class="position-item"><div class="position-top"><strong>Forge NFT #${p.id}</strong><span class="status">${p.status}</span></div><div class="position-values"><div><span>Principal now</span><strong>${p.principal}</strong></div><div><span>Power now</span><strong>${p.power}</strong></div></div><div class="progress-label"><span>${p.label}</span><b>${p.remaining}</b></div><div class="progress-track"><span style="width:${p.elapsed}%"></span></div><div class="progress-label"><span>${p.decayLabel}</span><b>${p.decayRight}</b></div><div class="progress-track decay"><span style="width:${p.decay}%"></span></div></article>`).join('');
+  const markup = items.map(p => { const phase=p.status==='Decaying'?'decay':p.status==='Grace period'?'grace':'active'; const progress=phase==='decay'?p.decay:p.elapsed; return `<details class="position-item compact-stake" data-phase="${phase}"><summary><div class="position-top"><strong>#${p.id} · ${p.principal}</strong><span class="status">${p.status}</span></div><div class="progress-track"><span style="width:${progress}%"></span></div><div class="progress-label"><span>${p.remaining}</span><b>${progress.toFixed(2)}%</b></div><span class="stake-hint">Expand for details, end or transfer stake</span></summary><div class="stake-details"><div class="position-values"><div><span>Power now</span><strong>${p.power}</strong></div><div><span>Phase</span><strong>${p.status}</strong></div></div><p>${p.decayRight}</p><div class="claim-actions"><button data-stake-action="End stake">${phase==='active'?'Locked until maturity':'End stake'}</button><button data-stake-action="Transfer stake">Transfer stake</button></div></div></details>`; }).join('');
+  $('#position-list').innerHTML = markup;
+  $('#reward-positions').innerHTML = markup;
+  $$('[data-stake-action]').forEach(b=>b.addEventListener('click',()=>showModal(b.dataset.stakeAction,'Preview only. No wallet transaction will be submitted.')));
   $('#active-filter').setAttribute('aria-pressed', String(!ended)); $('#ended-filter').setAttribute('aria-pressed', String(ended));
 }
 $('#active-filter').addEventListener('click', () => drawPositions(false));
