@@ -7,9 +7,25 @@
 @media(max-width:600px){.hero-actions{gap:18px;margin-top:20px}.hero-actions .primary-button{padding:13px 19px}.hero-actions .hero-link{font-size:13px}.hero-art{margin-top:12px}}
 /* One section heading, followed by two aligned cards. */
 @media(min-width:960px){
- #panel-buy{max-width:none;margin:0;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:26px 28px}
+ #panel-buy{max-width:none;margin:0;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:26px 28px}
  #panel-buy .buy-hero{grid-column:1/-1;grid-row:1;max-width:none;margin:0}
  #panel-buy .buy-hero>div>p{max-width:none;margin-bottom:0}
- #panel-buy .buy-swap{grid-column:2;grid-row:2;width:100%;max-width:none;margin:0}
- #panel-buy .buy-guide{grid-column:1;grid-row:2;margin:0;align-self:start}
+ #panel-buy .buy-swap{grid-column:1;grid-row:2;width:100%;max-width:none;margin:0}
+ #panel-buy .buy-guide{grid-column:2;grid-row:2;margin:0;align-self:start}
+}
+
+/* Keep the purchase flow readable while reducing its vertical footprint. */
+@media(min-width:960px){
+ #panel-buy .buy-swap{padding:20px}
+ #panel-buy .buy-swap-heading{margin-bottom:14px}
+ #panel-buy .buy-token-panel{padding:14px 16px}
+ #panel-buy .buy-token-panel>label,#panel-buy .buy-token-panel>span{margin-bottom:8px}
+ #panel-buy .buy-token-panel>.usd-reference{margin-top:5px}
+ #panel-buy .buy-balance-line{margin-top:10px}
+ #panel-buy .buy-quote-details{margin-top:12px;padding:4px 14px}
+ #panel-buy .buy-quote-details .fee-line{padding:8px 0}
+ #panel-buy #buy-refresh{margin:6px 0 6px auto}
+ #panel-buy #buy-status{margin:10px 2px}
+ #panel-buy .buy-swap>.primary-button{min-height:46px;margin-top:0}
+ #panel-buy .buy-swap>.action-note{margin-top:9px}
 }
