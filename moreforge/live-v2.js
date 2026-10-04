@@ -198,7 +198,8 @@ async function preview(){
 function renderRewards(x){
  const scrollTop=$('#claim-cycles').scrollTop;
  let native=0n,btc=0n;for(const c of x.claims)c.pool===3?btc+=c.value:native+=c.value;
- $('#claim-totals').innerHTML=`<div><b>${display(native)} ${x.n.unit}</b>${referenceMarkup({NATIVE:native})}</div><div><b>${display(btc,8)} ${x.n.btc}</b>${referenceMarkup({BTC:btc})}</div>`;
+ $('#claim-totals').innerHTML=account?`<strong class="claim-reward-total">${display(native)} ${x.n.unit}</strong>${btc?`<strong class="claim-reward-total">${display(btc,8)} ${x.n.btc}</strong>`:''}`:'<strong class="claim-reward-total">Connect wallet</strong>';
+ $('#claim-usd').hidden=!account;
  setReference($('#claim-usd'),{NATIVE:native,BTC:btc});
  $('#claim-cycles').innerHTML=x.claims.map(c=>`<div class="claim-record"><div><b>${[8,28,88,288][c.pool]}-day pool · Cycle ${c.cycle}</b><small>MORE NFT #${c.id}</small></div><strong title="Exact reward: ${formatUnits(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}">${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</strong></div>`).join('');
  $('#claim-cycles').scrollTop=scrollTop;
@@ -285,6 +286,7 @@ async function reviewWithdrawal(id){
 $('#position-close').onclick=$('#position-cancel').onclick=()=>{positionReview=null;$('#position-review').close();};
 $('#position-confirm').onclick=async()=>{const v=positionReview;positionReview=null;$('#position-review').close();if(!v||ctx!==v.x||!same(account,v.account))return;await action('Withdrawing principal',async s=>{const p=new Contract(v.x.m.position,positionAbi,s);if(!same(await p.ownerOf(v.id),v.account))throw Error('Position owner changed.');return p.withdraw(v.id);});};
 async function transfer(id){const x=ctx,dest=prompt('Recipient wallet. This transfers locked principal and all unclaimed and future reward rights.');if(!dest)return;if(!isAddress(dest)||/^0x0{40}$/i.test(dest)){status('Enter a valid nonzero address.');return;}if(!confirm('Transfer position #'+id+', its principal and reward rights to '+dest+'?'))return;await action('Transferring position',s=>new Contract(x.m.position,positionAbi,s).safeTransferFrom(account,dest,id));}
+$('#refresh-rewards').onclick=()=>refresh();
 $('#claim-open').onclick=()=>{const x=ctx;if(!x?.forgeReady||!account||!x.claims.length)return;const items=x.claims.slice(0,20).map(c=>[c.pool,c.cycle,c.id]);return action('Claiming rewards',s=>new Contract(x.m.helper,helperAbi,s).claim(items));};
 $('#settle-due').onclick=async()=>{const x=ctx;if(!x?.forgeReady||!account||busy)return;await refresh();if(ctx!==x||!x.due.length)return;await action('Settling all due pools',s=>new Contract(x.m.helper,helperAbi,s).settle(x.due));};
 $('#refresh-pools').onclick=()=>refresh();
