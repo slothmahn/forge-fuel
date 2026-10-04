@@ -1,6 +1,6 @@
 /* One header rhythm for Fuel Forge and MORE Forge, independent of chain colours. */
 /* Compact position rows keep transaction controls behind native disclosures. */
-#app.forge-refresh .compact-asset-card,body.more-forge-site .compact-asset-card{padding:0!important;margin:0 0 12px!important}
+#app.forge-refresh .compact-asset-card,body.more-forge-site .compact-asset-card{display:block!important;min-height:0!important;height:auto!important;padding:0!important;margin:0 0 12px!important}
 .compact-position>summary{padding:16px 18px;list-style:none;cursor:pointer}
 .compact-position>summary::-webkit-details-marker{display:none}
 .compact-position-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
@@ -82,3 +82,11 @@ body.more-forge-site .tabs button{height:44px;min-height:44px;padding:13px 8px;f
 @media(max-width:760px){#app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{width:158px}}
 
 [data-owner-legacy][hidden]{display:none!important}
+
+/* Match card geometry across the two protocols. */
+body.more-forge-site #pool-cards .pool-card{border-radius:18px}
+body.more-forge-site #burn-cards{gap:20px}
+body.more-forge-site #burn-cards .burn-card{padding:28px}
+body.more-forge-site #panel-rewards .claim-actions{display:flex;gap:12px;flex-wrap:wrap}
+body.more-forge-site #panel-rewards .claim-actions button{width:auto;flex:0 1 auto}
+@media(max-width:760px){body.more-forge-site #burn-cards .burn-card{padding:23px}body.more-forge-site #burn-cards{gap:12px}}

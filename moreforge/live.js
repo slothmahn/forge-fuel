@@ -1,3 +1,4 @@
+import {legacyPositionMarkup} from './legacy-position-ui.js?v=115';
 import {readPositions,readPool,readClaims} from './chain-data.js?v=more-forge-loading-47';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-polish-33';
 import {displayAmount,amountText} from './amounts.js?v=more-forge-polish-33';
@@ -107,7 +108,15 @@ function renderPools(x){
 }
 async function refreshPools(){if(busy||poolsRefreshing||!ctx?.ready)return; poolsRefreshing=true;disable();try{await refresh();return true;}catch(e){status(error(e));return false;}finally{poolsRefreshing=false;disable();}}
 $('#refresh-pools').onclick=refreshPools;
-function renderRewards(x){let native=0n,btc=0n;for(const c of x.claims)c.pool===3?btc+=c.value:native+=c.value;$('#claim-totals').innerHTML=`<div><b>${showUnits(native)} ${x.n.unit}</b>${referenceMarkup({NATIVE:native})}</div><div><b>${showUnits(btc,8)} ${x.n.btc}</b>${referenceMarkup({BTC:btc})}</div>`;setReference($('#claim-usd'),{NATIVE:native,BTC:btc});$('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${showUnits(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}${referenceMarkup({[c.pool===3?'BTC':'NATIVE']:c.value})}</div>`).join('');$('#claim-status').textContent=account?(x.claims.length?x.claims.length+' rewards ready. Up to 20 reward records per claim transaction.':'No settled rewards available for this wallet.'):'Connect wallet to load your rewards.';$('#position-controls').innerHTML=x.owned.length?'<details><summary>Transfer reward rights to another wallet</summary>'+x.owned.map(p=>`<p>Position #${p.id} · ${date(p.maturity)} · ${Number(p.maturity)>=x.now?'earning power active':'earning power ended'} <button data-transfer="${p.id}">Transfer position</button></p>`).join('')+'<p>A transfer gives the recipient all future and unclaimed rewards for that position.</p></details>':'';$$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));}
+function renderRewards(x){let native=0n,btc=0n;for(const c of x.claims)c.pool===3?btc+=c.value:native+=c.value;
+ $('#claim-totals').innerHTML=account?`<strong class="claim-reward-total">${showUnits(native)} ${x.n.unit}</strong>${btc?`<strong class="claim-reward-total">${showUnits(btc,8)} ${x.n.btc}</strong>`:''}`:'<strong class="claim-reward-total">Connect wallet</strong>';
+ setReference($('#claim-usd'),{NATIVE:native,BTC:btc});$('#claim-usd').hidden=!account;
+ $('#claim-cycles').innerHTML=x.claims.map(c=>`<div>Position #${c.id} · ${[8,28,88,288][c.pool]} Day · Cycle ${c.cycle}: ${showUnits(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</div>`).join('');
+ $('#claim-status').textContent=account?(x.claims.length?'Rewards available from settled cycles.':'No settled rewards available for this wallet.'):'Connect wallet to load your rewards.';
+ $('#position-controls').innerHTML=`<p class="eyebrow">YOUR STAKES</p><h3>Your MORE Forge Positions</h3><p class="positions-intro">${account?x.owned.length+' positions':'Connect wallet to view your positions'}</p><div class="forge-scroll-list">${x.owned.map(p=>legacyPositionMarkup(p,x.now)).join('')||'<p class="position-empty">No positions to display.</p>'}</div>`;
+ $$('[data-transfer]').forEach(b=>b.onclick=()=>transfer(BigInt(b.dataset.transfer)));
+}
+$('#refresh-rewards').onclick=()=>refresh().catch(e=>status(error(e)));
 async function renderBurns(x,a=account,current=()=>x===ctx&&a===account){
  const rows=await Promise.all(x.c.burners.map((b,i)=>readBurn(b,x.r,x.m.burners[i],a||x.m.owner,x.now)));
  if(!current())return;
