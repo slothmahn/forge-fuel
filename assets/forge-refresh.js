@@ -1,7 +1,6 @@
 import './chain-navigation.js?v=chain-dropdown-43';
-// Presentation-only entry. The deployed application's wallet, reads, and transactions
-// remain in the existing, unchanged module below.
-import './mainnet-white-paper-v1.js?v=burn-usd-total-82';
+// Presentation entry. Wallet, public reads, and transactions live in the application module below.
+import './mainnet-white-paper-v1.js?v=public-data-86';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
