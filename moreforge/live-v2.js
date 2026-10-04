@@ -148,7 +148,7 @@ async function preview(){
  $$('[data-term]').forEach(b=>b.classList.toggle('active',Number(b.dataset.term)===v.days));$$('[data-boost]').forEach(b=>b.classList.toggle('active',v.burned===v.principal*BigInt(b.dataset.boost)));
  setReference($('#principal-usd'),{MORE:v.principal});setReference($('#burn-usd'),{MORE:v.burned});
  text('#native-fee','Loading quote…');text('#total-cost',displayAmount(v.total,18,4)+' MORE + fee');
- text('#build-status',!x?.forgeReady?'Checking position availability…':!x.dataLoaded?'Loading position data. Your fee quote is available separately.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Not enough MORE for principal plus optional burn.':'Review all amounts and withdrawal dates before creating your position.');
+ text('#build-status',!x?.forgeReady?'Checking position availability…':!x.dataLoaded?'Loading position data. Your fee quote is available separately.':!canEnter(x)?'Entries are paused.':account&&v.total>x.balance?'Preview only: your wallet needs more MORE to create this position.':'Review all amounts and withdrawal dates before creating your position.');
  { $('#term-payouts').innerHTML='<p class="field-help">Loading current funding and eligible power…</p>';text('#term-native-total','Loading reward estimate…');text('#term-bitcoin-total','');text('#term-usd-total','');text('#current-preview-share','Loading…');$('#current-payouts').innerHTML='<p>Loading current funding and eligible power…</p>';}
  if(!x?.ready){text('#native-fee','Quote unavailable');return;}
  try{
