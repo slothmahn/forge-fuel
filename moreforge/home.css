@@ -5,3 +5,11 @@
 .hero .more-core img{filter:drop-shadow(0 0 12px #ff751c70)}
 @media(min-width:960px){#panel-buy .buy-hero{margin-top:0}#panel-buy .buy-hero h2{font-size:clamp(30px,3vw,42px);margin-top:12px}.hero{padding-bottom:28px}}
 @media(max-width:600px){.hero-actions{gap:18px;margin-top:20px}.hero-actions .primary-button{padding:13px 19px}.hero-actions .hero-link{font-size:13px}.hero-art{margin-top:12px}}
+/* One section heading, followed by two aligned cards. */
+@media(min-width:960px){
+ #panel-buy{max-width:none;margin:0;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:26px 28px}
+ #panel-buy .buy-hero{grid-column:1/-1;grid-row:1;max-width:none;margin:0}
+ #panel-buy .buy-hero>div>p{max-width:none;margin-bottom:0}
+ #panel-buy .buy-swap{grid-column:2;grid-row:2;width:100%;max-width:none;margin:0}
+ #panel-buy .buy-guide{grid-column:1;grid-row:2;margin:0;align-self:start}
+}
