@@ -1,9 +1,28 @@
 /* One header rhythm for Fuel Forge and MORE Forge, independent of chain colours. */
-/* Keep pool guidance beside its title instead of across the page above the cards. */
-#app.forge-refresh #pools>.section-heading,body.more-forge-site #panel-pools>.section-heading{display:flex;justify-content:flex-start;align-items:flex-end;gap:32px}
-#app.forge-refresh #pools>.section-heading>div,body.more-forge-site #panel-pools>.section-heading>div{flex:0 0 auto}
-#app.forge-refresh #pools>.section-heading>p,body.more-forge-site #panel-pools>.section-heading>p{flex:0 1 580px;max-width:580px;margin:0;font-size:14px;line-height:1.7;text-align:left}
-@media(max-width:760px){#app.forge-refresh #pools>.section-heading,body.more-forge-site #panel-pools>.section-heading{flex-direction:column;align-items:flex-start;gap:8px}#app.forge-refresh #pools>.section-heading>p,body.more-forge-site #panel-pools>.section-heading>p{flex:auto;max-width:100%;font-size:13px}}
+/* Compact position rows keep transaction controls behind native disclosures. */
+#app.forge-refresh .compact-asset-card,body.more-forge-site .compact-asset-card{padding:0!important;margin:0 0 12px!important}
+.compact-position>summary{padding:16px 18px;list-style:none;cursor:pointer}
+.compact-position>summary::-webkit-details-marker{display:none}
+.compact-position-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.compact-position-heading>strong{font-size:16px;line-height:1.5;overflow-wrap:anywhere}
+.compact-position-heading [data-live-principal],.compact-position-heading [data-live-principal] strong{display:inline;font-size:inherit}
+.compact-position-heading .position-amount{font-size:inherit!important}
+.compact-position-heading [data-live-principal] small{font-size:12px;margin-left:5px}
+.compact-position-meta{display:flex!important;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;line-height:1.5;margin-top:8px}
+.compact-position .position-progress,.compact-position .position-timeline{margin:12px 0 0!important}
+.compact-position .position-progress-track,.compact-position .position-timeline-track{height:6px!important}
+.compact-position-meta .position-countdown{margin:0!important;font-size:12px!important}
+.compact-position-details{padding:0 18px 18px;border-top:1px solid #ffffff18}
+.compact-position-details .asset-stats,.compact-position-details .position-stats{margin-top:16px}
+.compact-asset-card[data-phase="active"] .position-progress-fill,.compact-asset-card[data-phase="locked"] .position-timeline-track>span{background:#a9ed42!important}
+.compact-asset-card[data-phase="grace"] .position-progress-fill,.compact-asset-card[data-phase="grace"] .position-timeline-track>span{background:#f0b54a!important}
+.compact-asset-card[data-phase="decay"] .position-progress-fill,.compact-asset-card[data-phase="decay"] .position-timeline-track>span,.compact-asset-card[data-phase="expired"] .position-progress-fill,.compact-asset-card[data-phase="expired"] .position-timeline-track>span{background:#ed6d63!important}
+@media(max-width:760px){.compact-position>summary{padding:14px}.compact-position-heading>strong{font-size:14px}.compact-position-details{padding:0 14px 14px}}
+/* Keep payout and burn guidance beside its title instead of across the page above the cards. */
+#app.forge-refresh :is(#pools,#burns)>.section-heading,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading{display:flex;justify-content:flex-start;align-items:flex-end;gap:32px}
+#app.forge-refresh :is(#pools,#burns)>.section-heading>div,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading>div{flex:0 0 auto}
+#app.forge-refresh :is(#pools,#burns)>.section-heading>p,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading>p{flex:0 1 580px;max-width:580px;margin:0;font-size:14px;line-height:1.7;text-align:left}
+@media(max-width:760px){#app.forge-refresh :is(#pools,#burns)>.section-heading,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading{flex-direction:column;align-items:flex-start;gap:8px}#app.forge-refresh :is(#pools,#burns)>.section-heading>p,body.more-forge-site :is(#panel-pools,#panel-burns)>.section-heading>p{flex:auto;max-width:100%;font-size:13px}}
 #app.forge-refresh .topbar,body.more-forge-site .site-header{display:flex;align-items:center;justify-content:space-between;height:104px;min-height:104px;padding:0;gap:20px}
 #app.forge-refresh .brand-wordmark-art,body.more-forge-site .more-brand img{display:block;width:246px;height:76px;object-fit:contain;object-position:left}
 body.more-forge-site .more-brand{width:246px;flex-shrink:0}

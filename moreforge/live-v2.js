@@ -2,7 +2,7 @@ import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../ass
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=99';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
-import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=nft-simple-102';
+import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=compact-positions-111';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
