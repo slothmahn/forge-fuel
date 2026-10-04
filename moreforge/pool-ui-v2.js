@@ -9,7 +9,7 @@ export function cycleProgress(start,deadline,now){
  const duration=Number(deadline)-Number(start);
  return duration>0?Math.max(0,Math.min(100,(Number(now)-Number(start))/duration*100)):0;
 }
-const progressText=p=>p>0&&p<0.01?'<0.01':p.toLocaleString(undefined,{maximumFractionDigits:2});
+const progressText=p=>p>0&&p<0.01?'<0.01':p.toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
 export function updatePoolProgress(root,now){
  for(const bar of root.querySelectorAll('[data-cycle-start]')){
   const p=cycleProgress(bar.dataset.cycleStart,bar.dataset.cycleDeadline,now);

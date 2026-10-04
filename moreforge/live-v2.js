@@ -4,7 +4,7 @@ import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-clock-80';
+import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-precision-91';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-layout-79';
 import {installBuy} from './buy-ui-v2.js?v=71';
 import {displayAmount,amountText} from './amounts.js';
