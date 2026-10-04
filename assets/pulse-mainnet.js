@@ -167,12 +167,12 @@ async function attachFuelWallet(provider,accounts){
   fuelWalletListeners.add(provider);
  }
  const chain=BigInt(await provider.request({method:'eth_chainId'}));
- Z.walletProvider=new gd(provider);Z.address=N(accounts[0]);Z.signer=null;
+ Z.walletTransport=provider;Z.walletProvider=new gd(provider);Z.address=N(accounts[0]);Z.signer=null;
  // Chain data always comes from the selected site's public RPC.
  Z.provider=Z.publicProvider;
  if(chain===369n)Z.signer=await Z.walletProvider.getSigner(Z.address);
  Y(`#wallet-address`,Jd(Z.address));Y(`#connect`,chain===369n?Jd(Z.address):`Switch to PulseChain`);
- Y(`#network-pill`,chain===369n?`Connected · PulseChain`:`PulseChain`);
+ Y(`#network-pill`,chain===369n?`PulseChain`:`PulseChain`);
  J(`#connect-rewards`).hidden=chain===369n;J(`#refresh-rewards`).hidden=chain!==369n;
  rememberWalletProvider(provider);pf();
  if(fuelPublicReadsAllowed)await Rf();ff();
