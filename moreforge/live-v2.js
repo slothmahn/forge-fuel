@@ -204,7 +204,7 @@ function renderRewards(x){
  $('#claim-cycles').innerHTML=x.claims.map(c=>`<div class="claim-record"><div><b>${[8,28,88,288][c.pool]}-day pool · Cycle ${c.cycle}</b><small>MORE NFT #${c.id}</small></div><strong title="Exact reward: ${formatUnits(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}">${display(c.value,c.pool===3?8:18)} ${c.pool===3?x.n.btc:x.n.unit}</strong></div>`).join('');
  $('#claim-cycles').scrollTop=scrollTop;
  $('#claim-cycles').tabIndex=x.claims.length?0:-1;
- text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?`${x.claims.length} claimable reward records. Up to 20 can be claimed per transaction.`:'No settled rewards for this wallet.');
+ text('#claim-status',!account?'Connect wallet to load your rewards.':x.claims.length?'Rewards available to claim.':'No settled rewards for this wallet.');
 }
 function positionTime(x){return BigInt(x.now+Math.max(0,Math.floor((Date.now()-(x.nowReadAt||Date.now()))/1000)));}
 function renderPositions(x){
@@ -251,7 +251,7 @@ async function wallet(x){
 }
 async function action(label,fn){
  if(busy)return null;const x=ctx;if(!x?.ready)return null;busy=true;disable();let receipt=null,message;
- try{const signer=await wallet(x);status(label+' · confirm in wallet');const tx=await fn(signer);status(label+' · waiting for confirmation');receipt=await tx.wait();if(receipt.status!==1)throw Error('Transaction reverted.');message='Confirmed: '+tx.hash;}
+ try{const signer=await wallet(x);status(label+' · confirm in wallet');const tx=await fn(signer);status(label+' · waiting for confirmation');receipt=await tx.wait();if(receipt.status!==1)throw Error('Transaction reverted.');message=(label==='Claiming rewards'?'Rewards claimed successfully. Transaction: ':'Confirmed: ')+tx.hash;}
  catch(err){message=error(err);}finally{busy=false;await refresh();disable();status(message);}
  return receipt?.status===1?receipt:null;
 }

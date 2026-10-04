@@ -1,6 +1,6 @@
 import './chain-navigation.js?v=wallet-switch-99';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
-import './mainnet-white-paper-v1.js?v=claim-layout-101';
+import './mainnet-white-paper-v1.js?v=rewards-clean-105';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
