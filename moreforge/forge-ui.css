@@ -104,7 +104,8 @@ h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
 /* Shared claim-card width and rhythm with Fuel Forge. */
 .rewards-layout{display:grid;grid-template-columns:minmax(0,1fr);gap:24px;margin:24px 0}
 #panel-rewards .rewards-layout>.card{min-width:0;width:100%;margin:0}
-#panel-rewards .rewards-layout>.claim-card{max-width:800px}
+#panel-rewards .rewards-layout>.card{max-width:none}
+@media(min-width:1001px){.rewards-layout{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}}
 #panel-rewards .claim-card h3{font-size:30px;line-height:1.2;margin:8px 0 0}
 #panel-rewards .claim-cycle-info{margin:14px 0 0;font-size:14px;line-height:1.6;color:var(--muted);max-width:58ch}
 #panel-rewards .claim-totals{display:grid;grid-template-columns:1fr;gap:10px;margin:22px 0 10px}
@@ -114,6 +115,7 @@ h1,h2,h3,h4{font-family:inherit;letter-spacing:-.045em}
 #panel-rewards .claim-reward-usd[hidden]{display:none}
 #panel-rewards .claim-actions{justify-content:flex-start;flex-wrap:wrap;margin:26px 0 0}
 #panel-rewards .claim-actions .primary-button{flex:0 1 auto}
+#panel-rewards #refresh-rewards{border:1px solid #ffab4d44;border-radius:10px;background:#ffab4d10;color:#f3ebe4;cursor:pointer;font-weight:650;padding:12px 18px}
 #panel-rewards .claim-details{margin-top:18px;color:var(--muted);font-size:12px;line-height:1.7}
 #panel-rewards .claim-details summary{cursor:pointer}
 /* The content lists scroll independently, matching Fuel Forge's NFT lists. */
