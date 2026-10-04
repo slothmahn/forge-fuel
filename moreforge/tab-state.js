@@ -17,12 +17,12 @@ window.moreForgeTabs = (() => {
       panel.setAttribute('aria-labelledby', panel.id.replace('panel-', 'tab-'));
     });
     for (const element of document.querySelectorAll('.hero, .burn-summary')) {
-      element.hidden = key !== 'build';
+      element.hidden = key !== 'build' && key !== 'buy';
     }
     if (updateUrl) {
       history.replaceState(null, '', '#' + key);
       const navigation = document.querySelector('.tabs');
-      const destination = document.querySelector(key === 'build' ? '.hero' : '#panel-' + key);
+      const destination = document.querySelector(key === 'build' || key === 'buy' ? '.hero' : '#panel-' + key);
       if (navigation && destination) window.scrollTo({top: Math.max(0, destination.getBoundingClientRect().top + window.scrollY - navigation.getBoundingClientRect().height - 20), behavior: 'instant'});
     }
     document.documentElement.removeAttribute('data-more-tab-pending');
@@ -41,10 +41,21 @@ window.moreForgeTabs = (() => {
         tabs[next].focus({preventScroll: true});
       };
     });
+    document.querySelectorAll('[data-hero-action]').forEach(link => {
+      link.onclick = event => {
+        event.preventDefault();
+        select(link.dataset.heroAction, false);
+        history.replaceState(null, '', '#' + link.dataset.heroAction);
+        const target = document.querySelector(link.getAttribute('href'));
+        const navigation = document.querySelector('.tabs');
+        if (target) window.scrollTo({top: Math.max(0, target.getBoundingClientRect().top + window.scrollY - (navigation?.getBoundingClientRect().height || 0) - 20), behavior: 'smooth'});
+      };
+    });
     const brand = document.querySelector('.more-brand');
     if (brand) brand.onclick = event => {
       event.preventDefault();
-      select('buy');
+      select('build', false);
+      history.replaceState(null, '', '#build');
       window.scrollTo({top: 0, behavior: 'instant'});
     };
   }

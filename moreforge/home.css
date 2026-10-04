@@ -1,0 +1,7 @@
+/* Shared animated introduction for the two entry paths. */
+.hero-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap;margin-top:24px}
+.hero-actions .primary-button{display:inline-flex;align-items:center;gap:24px;text-decoration:none;width:auto;margin:0;padding:15px 23px}
+.hero-actions .hero-link{margin:0}
+.hero .more-core img{filter:drop-shadow(0 0 12px #ff751c70)}
+@media(min-width:960px){#panel-buy .buy-hero{margin-top:0}#panel-buy .buy-hero h2{font-size:clamp(30px,3vw,42px);margin-top:12px}.hero{padding-bottom:28px}}
+@media(max-width:600px){.hero-actions{gap:18px;margin-top:20px}.hero-actions .primary-button{padding:13px 19px}.hero-actions .hero-link{font-size:13px}.hero-art{margin-top:12px}}
