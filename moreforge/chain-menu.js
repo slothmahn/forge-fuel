@@ -31,5 +31,6 @@
    choices[event.key==='Home'?0:event.key==='End'?choices.length-1:(i+(event.key==='ArrowDown'?1:-1)+choices.length)%choices.length].focus();
   }
  });
+ window.addEventListener('more-chain-selection-reset',sync);
  sync();
 })();

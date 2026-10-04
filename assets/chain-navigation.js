@@ -1,8 +1,10 @@
+import {switchWalletChain} from './wallet-chain-switch.js?v=99';
 import {findWalletProvider} from './wallet-session.js?v=wallet-session-95';
 // Shared navigation for the two live chain experiences.
-const chains = [{id:4663n,name:'Robinhood Chain',path:'/'},{id:369n,name:'PulseChain',path:'/pulsechain/'}];
+const chains = [{id:4663n,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://robinhoodchain.blockscout.com',path:'/'},{id:369n,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com',path:'/pulsechain/'}];
 const current = location.pathname.startsWith('/pulsechain/') ? 369n : 4663n;
 function routeChain(value) {
+  if(window.forgeManualChainSwitch)return true;
   let target; try { target=chains.find(chain=>chain.id===BigInt(value)); } catch { return false; }
   if (!target) return false;
   const url=new URL(location.href);
@@ -38,6 +40,15 @@ function addNavigation() {
  const links=document.createElement('nav'); links.setAttribute('aria-label','Live blockchain sites');
  for (const chain of chains) {
    const link=document.createElement('a'); link.href=chain.path+'?chain='+chain.id; link.textContent=chain.name;
+   link.addEventListener('click',async event=>{
+    if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;
+    event.preventDefault();if(window.forgeManualChainSwitch)return;
+    window.forgeManualChainSwitch=true;menu.open=false;
+    try{const found=await findWalletProvider(true);if(found){await switchWalletChain(found.provider,chain);}
+     location.assign(link.href);
+    }catch(error){const notice=document.querySelector('.mainnet-preview-banner');if(notice){notice.hidden=false;notice.textContent=Number(error?.code)===4001?'Chain switch cancelled. Your wallet stays on the current chain.':error?.message||'Unable to switch your wallet. Try again.';}}
+    finally{window.forgeManualChainSwitch=false;}
+   });
    if(chain.id===current) link.setAttribute('aria-current','page');
    const status=document.createElement('small'); status.textContent='Live site ↗'; link.append(status); links.append(link);
  }

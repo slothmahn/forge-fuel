@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=rpc-recovery-96';
+import './chain-navigation.js?v=wallet-switch-99';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './pulse-mainnet.js?v=calculator-98';

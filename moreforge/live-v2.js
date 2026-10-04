@@ -1,3 +1,4 @@
+import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=99';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=61';
@@ -291,7 +292,13 @@ let timer;for(const id of ['#amount','#boost','#term'])$(id).oninput=()=>{if(ctx
 $('#max-amount').onclick=()=>{if(!account||!ctx)return;try{const burn=amount($('#boost').value||'0','Optional burn');$('#amount').value=units(ctx.balance>burn?ctx.balance-burn:0n);preview();}catch(err){status(error(err));}};
 $('#max-boost').onclick=()=>{try{const principal=amount($('#amount').value,'Principal'),available=account&&ctx?ctx.balance>principal?ctx.balance-principal:0n:principal*3n;$('#boost').value=units(available<principal*3n?available:principal*3n);preview();}catch(err){status(error(err));}};
 $('#max-term').onclick=()=>{$('#term').value='1000';preview();};$$('[data-term]').forEach(b=>b.onclick=()=>{$('#term').value=b.dataset.term;preview();});$$('[data-boost]').forEach(b=>b.onclick=()=>{try{$('#boost').value=units(amount($('#amount').value,'Principal')*BigInt(b.dataset.boost));preview();}catch(err){status(error(err));}});
-$('#chain').onchange=load;window.addEventListener('more-market-prices',event=>{if(event.detail.key===$('#chain').value){quotes=event.detail.quotes;refreshReferences(document,quotes);}});
+$('#chain').onchange=async()=>{
+ const previous=ctx?.key||'rh',next=$('#chain').value;if(busy){$('#chain').value=previous;window.dispatchEvent(new Event('more-chain-selection-reset'));return;}
+ busy=true;disable();
+ try{const found=await findWalletProvider(true);if(found&&networks[next]){provider=found.provider;account=found.accounts[0];rememberWalletProvider(provider);await switchWalletChain(provider,{...networks[next],name:next==='pls'?'PulseChain':'Robinhood Chain'});}
+ }catch(err){$('#chain').value=previous;window.dispatchEvent(new Event('more-chain-selection-reset'));status(Number(err?.code)===4001?'Chain switch cancelled. Your wallet stays on the current chain.':error(err));busy=false;disable();return;}
+ busy=false;await load();
+};window.addEventListener('more-market-prices',event=>{if(event.detail.key===$('#chain').value){quotes=event.detail.quotes;refreshReferences(document,quotes);}});
 installInputSizing();pending();disable();
 try{[legacy,manifests]=await Promise.all(['deployments.json','deployments-v2.json'].map(file=>fetch(file,{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Deployment data unavailable.');return r.json();})));await load();}catch(err){status(error(err));pending(error(err));}
 setInterval(()=>{if(!busy&&!document.hidden)refresh();},30000);

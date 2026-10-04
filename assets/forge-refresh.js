@@ -1,4 +1,4 @@
-import './chain-navigation.js?v=rpc-recovery-96';
+import './chain-navigation.js?v=wallet-switch-99';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
 import './mainnet-white-paper-v1.js?v=calculator-98';
 // Some mobile browsers apply a saved position or URL fragment after load.
