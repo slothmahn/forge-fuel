@@ -125,8 +125,8 @@
 .forge-refresh .burn-card .burn-card-actions a{color:var(--burn-soft)}
 .forge-refresh .burn-card .burn-card-actions button[data-burn-key]{border-color:var(--burn-border)}
 
-/* Use the available desktop space and keep the burn figures readable. */
-.forge-refresh .topbar,.forge-refresh main,.forge-refresh footer,.forge-refresh .ff-hero,.forge-refresh>.wallet-section,.forge-refresh>.price-ribbon,.forge-refresh .site-tabs{max-width:1440px}
+/* Match PulseChain’s desktop content width and keep burn figures readable. */
+.forge-refresh .topbar,.forge-refresh main,.forge-refresh footer,.forge-refresh .ff-hero,.forge-refresh>.wallet-section,.forge-refresh>.price-ribbon,.forge-refresh .site-tabs{max-width:1280px}
 .forge-refresh .top-actions .pill,.forge-refresh .top-actions .button{font-size:13px}
 .forge-refresh .site-tabs a{font-size:14px;min-height:50px}
 .forge-refresh #burns .section-heading{margin-bottom:28px}
