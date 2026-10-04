@@ -1,4 +1,9 @@
 /* One header rhythm for Fuel Forge and MORE Forge, independent of chain colours. */
+/* Keep pool guidance beside its title instead of across the page above the cards. */
+#app.forge-refresh #pools>.section-heading,body.more-forge-site #panel-pools>.section-heading{display:flex;justify-content:flex-start;align-items:flex-end;gap:32px}
+#app.forge-refresh #pools>.section-heading>div,body.more-forge-site #panel-pools>.section-heading>div{flex:0 0 auto}
+#app.forge-refresh #pools>.section-heading>p,body.more-forge-site #panel-pools>.section-heading>p{flex:0 1 580px;max-width:580px;margin:0;font-size:14px;line-height:1.7;text-align:left}
+@media(max-width:760px){#app.forge-refresh #pools>.section-heading,body.more-forge-site #panel-pools>.section-heading{flex-direction:column;align-items:flex-start;gap:8px}#app.forge-refresh #pools>.section-heading>p,body.more-forge-site #panel-pools>.section-heading>p{flex:auto;max-width:100%;font-size:13px}}
 #app.forge-refresh .topbar,body.more-forge-site .site-header{display:flex;align-items:center;justify-content:space-between;height:104px;min-height:104px;padding:0;gap:20px}
 #app.forge-refresh .brand-wordmark-art,body.more-forge-site .more-brand img{display:block;width:246px;height:76px;object-fit:contain;object-position:left}
 body.more-forge-site .more-brand{width:246px;flex-shrink:0}
