@@ -1,0 +1,139 @@
+{
+  "chainId": 4663,
+  "controller": "0xCae88Ca5A86F3eCB94673229C9EDd19e31274fb3",
+  "manager": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+  "codeHash": "0xf252ff632385d4a6bbe09653ba6c69f11f2268f34b84357119ff58984655bcdd",
+  "engines": [
+    "0x20c6D511Cb4862e30B2d28060DCAEfc86f2DC876",
+    "0x5Df3D7abA3dA3F6a2d89a7bA689294F6312A85DF",
+    "0x70FfdAf9277796711de29A5A4c82dDd5EACaB3d7",
+    "0xC97e0B8d3a482D2b872650b1561B897E684a240A",
+    "0xB614130C2B5B90b260834E4034EBBdf6a24CDD34",
+    "0xEf7025912f43eb30Cf032B92ae1551d1750D57c2"
+  ],
+  "steps": [
+    {
+      "suite": "Fuel Forge",
+      "label": "fuelBurner",
+      "address": "0x20c6D511Cb4862e30B2d28060DCAEfc86f2DC876",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0x6Bc6FCBCd97809476491b5dC409de321bb880893"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "moreBurner",
+      "address": "0x5Df3D7abA3dA3F6a2d89a7bA689294F6312A85DF",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0x01c560AF741Be22dFD40C17E339d3c32964C6489"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "pampBurner",
+      "address": "0x70FfdAf9277796711de29A5A4c82dDd5EACaB3d7",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0xAE703293C045c4390e97bADe89E2a6AaE1D4234c"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "fuelBurner",
+      "address": "0xC97e0B8d3a482D2b872650b1561B897E684a240A",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0xbc3Cc5895Adb938A1306fad49168276936464ecB"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "moreBurner",
+      "address": "0xB614130C2B5B90b260834E4034EBBdf6a24CDD34",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0xf45d6680e9c2a6CBBC04feD62Cd979835edF957d"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "pampBurner",
+      "address": "0xEf7025912f43eb30Cf032B92ae1551d1750D57c2",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000",
+        "adapter": "0x86439570b7E7EEd82E36fC36fDe0F1024BAc489E"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "position",
+      "address": "0x316a858567426Acd376E242b90CeD3742101A58b",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "1000000000000000",
+        "maxFeeWei": "1000000000000000000"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "foundry",
+      "address": "0x6A6657010862934AC701eDf1E1f246018250953e",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "10000000000000000",
+        "maxFeeWei": "1000000000000000000",
+        "adapter": "0x58f445bA64a2f69Ff96DD3308937aDE78869578e",
+        "maxSwapEth": "2000000000000000000",
+        "maxSlippageBps": "1000"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "position",
+      "address": "0xffFfd77D27FBD3E833585E72b393A88FAd67f659",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "1000000000000000",
+        "maxFeeWei": "1000000000000000000",
+        "entriesPaused": false
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "bitcoinVault",
+      "address": "0xA4859bDc0a5DA5ed57ec0B3FCF5D36a8c8677C39",
+      "action": "renounceOwnership",
+      "settings": {
+        "adapter": "0xFAdbC4a6D5ba28919f53f476C4d5e22fE1116f43",
+        "maxSwapNative": "500000000000000000",
+        "maxSlippageBps": "1000"
+      }
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../assets/owner-transition.js?v=owner-transition-106';
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=99';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
@@ -7,7 +8,7 @@ import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddres
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-precision-91';
-import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-layout-79';
+import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=owner-transition-106';
 import {installBuy} from './buy-ui-v2.js?v=71';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
@@ -82,6 +83,7 @@ async function load(){
 }
 async function verify(x){
  const {m,r,position:p}=x;
+ await verifyDripController(r,m);
  const router=new Contract(m.contracts.feeRouter,['function eightDayVault() view returns(address)','function twentyEightDayVault() view returns(address)','function eightyEightDayVault() view returns(address)','function bitcoinVault() view returns(address)','function fuelBurner() view returns(address)','function moreBurner() view returns(address)','function pampBurner() view returns(address)','function development() view returns(address)'],r);
  const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner','pampBurner','development'];
  const [codes,name,owner,more,oracle,receiver,day,helperBtc,vaultChecks,helperVaults,rewardToken,actual]=await Promise.all([
@@ -89,7 +91,7 @@ async function verify(x){
   Promise.all(x.vaults.map(async(v,i)=>{const [pos,anchor,duration]=await Promise.all([v.positions(),v.launchTime(),v.cycleDuration()]);return same(pos,m.position)&&Number(anchor)===m.launchTime&&Number(duration)===[8,28,88,288][i]*86400;})),
   Promise.all([0,1,2].map(i=>x.helper.vaults(i))),x.vaults[3].rewardToken(),Promise.all(fields.map(k=>router[k]()))
  ]);
- if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,m.owner)||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('Contract verification failed.');
+ if(codes.some(c=>c==='0x')||name!=='MORE Forge Position V2'||!same(owner,expectedOwner(owner,'position',m))||!same(more,m.more)||!same(oracle,m.contracts.feeQuote)||!same(receiver,m.contracts.feeRouter)||day!==DAY||!same(helperBtc,m.vaults[3])||vaultChecks.some(ok=>!ok))throw Error('Contract verification failed.');
  if(helperVaults.some((a,i)=>!same(a,m.vaults[i])))throw Error('Settlement helper mismatch.');
  if(!same(rewardToken,m.bitcoinToken))throw Error('Bitcoin token mismatch.');
  if(actual.some((a,i)=>!same(a,[...m.vaults,...m.burners,m.owner][i])))throw Error('Fee routing mismatch.');
@@ -222,7 +224,7 @@ async function renderBurns(x,a,current){
  const rows=await Promise.all(x.burners.map((b,i)=>readBurn(b,x.r,x.m.burners[i],a||x.m.owner,x.now)));if(!current())return;
  const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
  $$('[data-execute]').forEach(b=>b.onclick=()=>action('Executing burn',s=>new Contract(x.m.burners[Number(b.dataset.execute)],burnAbi,s).execute()));
- $$('[data-save-burn]').forEach(b=>b.onclick=async()=>{const [i,field]=b.dataset.saveBurn.split('-');if(!same(a,rows[Number(i)].owner))return;try{const v=ownerSetting(field,$(`[data-burn-setting="${i}-${field}"]`).value);await action('Updating burn settings',s=>new Contract(x.m.burners[Number(i)],burnAbi,s)[{cap:'setMaxSwapEth',drip:'setDailyPoolBps',slippage:'setMaxSlippageBps'}[field]](v));}catch(err){status(error(err));}});
+ $$('[data-save-burn]').forEach(b=>b.onclick=async()=>{const [i,field]=b.dataset.saveBurn.split('-');const mode=burnControl(rows[Number(i)].owner,a,x.m);if(!mode||mode==='drip'&&field!=='drip')return;try{const v=ownerSetting(field,$(`[data-burn-setting="${i}-${field}"]`).value);if(field==='drip'){await action('Updating daily drip',s=>setBurnDrip(s,x.m,x.m.burners[Number(i)],v));return;}await action('Updating burn settings',s=>new Contract(x.m.burners[Number(i)],burnAbi,s)[{cap:'setMaxSwapEth',drip:'setDailyPoolBps',slippage:'setMaxSlippageBps'}[field]](v));}catch(err){status(error(err));}});
  let storage;try{storage=localStorage;}catch{}
  x.m.burners.forEach((address,i)=>burnTotal(x.r,address,x.n.id,Number(x.m.deploymentBlock),x.block,storage).then(value=>{if(!current())return;const e=$(`[data-burn-total="${i}"]`);if(e)e.innerHTML=display(value)+' '+['FUEL','MORE','PAMP'][i]+referenceMarkup({[['FUEL','MORE','PAMP'][i]]:value});refreshReferences(document,quotes);}).catch(()=>{}));
  refreshReferences(document,quotes);disable();

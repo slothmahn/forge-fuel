@@ -1,0 +1,17 @@
+import assert from 'node:assert/strict';
+import {expectedOwner,burnControl,ZERO_OWNER,verifyDripController} from '../../assets/owner-transition.js';
+const manager='0x1111111111111111111111111111111111111111',controller='0x2222222222222222222222222222222222222222',stranger='0x3333333333333333333333333333333333333333';
+const m={owner:manager,ownershipTransition:{manager,controller,renounce:['position','foundry'],burners:['fuelBurner']}};
+assert.equal(expectedOwner(manager,'position',m),manager);
+assert.equal(expectedOwner(ZERO_OWNER,'position',m),ZERO_OWNER);
+assert.equal(expectedOwner(controller,'fuelBurner',m),controller);
+assert.throws(()=>expectedOwner(stranger,'position',m));
+assert.throws(()=>expectedOwner(ZERO_OWNER,'fuelBurner',m));
+assert.throws(()=>expectedOwner(controller,'position',m));
+assert.throws(()=>expectedOwner(ZERO_OWNER,'position',{owner:manager}));
+assert.equal(burnControl(controller,manager,m),'drip');
+assert.equal(burnControl(manager,manager,m),'owner');
+assert.equal(burnControl(controller,stranger,m),'');
+assert.equal(burnControl(ZERO_OWNER,manager,m),'');
+await assert.rejects(()=>verifyDripController({getCode:async()=> '0x'},m),/code mismatch/);
+console.log('Known ownership transitions accepted; strangers, unplanned owners and invalid controller code rejected; drip manager separated from direct owner.');
