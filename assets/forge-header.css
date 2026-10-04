@@ -86,7 +86,7 @@ body.more-forge-site .tabs button{height:44px;min-height:44px;padding:13px 8px;f
 /* Match card geometry across the two protocols. */
 body.more-forge-site #pool-cards .pool-card{border-radius:18px}
 body.more-forge-site #burn-cards{gap:20px}
-body.more-forge-site #burn-cards .burn-card{padding:28px}
+#app.forge-refresh #burns .burn-card,body.more-forge-site #burn-cards .burn-card{padding:28px}
 body.more-forge-site #panel-rewards .claim-actions{display:flex;gap:12px;flex-wrap:wrap}
 body.more-forge-site #panel-rewards .claim-actions button{width:auto;flex:0 1 auto}
-@media(max-width:760px){body.more-forge-site #burn-cards .burn-card{padding:23px}body.more-forge-site #burn-cards{gap:12px}}
+@media(max-width:760px){#app.forge-refresh #burns .burn-card,body.more-forge-site #burn-cards .burn-card{padding:23px}body.more-forge-site #burn-cards{gap:12px}}
