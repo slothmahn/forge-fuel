@@ -1,7 +1,7 @@
-import './chain-navigation.js?v=chain-dropdown-43';
+import './chain-navigation.js?v=wallet-session-95';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=cycle-precision-91';
+import './pulse-mainnet.js?v=wallet-session-95';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;

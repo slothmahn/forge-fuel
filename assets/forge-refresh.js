@@ -1,6 +1,6 @@
-import './chain-navigation.js?v=chain-dropdown-43';
+import './chain-navigation.js?v=wallet-session-95';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
-import './mainnet-white-paper-v1.js?v=cycle-precision-91';
+import './mainnet-white-paper-v1.js?v=wallet-session-95';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;

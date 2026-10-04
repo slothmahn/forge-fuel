@@ -1,3 +1,4 @@
+import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=61';
 import {installFeeSettings} from './owner-fees.js?v=1';
@@ -227,12 +228,19 @@ async function renderBurns(x,a,current){
 function addProvider(p,info={}){if(typeof p?.request!=='function')return;const old=discovered.find(x=>x.p===p);if(old)Object.assign(old.info,info);else discovered.push({p,info});}
 window.addEventListener('eip6963:announceProvider',e=>addProvider(e.detail?.provider,e.detail?.info));window.dispatchEvent(new Event('eip6963:requestProvider'));
 function changed(accounts){account=accounts[0]||null;review=null;positionReview=null;for(const d of $$('dialog[open]'))d.close();if(ctx){ctx.dataLoaded=false;ctx.balance=0n;}text('#connect-wallet',account?account.slice(0,6)+'…'+account.slice(-4):'Connect wallet');renderPositions(ctx);buy.update();disable();if(!busy)refresh();}
+function attachMoreWallet(p,accounts){
+provider=p;
+if(!listening.has(p)){p.on?.('accountsChanged',a=>{if(provider===p)changed(a);});p.on?.('chainChanged',()=>{if(provider===p&&!busy){review=null;positionReview=null;$('#review').close();$('#position-review').close();refresh();}});listening.add(p);}
+rememberWalletProvider(p);changed(accounts);
+}
 $('#connect-wallet').onclick=async()=>{try{
- window.dispatchEvent(new Event('eip6963:requestProvider'));addProvider(window.ethereum);addProvider(window.rabby);for(const p of window.ethereum?.providers||[])addProvider(p);
- provider=discovered.find(x=>x.info.rdns==='io.rabby'||x.p.isRabby)?.p||window.ethereum||discovered[0]?.p;if(!provider)throw Error('Open this page in Rabby or another compatible wallet browser.');
- const p=provider;if(!listening.has(p)){p.on?.('accountsChanged',a=>{if(provider===p)changed(a);});p.on?.('chainChanged',()=>{if(provider===p&&!busy){review=null;positionReview=null;$('#review').close();$('#position-review').close();refresh();}});listening.add(p);}
- changed(await p.request({method:'eth_requestAccounts'}));
- }catch(err){status(error(err));}};
+const found=await findWalletProvider();const p=found?.provider;
+if(!p)throw Error('Open this page in Rabby or another compatible wallet browser.');
+attachMoreWallet(p,await p.request({method:'eth_requestAccounts'}));
+}catch(err){status(error(err));}};
+async function restoreMoreWallet(){try{const found=await findWalletProvider(true);if(found)attachMoreWallet(found.provider,found.accounts);}catch{}}
+window.addEventListener('ethereum#initialized',()=>void restoreMoreWallet());
+void restoreMoreWallet();
 async function wallet(x){
  if(!provider||!account)throw Error('Connect your wallet first.');
  const accounts=await provider.request({method:'eth_accounts'});if(!same(accounts[0],account))throw Error('Wallet account changed. Reconnect and review.');

@@ -1,3 +1,4 @@
+import {findWalletProvider} from './wallet-session.js?v=wallet-session-95';
 // Shared navigation for the two live chain experiences.
 const chains = [{id:4663n,name:'Robinhood Chain',path:'/'},{id:369n,name:'PulseChain',path:'/pulsechain/'}];
 const current = location.pathname.startsWith('/pulsechain/') ? 369n : 4663n;
@@ -58,5 +59,5 @@ function addNavigation() {
 const navigationObserver=new MutationObserver(()=>{addNavigation();if(document.querySelector('.forge-chain-select'))navigationObserver.disconnect();});
 navigationObserver.observe(document.documentElement,{childList:true,subtree:true});
 addNavigation();
-followAuthorizedWallet(window.ethereum);
+findWalletProvider(true).then(found=>found&&followAuthorizedWallet(found.provider)).catch(()=>{});
 window.addEventListener('ethereum#initialized',()=>followAuthorizedWallet(window.ethereum),{once:true});
