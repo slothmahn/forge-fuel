@@ -107,3 +107,16 @@ body.more-forge-site #panel-rewards .claim-actions button{width:auto;flex:0 1 au
 #app.forge-refresh #burns .burn-metrics>div{font-size:12px}
 #app.forge-refresh #burns .burn-metrics>div>strong{font-size:13px;line-height:1.5}
 #app.forge-refresh #burns .burn-metrics>div:first-child>strong{font-size:32px;line-height:1.25}
+
+/* Use the same type scale for payout and burn pages. */
+#app.forge-refresh :is(#pools,#burns) .section-heading h2,body.more-forge-site :is(#panel-pools,#panel-burns) .section-heading h2{font-size:30px;line-height:1.2}
+#app.forge-refresh :is(#pools,#burns) .pool-value,#app.forge-refresh #burns .burn-metrics>div:first-child>strong,body.more-forge-site #pool-cards .pool-value,body.more-forge-site #burn-cards .burn-balance>strong{font-size:35px;line-height:1.25}
+@media(max-width:760px){#app.forge-refresh :is(#pools,#burns) .section-heading h2,body.more-forge-site :is(#panel-pools,#panel-burns) .section-heading h2{font-size:27px}#app.forge-refresh :is(#pools,#burns) .pool-value,#app.forge-refresh #burns .burn-metrics>div:first-child>strong,body.more-forge-site #pool-cards .pool-value,body.more-forge-site #burn-cards .burn-balance>strong{font-size:30px}}
+
+#app.forge-refresh #burns .burn-overview>div{background:#182219;border:1px solid #ffffff20;border-radius:13px}
+
+#app.forge-refresh #burns .burn-overview>div{background:linear-gradient(145deg,#1a251c,#121a15);border-color:#b3d5b12b}
+body.more-forge-site #burn-overview>div{background:linear-gradient(110deg,#2b1d1688,#1a171280);border-color:var(--forge-border);border-radius:13px;box-shadow:none}
+#app.forge-refresh :is(#pools,#burns) :is(.pool-card h3,.burn-card-heading h3),body.more-forge-site :is(#pool-cards,#burn-cards) :is(.pool-card h3,.burn-heading h3){font-size:20px;line-height:1.25}
+
+body.fuel-pulsechain #app.forge-refresh #burns .burn-overview>div{background:linear-gradient(125deg,#211728,#181320);border-color:#ffffff26}

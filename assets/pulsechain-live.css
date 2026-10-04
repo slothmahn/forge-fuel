@@ -147,3 +147,7 @@ body .mainnet-preview-toast button,body .activity button{background:#ffffff12;co
 #app.forge-refresh .ff-art img{width:247px;height:260px;object-fit:contain;transform:none;transform-origin:center}
 @media(max-width:760px){#app.forge-refresh .ff-art{height:230px}#app.forge-refresh .ff-art img{width:185px;height:195px}}
 @media(max-width:480px){#app.forge-refresh .ff-art{height:225px;margin-top:12px}#app.forge-refresh .ff-art img{width:190px;height:210px}}
+
+#app.forge-refresh #burns .burn-overview>div{background:linear-gradient(125deg,#211728,#181320);border-color:#ffffff26;border-radius:13px}
+
+#app.forge-refresh #burns .burn-overview>div{background:linear-gradient(125deg,#211728,#181320);border-color:#ffffff26}
