@@ -22,7 +22,8 @@ $('.toast button').addEventListener('click', () => { $('#toast').hidden = true; 
 $$('.dialog-close, .dialog-done').forEach(button => button.addEventListener('click', () => modal.close()));
 modal.addEventListener('click', event => { if (event.target === modal) { const r = modal.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) modal.close(); } });
 function switchTab(name, updateHash = true) {
-  if (!['build', 'pools', 'rewards', 'nfts', 'burns'].includes(name)) name = 'build';
+  if (name === 'nfts') name = 'rewards';
+  if (!['build', 'pools', 'rewards', 'burns'].includes(name)) name = 'build';
   $$('[data-tab]').forEach(button => { const selected = button.dataset.tab === name; button.setAttribute('aria-selected', String(selected)); button.tabIndex = selected ? 0 : -1; });
   $$('[role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== `panel-${name}`; });
   $$('.chain-options a').forEach(link => { const url = new URL(link.getAttribute('href'), location.href); url.hash = name === 'build' ? 'start' : name; link.href = url.href; });
@@ -150,7 +151,7 @@ $('#burn-grid').innerHTML = burns.map(b => {
   const next = b.balance * b.drip / 100 / 144;
   return `<article class="card burn-card"><div class="burn-card-top"><img class="burn-emblem" src="../images/${b.image}" alt="${b.symbol} logo"><div class="burn-card-heading"><p class="eyebrow">${b.symbol} BURN POOL</p><h3>${b.symbol} Buy &amp; Burn</h3></div></div><div class="burn-settings"><span><strong>${b.share}%</strong> of protocol fees</span><span><strong>${b.drip}%</strong> daily drip</span></div><div class="burn-metrics"><div><span>Burn Pool Balance</span><strong>${fmt(b.balance,6)} ETH<small>≈ $${fmt(b.balance*2700)} USD reference</small></strong></div><div><span>Next burn</span><strong>${fmt(next,8)} ETH<small>1 interval ready</small><small>≈ $${fmt(next*2700)} USD reference</small></strong></div><div><span>Caller reward (1.5%)</span><strong>${fmt(next*.015,10)} ETH<small>≈ $${fmt(next*.015*2700)} USD reference</small></strong></div><div><span>Next interval</span><strong class="burn-ready">Ready to burn</strong></div><div><span>Total ${b.symbol} burned</span><strong>${fmt(b.total)} ${b.symbol}</strong></div></div><div class="burn-card-actions"><button class="primary-button" data-dialog="${b.symbol} burn preview|This sample shows a ${fmt(next,8)} ETH execution and a ${fmt(next*.015,10)} ETH caller reward. No swap, burn, or wallet transaction will occur.">Preview burn</button><span>Sample pool</span></div></article>`;
 }).join('');
-function drawPositions(ended = false, updateRewards = false) {
+function drawPositions(ended = false) {
   const items = ended ? [
     {id:'0003',status:'Ended',principal:'0 FUEL',power:'0',elapsed:100,label:'Position closed',remaining:'Principal returned',decay:100,decayLabel:'Closed during grace',decayRight:'No decay applied'}
   ] : [
@@ -159,15 +160,14 @@ function drawPositions(ended = false, updateRewards = false) {
     {id:'0009',status:'Decaying',principal:'20,000,000 FUEL',power:'20,000,000',elapsed:100,label:'Maturity reached',remaining:'Grace period ended',decay:50,decayLabel:'Principal decay',decayRight:'50% of principal remains'}
   ];
   const markup = items.map(p => { const phase=p.status==='Ended'?'ended':p.status==='Decaying'?'decay':p.status==='Grace period'?'grace':'active'; const progress=phase==='decay'?p.decay:p.elapsed; return `<details class="position-item compact-stake" data-phase="${phase}"><summary><div class="position-top"><strong>#${p.id} · ${p.principal}</strong><span class="status">${p.status}</span></div><div class="progress-track"><span style="width:${progress}%"></span></div><div class="progress-label"><span>${p.remaining}</span><b>${progress.toFixed(2)}%</b></div><span class="stake-hint">${phase==='ended'?'Expand for details or transfer stake':'Expand for details, end or transfer stake'}</span></summary><div class="stake-details"><div class="position-values"><div><span>Power now</span><strong>${p.power}</strong></div><div><span>Phase</span><strong>${p.status}</strong></div></div><p>${p.decayRight}</p><div class="claim-actions"><button ${phase==='active'||p.status==='Ended'?'disabled':''} data-stake-action="End stake">${phase==='active'?'Locked until maturity':'End stake'}</button><button data-stake-action="Transfer stake">Transfer stake</button></div></div></details>`; }).join('');
-  $('#position-list').innerHTML = markup;
-  if (updateRewards) $('#reward-positions').innerHTML = markup;
+  $('#reward-positions').innerHTML = markup;
   $$('[data-stake-action]').forEach(b=>b.addEventListener('click',()=>showModal(b.dataset.stakeAction,'Preview only. No wallet transaction will be submitted.')));
   $('#active-filter').setAttribute('aria-pressed', String(!ended)); $('#ended-filter').setAttribute('aria-pressed', String(ended));
 }
 $('#active-filter').addEventListener('click', () => drawPositions(false));
 $('#ended-filter').addEventListener('click', () => drawPositions(true));
 $$('[data-dialog]').forEach(button => button.addEventListener('click', () => { const [title, body] = button.dataset.dialog.split('|'); showModal(title, body); }));
-drawPositions(false, true); updatePreview(); switchTab(location.hash.slice(1), false);
+drawPositions(false); updatePreview(); switchTab(location.hash.slice(1), false);
 
 // Upright ticker badges follow a tilted ellipse around the approved stationary F.
 const orbitArt = $('.hero-art');

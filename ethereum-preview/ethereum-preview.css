@@ -128,3 +128,6 @@ h1,h2,h3,.pool-value,.pool-usd,.wallet-strip strong{font-family:"Space Grotesk",
 @media(max-width:760px){.burn-flow{flex-direction:column;gap:10px;text-align:center}.burn-flow>b{transform:rotate(90deg)}.wide-forge-layout>.power-card .estimate-rows{margin-top:14px}.estimate-rows strong{font-size:13px!important}}
 
 .compact-stake[data-phase=ended] .progress-track span{background:#87929d}.compact-stake[data-phase=ended] .status{color:#a3adb9}
+
+/* One place for rewards and stake management. */
+.stake-filters{margin-bottom:18px;gap:8px}.stake-filters button{flex:1;font-size:11px;padding:10px 12px}.tabs button{flex:1 1 0}
