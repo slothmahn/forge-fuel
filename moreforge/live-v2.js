@@ -41,6 +41,8 @@ function disable(){
  $$('[data-withdraw],[data-transfer],[data-execute],[data-save-burn]').forEach(b=>b.disabled=busy||!account||!x?.dataLoaded||b.dataset.ready==='false');
  $('#position-confirm').disabled=busy||!positionReview;
  buy.disable();ownerFees.render();
+ const legacyOwner=manifests[$('#chain').value]?.owner;
+ $$('[data-owner-legacy]').forEach(e=>e.hidden=!account||!legacyOwner||!same(account,legacyOwner));
 }
 function pending(problem=''){
  const key=$('#chain').value,future=!networks[key],planned=future||(manifests[key]&&manifests[key].status!=='deployed');

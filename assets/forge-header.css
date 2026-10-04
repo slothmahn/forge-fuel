@@ -80,3 +80,5 @@ body.more-forge-site .tabs button{height:44px;min-height:44px;padding:13px 8px;f
 }
 #app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{width:178px}
 @media(max-width:760px){#app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{width:158px}}
+
+[data-owner-legacy][hidden]{display:none!important}
