@@ -66,7 +66,7 @@ html,body{background:#100b19;color:#f9f3ff;font-family:Inter,-apple-system,Blink
 
 #app.forge-refresh .ff-tab-icon{display:inline-grid;place-items:center;width:17px;height:17px;flex:0 0 17px}#app.forge-refresh .ff-tab-icon svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.45;fill:none;stroke-linecap:round;stroke-linejoin:round}#app.forge-refresh .ff-fire-icon{font-family:"Apple Color Emoji","Segoe UI Emoji",sans-serif;font-size:18px;line-height:1}
 #app.forge-refresh .build-switch{background:#100b1a}#app.forge-refresh .ff-hero h1{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-#app.forge-refresh .topbar,#app.forge-refresh main,#app.forge-refresh footer,#app.forge-refresh .ff-hero,#app.forge-refresh>.wallet-section,#app.forge-refresh>.price-ribbon,#app.forge-refresh .site-tabs{max-width:1280px}
+#app.forge-refresh .topbar,#app.forge-refresh main,#app.forge-refresh footer,#app.forge-refresh .ff-hero,#app.forge-refresh>.wallet-section,#app.forge-refresh>.price-ribbon,#app.forge-refresh .site-tabs{max-width:1440px}
 #app.forge-refresh .ff-token{display:inline-flex}
 #app.forge-refresh .pool-card .pool-usd,#app.forge-refresh .pool-card .pool-top,#app.forge-refresh .pool-card .pool-value small{color:var(--pool-accent)}
 #app.forge-refresh .pool-card{--accent:var(--pool-accent)}#app.forge-refresh .pool-overview>div,#app.forge-refresh .settle-bar,#app.forge-refresh .claim-bar{background:linear-gradient(125deg,#211728,#181320);border-color:#ffffff26}
