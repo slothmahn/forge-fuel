@@ -1,17 +1,20 @@
 import {BrowserProvider,JsonRpcProvider,FetchRequest,Contract,keccak256} from '../moreforge/vendor/ethers-6.15.0.js';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=99';
-const plan=await fetch('./transition-plan.json',{cache:'no-store'}).then(r=>r.json());
+const isPls=new URLSearchParams(location.search).get('chain')==='369';
+const chain=isPls?{id:369,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com'}:{id:4663,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://robinhoodchain.blockscout.com'};
+const plan=await fetch(isPls?'./transition-plan-pls.json':'./transition-plan.json',{cache:'no-store'}).then(r=>r.json());
 const $=s=>document.querySelector(s),same=(a,b)=>a.toLowerCase()===b.toLowerCase(),zero='0x0000000000000000000000000000000000000000';
-const fields=['feeBps','feeBoundsEnabled','minFeeWei','maxFeeWei','entriesPaused','dailyPoolBps','maxSlippageBps','maxSwapEth','maxSwapNative','adapter'];
+if(isPls){document.title='Finish PulseChain ownership changes';document.querySelector('.eyebrow').textContent='FUEL FORGE + MORE FORGE · PULSECHAIN';document.querySelector('#intro-steps').textContent='Six steps transfer the burn engines to your drip-only controller. Five steps permanently renounce the remaining ownership powers, including Fuel’s fee router. Each requires your wallet approval.';document.querySelector('#status').textContent='Connect your owner wallet on PulseChain to review the next step.';}
+const fields=['fuelBurnBps','moreBurnBps','pampBurnBps','feeBps','feeBoundsEnabled','minFeeWei','maxFeeWei','entriesPaused','dailyPoolBps','maxSlippageBps','maxSwapEth','maxSwapNative','adapter'];
 const abi=['function owner() view returns(address)','function transferOwnership(address)','function renounceOwnership()',...fields.map(k=>`function ${k}() view returns(${['feeBoundsEnabled','entriesPaused'].includes(k)?'bool':k==='adapter'?'address':'uint256'})`)];
 let busy=false,next=null,wallet=null;
-const connection=new FetchRequest('https://rpc.mainnet.chain.robinhood.com/');connection.timeout=20000;
-const reads=new JsonRpcProvider(connection,4663,{staticNetwork:true,batchMaxCount:10});
+const connection=new FetchRequest(chain.rpc);connection.timeout=20000;
+const reads=new JsonRpcProvider(connection,chain.id,{staticNetwork:true,batchMaxCount:10});
 const show=t=>$('#status').textContent=t;
 async function context(){
  if(!wallet)throw Error('Connect your wallet first.');
- const p=new BrowserProvider(wallet);if((await p.getNetwork()).chainId!==BigInt(plan.chainId))throw Error('Switch your wallet to Robinhood first.');
+ const p=new BrowserProvider(wallet);if((await p.getNetwork()).chainId!==BigInt(plan.chainId))throw Error('Switch your wallet to '+chain.name+' first.');
  const accounts=await wallet.request({method:'eth_accounts'});if(!accounts?.[0])throw Error('Unlock your wallet and connect again.');
  const signer=await p.getSigner(accounts[0]);if(!same(await signer.getAddress(),plan.manager))throw Error('Select the owner account in your wallet, then connect again: '+plan.manager);
  if(keccak256(await reads.getCode(plan.controller))!==plan.codeHash)throw Error('Controller code does not match the tested build.');
@@ -37,13 +40,13 @@ async function scan(){
  }
  $('#steps').replaceChildren(...rows.map(({step,done})=>{const li=document.createElement('li');li.textContent=(done?'Complete: ':'Pending: ')+step.suite+' · '+step.label+' · '+(step.action==='transferOwnership'?'transfer to drip controller':'renounce ownership');return li;}));
  $('#next').disabled=!next;
- show(next?'Next: '+next.suite+' · '+next.label+'\nContract: '+next.address+'\nAction: '+next.action+'\n'+(next.action==='transferOwnership'?'New owner: '+plan.controller+'\nOnly the daily drip remains adjustable.':'Ownership becomes permanently empty. These owner powers cannot be restored.'):'All ten Robinhood ownership steps are confirmed. Only daily drip control remains.');return x;
+ show(next?'Next: '+next.suite+' · '+next.label+'\nContract: '+next.address+'\nAction: '+next.action+'\n'+(next.action==='transferOwnership'?'New owner: '+plan.controller+'\nOnly the daily drip remains adjustable.':'Ownership becomes permanently empty. These owner powers cannot be restored.'):'All '+plan.steps.length+' '+chain.name+' ownership steps are confirmed. Only daily drip control remains.');return x;
 }
-$('#check').onclick=async()=>{if(busy)return;busy=true;$('#check').disabled=true;$('#next').disabled=true;try{show('Finding your wallet…');const found=await findWalletProvider();if(!found)throw Error('No wallet detected. Open this link inside your wallet browser or enable your wallet extension.');wallet=found.provider;show('Unlock your wallet and approve the connection…');await wallet.request({method:'eth_requestAccounts'});rememberWalletProvider(wallet);show('Confirm switching to Robinhood in your wallet if prompted…');await switchWalletChain(wallet,{id:4663,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://robinhoodchain.blockscout.com'});await scan();}catch(e){show(e.shortMessage||e.message);}finally{busy=false;$('#check').disabled=false;}};
+$('#check').onclick=async()=>{if(busy)return;busy=true;$('#check').disabled=true;$('#next').disabled=true;try{show('Finding your wallet…');const found=await findWalletProvider();if(!found)throw Error('No wallet detected. Open this link inside your wallet browser or enable your wallet extension.');wallet=found.provider;show('Unlock your wallet and approve the connection…');await wallet.request({method:'eth_requestAccounts'});rememberWalletProvider(wallet);show('Confirm switching to '+chain.name+' in your wallet if prompted…');await switchWalletChain(wallet,chain);await scan();}catch(e){show(e.shortMessage||e.message);}finally{busy=false;$('#check').disabled=false;}};
 $('#next').onclick=async()=>{
  if(busy||!next)return;busy=true;$('#check').disabled=true;$('#next').disabled=true;
  try{const x=await scan(),step=next;if(!step)return;const c=new Contract(step.address,abi,x.signer);const description=step.suite+' '+step.label+'\n'+step.address+'\n'+(step.action==='transferOwnership'?'Permanently transfer ownership to the drip-only controller.':'Permanently renounce ownership. This cannot be undone.');if(!confirm(description+'\nContinue to your wallet?'))return;
-  if(BigInt(await wallet.request({method:'eth_chainId'}))!==BigInt(plan.chainId))throw Error('Wallet chain changed. Reconnect on Robinhood before continuing.');const accounts=await wallet.request({method:'eth_accounts'});if(!accounts?.[0]||!same(accounts[0],plan.manager))throw Error('Wallet account changed. Reconnect the owner account before continuing.');
+  if(BigInt(await wallet.request({method:'eth_chainId'}))!==BigInt(plan.chainId))throw Error('Wallet chain changed. Reconnect on '+chain.name+' before continuing.');const accounts=await wallet.request({method:'eth_accounts'});if(!accounts?.[0]||!same(accounts[0],plan.manager))throw Error('Wallet account changed. Reconnect the owner account before continuing.');
   $('#next').disabled=true;show('Review this ownership transaction in your wallet.');const tx=step.action==='transferOwnership'?await c.transferOwnership(plan.controller):await c.renounceOwnership();show('Submitted: '+tx.hash+'\nWaiting for confirmation…');const receipt=await tx.wait();if(receipt.status!==1)throw Error('Transaction reverted.');await scan();
  }catch(e){show(e.shortMessage||e.message);next=null;$('#next').disabled=true;}finally{busy=false;$('#check').disabled=false;}
 };

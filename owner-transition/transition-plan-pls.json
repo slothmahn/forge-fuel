@@ -1,0 +1,150 @@
+{
+  "chainId": 369,
+  "controller": "0xc8002615113Beeb9792FBac49D02615456F7Db59",
+  "manager": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+  "codeHash": "0xf252ff632385d4a6bbe09653ba6c69f11f2268f34b84357119ff58984655bcdd",
+  "engines": [
+    "0xc8ccbf69314919b2d2cd212b8955ee4d6a7383f0",
+    "0x89ec8918b79f2605eaaf28e3a2ed14b05895a15f",
+    "0xe791b036fb503cf271682bfcc9057f03afc150ed",
+    "0x2907234023B992cCeeAd170f1627855412a98084",
+    "0xc47B52fe1Ad0d9967a75138656eC603Bc6A6fC88",
+    "0x560DD6B014e7b8046dfa13Fa2AAA3A1E80713bF0"
+  ],
+  "steps": [
+    {
+      "suite": "Fuel Forge",
+      "label": "fuelBurner",
+      "address": "0xc8ccbf69314919b2d2cd212b8955ee4d6a7383f0",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0x4C9702De529e557e2B629cDfD7842ddB374D0e4f"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "moreBurner",
+      "address": "0x89ec8918b79f2605eaaf28e3a2ed14b05895a15f",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0x742c527449cAa31210c242BEb7D4B3d88DB88A1c"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "pampBurner",
+      "address": "0xe791b036fb503cf271682bfcc9057f03afc150ed",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0xF691a994411f3c717ad00b44e07906357280E287"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "fuelBurner",
+      "address": "0x2907234023B992cCeeAd170f1627855412a98084",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0xB8eA2C2C43CAB1B5859B6684A21A105e1757B4EF"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "moreBurner",
+      "address": "0xc47B52fe1Ad0d9967a75138656eC603Bc6A6fC88",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0xb92D18F7151b8DBFCC45547A0e056Da4A12Ffd42"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "pampBurner",
+      "address": "0x560DD6B014e7b8046dfa13Fa2AAA3A1E80713bF0",
+      "action": "transferOwnership",
+      "settings": {
+        "dailyPoolBps": "100",
+        "maxSlippageBps": "1000",
+        "maxSwapEth": "1000000000000000000000000",
+        "adapter": "0x325852F41d0a0f0575B91CE8E40e1d820E70D8C5"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "position",
+      "address": "0x0ae27290a59fd9b7d08d01e2df206ec36e97dc8c",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "200000000000000000000000",
+        "maxFeeWei": "200000000000000000000000000"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "foundry",
+      "address": "0x1de63c7f92c5fc967cb315a86c8f6f8b1650ba20",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "2000000000000000000000000",
+        "maxFeeWei": "20000000000000000000000000",
+        "adapter": "0x38FB4348eFEf99A8AE821dC36726B1f081f2D15f",
+        "maxSwapEth": "1000000000000000000000000000",
+        "maxSlippageBps": "1000"
+      }
+    },
+    {
+      "suite": "Fuel Forge",
+      "label": "feeRouter",
+      "address": "0x1e0745c26479b1b70df6da9f64532a3f878f1c1a",
+      "action": "renounceOwnership",
+      "settings": {
+        "fuelBurnBps": "3300",
+        "moreBurnBps": "2000",
+        "pampBurnBps": "500"
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "position",
+      "address": "0x0438743F2fd7C655CC40bD6C65226fe47AeDDCEc",
+      "action": "renounceOwnership",
+      "settings": {
+        "feeBps": "10000",
+        "feeBoundsEnabled": false,
+        "minFeeWei": "200000000000000000000000",
+        "maxFeeWei": "200000000000000000000000000",
+        "entriesPaused": false
+      }
+    },
+    {
+      "suite": "MORE Forge",
+      "label": "bitcoinVault",
+      "address": "0x8031Fb8F384E5fcf43be48661073a2bC05AE61C9",
+      "action": "renounceOwnership",
+      "settings": {
+        "adapter": "0x9228115173cA5D789A9eB5599A065511c059F227",
+        "maxSwapNative": "1000000000000000000000000",
+        "maxSlippageBps": "1000"
+      }
+    }
+  ]
+}

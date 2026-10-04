@@ -112,6 +112,20 @@
     "feeBps": 10000,
     "feeBoundsEnabled": true,
     "minFeeWei": "200000000000000000000000",
-    "maxFeeWei": "200000000000000000000000000"
+    "maxFeeWei": "200000000000000000000000000",
+    "ownershipTransition": {
+      "controller": "0xc8002615113Beeb9792FBac49D02615456F7Db59",
+      "manager": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+      "codeHash": "0xf252ff632385d4a6bbe09653ba6c69f11f2268f34b84357119ff58984655bcdd",
+      "burners": [
+        "fuelBurner",
+        "moreBurner",
+        "pampBurner"
+      ],
+      "renounce": [
+        "position",
+        "bitcoinVault"
+      ]
+    }
   }
 }

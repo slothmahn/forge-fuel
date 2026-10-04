@@ -47,5 +47,20 @@
     "0xca9fa1f5c77efb986d1be29c24035d6eb80dd0adfdb40c1b1980057f464790b8",
     "0x5cc62e592ea18ecf01d30db3f2439b514f54f842df2a276093d0fcface36ae73",
     "0x7672e6503f1587e87e82e9d570c18724fcb30832f679fb95999fc80cb2043f8a"
-  ]
+  ],
+  "ownershipTransition": {
+    "controller": "0xc8002615113Beeb9792FBac49D02615456F7Db59",
+    "manager": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+    "codeHash": "0xf252ff632385d4a6bbe09653ba6c69f11f2268f34b84357119ff58984655bcdd",
+    "burners": [
+      "fuelBurner",
+      "moreBurner",
+      "pampBurner"
+    ],
+    "renounce": [
+      "position",
+      "foundry",
+      "feeRouter"
+    ]
+  }
 }
