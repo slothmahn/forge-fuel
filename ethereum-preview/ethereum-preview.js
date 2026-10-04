@@ -25,6 +25,7 @@ function switchTab(name, updateHash = true) {
   if (!['build', 'pools', 'rewards', 'nfts', 'burns'].includes(name)) name = 'build';
   $$('[data-tab]').forEach(button => { const selected = button.dataset.tab === name; button.setAttribute('aria-selected', String(selected)); button.tabIndex = selected ? 0 : -1; });
   $$('[role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== `panel-${name}`; });
+  $$('.chain-options a').forEach(link => { const url = new URL(link.getAttribute('href'), location.href); url.hash = name === 'build' ? 'start' : name; link.href = url.href; });
   $('.hero').hidden = name !== 'build';
   $('.wallet-strip').hidden = name !== 'build';
   if (updateHash) window.scrollTo({top:0, behavior:'instant'});
@@ -55,14 +56,12 @@ function formValues() {
   return { principal: val('#principal'), burn: val('#burn'), term: Math.max(8, Math.min(1000, Math.floor(val('#term')))) };
 }
 function clampFuel() {
-  const p = Math.min(DEMO_BALANCE, val('#principal'));
-  if (val('#principal') > p) $('#principal').value = p;
-  const maxBurn = Math.max(0, Math.min(p * 3, DEMO_BALANCE - p));
+  const maxBurn = val('#principal') * 3;
   if (val('#burn') > maxBurn) $('#burn').value = maxBurn;
 }
 const detailBlock = document.createElement('section');
 detailBlock.className = 'position-details';
-detailBlock.innerHTML = '<h4>Position details</h4>';
+detailBlock.innerHTML = '';
 detailBlock.append($('.preview-breakdown'),$('.timeline-note'));
 $('.power-card').append(detailBlock);
 const payoutRows = document.createElement('div');
@@ -80,12 +79,11 @@ function updateEstimates(share, term, foundry = false) {
   $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
   scenario.hidden=foundry;
   const total=rows.reduce((sum,p)=>sum+p.payout*Math.floor(term/p.days)*p.usd,0);
-  scenario.innerHTML=`<h4>Estimated rewards over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*p.usd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ $${fmt(total)} USD</strong></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p>`;
+  scenario.innerHTML=`<h4 class="details-title">Position details</h4><div class="scenario-estimate"><h4>Estimated rewards over your ${fmt(term)}-day term</h4><p>If the sample funding per cycle and your share stayed the same</p><div class="term-columns">${rows.map(p=>`<div><b>${p.days} Day</b><small>${Math.floor(term/p.days)} complete cycles</small><strong>≈ ${fmt(p.payout*Math.floor(term/p.days),p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*Math.floor(term/p.days)*p.usd)} USD</small></div>`).join('')}</div><div class="term-total"><span>Illustrative total rewards</span><strong>≈ $${fmt(total)} USD</strong></div><p>Sample data only. Assumes the same funding and share for every future cycle; actual deadlines can change the cycle count. No compounding. Before entry fees and gas. This is a scenario, not a forecast.</p></div>`;
 }
 function updatePreview() {
   const { principal, burn, term } = formValues();
   $$('[data-term]').forEach(button => button.classList.toggle('active', Number(button.dataset.term) === term));
-  scenario.append(detailBlock);
   $('.builder-grid').classList.add('wide-forge-layout');
   const durationBonus = principal * (term - 8) / 992;
   const power = principal + durationBonus + burn;
@@ -127,6 +125,8 @@ $('#forge-form').addEventListener('submit', event => {
 });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
+  $('#wallet-address').textContent = walletVisible ? 'Demo wallet' : 'Not connected';
+  $('#wallet-btc').textContent = walletVisible ? '0.0024' : '—';
   $('#wallet-label').textContent = walletVisible ? 'Demo wallet' : 'Show demo wallet';
   $('#wallet-fuel').innerHTML = walletVisible ? '1,200,000,000 <small>FUEL</small>' : '— <small>FUEL</small>';
   $('#wallet-pls').innerHTML = walletVisible ? '2.5 <small>ETH</small>' : '— <small>ETH</small>';
@@ -138,7 +138,10 @@ const pools = [
   {days:88, name:'ETH reward pool', balance:2.4, unit:'ETH', elapsed:26, left:'65d 3h left', share:.62},
   {days:288, name:'Bitcoin reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:.8}
 ];
-$('#pool-grid').innerHTML = pools.map(p => `<article class="card pool-card"><div class="pool-top"><span class="pool-number"><b>${p.days}</b> DAY</span><span class="sample-pill">SAMPLE CYCLE</span></div><div class="pool-amount">${fmt(p.balance, 8)}<small>${p.unit}</small></div><h3>${p.name}</h3><div class="progress-label"><span>${p.elapsed.toFixed(2)}% of cycle elapsed</span><b>${p.left}</b></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-detail"><div><span>Your estimated share</span><strong>${p.share}%</strong></div><div><span>Estimated payout</span><strong>${fmt(p.balance * .9975 * p.share / 100, p.unit === 'ETH' ? 6 : 8)} ${p.unit}</strong></div></div></article>`).join('');
+$('#pool-grid').innerHTML = pools.map(p => {
+  const rate=p.unit==='ETH'?2700:83000, payout=p.balance*.9975*p.share/100;
+  return `<article class="card pool-card"><div class="pool-top"><span>CYCLE 1</span><span class="pool-live">PREVIEW · ETHEREUM</span></div><h3>${p.days}-Day ${p.unit==='ETH'?'Pool':'Bitcoin Pool'}</h3><div class="pool-value">${fmt(p.balance,8)} <small>${p.unit}</small></div><div class="pool-usd">≈ $${fmt(p.balance*rate,2)} USD reference</div><div class="pool-row"><span>Closes</span><strong>${p.left}</strong></div><div class="pool-row"><span>Your estimated share</span><strong>${p.share.toFixed(2)}%</strong></div><div class="pool-row"><span>Estimated payout</span><strong>${fmt(payout,p.unit==='ETH'?6:8)} ${p.unit}<small>≈ $${fmt(payout*rate,2)} USD reference</small></strong></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-foot">${p.elapsed.toFixed(2)}% of cycle elapsed · estimate updates when refreshed</div></article>`;
+}).join('');
 const burns = [
   {symbol:'FUEL',image:'fuel-token.jpg',share:15,drip:1,balance:.28,total:82400000},
   {symbol:'MORE',image:'more-token.jpg',share:10,drip:1,balance:.20,total:18920000}
@@ -147,7 +150,7 @@ $('#burn-grid').innerHTML = burns.map(b => {
   const next = b.balance * b.drip / 100 / 144;
   return `<article class="card burn-card"><div class="burn-card-top"><img class="burn-emblem" src="../images/${b.image}" alt="${b.symbol} logo"><div class="burn-card-heading"><p class="eyebrow">${b.symbol} BURN POOL</p><h3>${b.symbol} Buy &amp; Burn</h3></div></div><div class="burn-settings"><span><strong>${b.share}%</strong> of protocol fees</span><span><strong>${b.drip}%</strong> daily drip</span></div><div class="burn-metrics"><div><span>Burn Pool Balance</span><strong>${fmt(b.balance,6)} ETH<small>≈ $${fmt(b.balance*2700)} USD reference</small></strong></div><div><span>Next burn</span><strong>${fmt(next,8)} ETH<small>1 interval ready</small><small>≈ $${fmt(next*2700)} USD reference</small></strong></div><div><span>Caller reward (1.5%)</span><strong>${fmt(next*.015,10)} ETH<small>≈ $${fmt(next*.015*2700)} USD reference</small></strong></div><div><span>Next interval</span><strong class="burn-ready">Ready to burn</strong></div><div><span>Total ${b.symbol} burned</span><strong>${fmt(b.total)} ${b.symbol}</strong></div></div><div class="burn-card-actions"><button class="primary-button" data-dialog="${b.symbol} burn preview|This sample shows a ${fmt(next,8)} ETH execution and a ${fmt(next*.015,10)} ETH caller reward. No swap, burn, or wallet transaction will occur.">Preview burn</button><span>Sample pool</span></div></article>`;
 }).join('');
-function drawPositions(ended = false) {
+function drawPositions(ended = false, updateRewards = false) {
   const items = ended ? [
     {id:'0003',status:'Ended',principal:'0 FUEL',power:'0',elapsed:100,label:'Position closed',remaining:'Principal returned',decay:100,decayLabel:'Closed during grace',decayRight:'No decay applied'}
   ] : [
@@ -155,16 +158,16 @@ function drawPositions(ended = false) {
     {id:'0017',status:'Grace period',principal:'50,000,000 FUEL',power:'51,008,065',elapsed:100,label:'Maturity reached',remaining:'4 days of grace left',decay:0,decayLabel:'Principal decay',decayRight:'Not started'},
     {id:'0009',status:'Decaying',principal:'20,000,000 FUEL',power:'20,000,000',elapsed:100,label:'Maturity reached',remaining:'Grace period ended',decay:50,decayLabel:'Principal decay',decayRight:'50% of principal remains'}
   ];
-  const markup = items.map(p => { const phase=p.status==='Decaying'?'decay':p.status==='Grace period'?'grace':'active'; const progress=phase==='decay'?p.decay:p.elapsed; return `<details class="position-item compact-stake" data-phase="${phase}"><summary><div class="position-top"><strong>#${p.id} · ${p.principal}</strong><span class="status">${p.status}</span></div><div class="progress-track"><span style="width:${progress}%"></span></div><div class="progress-label"><span>${p.remaining}</span><b>${progress.toFixed(2)}%</b></div><span class="stake-hint">Expand for details, end or transfer stake</span></summary><div class="stake-details"><div class="position-values"><div><span>Power now</span><strong>${p.power}</strong></div><div><span>Phase</span><strong>${p.status}</strong></div></div><p>${p.decayRight}</p><div class="claim-actions"><button data-stake-action="End stake">${phase==='active'?'Locked until maturity':'End stake'}</button><button data-stake-action="Transfer stake">Transfer stake</button></div></div></details>`; }).join('');
+  const markup = items.map(p => { const phase=p.status==='Ended'?'ended':p.status==='Decaying'?'decay':p.status==='Grace period'?'grace':'active'; const progress=phase==='decay'?p.decay:p.elapsed; return `<details class="position-item compact-stake" data-phase="${phase}"><summary><div class="position-top"><strong>#${p.id} · ${p.principal}</strong><span class="status">${p.status}</span></div><div class="progress-track"><span style="width:${progress}%"></span></div><div class="progress-label"><span>${p.remaining}</span><b>${progress.toFixed(2)}%</b></div><span class="stake-hint">${phase==='ended'?'Expand for details or transfer stake':'Expand for details, end or transfer stake'}</span></summary><div class="stake-details"><div class="position-values"><div><span>Power now</span><strong>${p.power}</strong></div><div><span>Phase</span><strong>${p.status}</strong></div></div><p>${p.decayRight}</p><div class="claim-actions"><button ${phase==='active'||p.status==='Ended'?'disabled':''} data-stake-action="End stake">${phase==='active'?'Locked until maturity':'End stake'}</button><button data-stake-action="Transfer stake">Transfer stake</button></div></div></details>`; }).join('');
   $('#position-list').innerHTML = markup;
-  $('#reward-positions').innerHTML = markup;
+  if (updateRewards) $('#reward-positions').innerHTML = markup;
   $$('[data-stake-action]').forEach(b=>b.addEventListener('click',()=>showModal(b.dataset.stakeAction,'Preview only. No wallet transaction will be submitted.')));
   $('#active-filter').setAttribute('aria-pressed', String(!ended)); $('#ended-filter').setAttribute('aria-pressed', String(ended));
 }
 $('#active-filter').addEventListener('click', () => drawPositions(false));
 $('#ended-filter').addEventListener('click', () => drawPositions(true));
 $$('[data-dialog]').forEach(button => button.addEventListener('click', () => { const [title, body] = button.dataset.dialog.split('|'); showModal(title, body); }));
-drawPositions(); updatePreview(); switchTab(location.hash.slice(1), false);
+drawPositions(false, true); updatePreview(); switchTab(location.hash.slice(1), false);
 
 // Upright ticker badges follow a tilted ellipse around the approved stationary F.
 const orbitArt = $('.hero-art');
@@ -185,3 +188,7 @@ if (CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) {
   new ResizeObserver(sizeOrbit).observe(orbitArt);
   sizeOrbit();
 }
+
+const chainMenu = $('.chain-menu');
+document.addEventListener('click', event => { if (!chainMenu.contains(event.target)) chainMenu.open = false; });
+document.addEventListener('keydown', event => { if (event.key === 'Escape' && chainMenu.open) { chainMenu.open = false; chainMenu.querySelector('summary').focus(); } });
