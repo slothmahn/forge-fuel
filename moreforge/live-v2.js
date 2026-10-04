@@ -17,7 +17,7 @@ const vaultAbi=['function positions() view returns(address)','function launchTim
 const helperAbi=['function vaults(uint256) view returns(address)','function bitcoin() view returns(address)','function settle((uint8 pool,uint256 cycleId,uint256 maxPositions)[])','function claim((uint8 pool,uint256 cycleId,uint256 tokenId)[])'];
 const date=t=>new Intl.DateTimeFormat(undefined,{dateStyle:'medium',timeStyle:'short'}).format(new Date(Number(t)*1000));
 const display=(v,d=18)=>displayAmount(v,d,d===8?8:6),units=n=>formatUnits(n,18),same=(a,b)=>a?.toLowerCase()===b?.toLowerCase();
-const error=e=>e.shortMessage||e.message||String(e),status=t=>$('#connection-status').textContent=t;
+const error=e=>e.shortMessage||e.message||String(e),status=t=>{const el=$('#connection-status');el.textContent=t;el.closest('.preview-notice').hidden=t.startsWith('MORE Forge · ');};
 const tab=k=>window.moreForgeTabs.select(k),text=(id,t)=>$(id).textContent=t;
 let legacy={},manifests={},ctx=null,epoch=0,previewId=0,account=null,provider=null,busy=false,quotes={},review=null,positionReview=null,positionFilter='active';
 const listening=new WeakSet(),discovered=[],refreshes=new WeakMap();

@@ -8,16 +8,16 @@
  };
  const strip=document.createElement('div');strip.className='market-strip';strip.setAttribute('aria-label','Chain token market prices');document.querySelector('.preview-notice').after(strip);
  let requestId=0;const cache={};
- const price=n=>Number.isFinite(n)&&n>0?(n<1?'$'+n.toPrecision(6).replace(/0+$/,'').replace(/\.$/,''):'$'+n.toLocaleString('en-US',{maximumFractionDigits:2})):'Unavailable';
+ const price=n=>Number.isFinite(n)&&n>0?(n<.01?'$'+n.toPrecision(3):'$'+n.toLocaleString('en-US',{maximumFractionDigits:2})):'Unavailable';
  function render(key,quotes={},status='Checking DexScreener…'){
   const network=networks[key];
   window.dispatchEvent(new CustomEvent('more-market-prices',{detail:{key,quotes}}));
   if(!network){strip.innerHTML='<small>AVAX · future chain. Token markets are not configured.</small>';return;}
   const entries=[['FUEL','FUEL'],['MORE','MORE'],[network.native,'NATIVE'],[network.btc,'BTC'],...(key==='rh'||key==='pls'?[['PAMP','PAMP']]:[])];
-  strip.innerHTML=entries.map(([symbol,id])=>{
+  strip.innerHTML='<div class="market-reference-grid">'+entries.map(([symbol,id])=>{
    const pair=network.pairs[id==='NATIVE'?'BTC':id];
    return pair?`<a href="https://dexscreener.com/${network.chain}/${pair}" target="_blank" rel="noopener noreferrer"><b>${symbol}</b><span>${quotes[id]===undefined?(status.startsWith('Checking')?'Checking…':'Unavailable'):price(quotes[id])}</span></a>`:`<span><b>${symbol}</b> Market pending</span>`;
-  }).join('')+`<div class="market-status"><span>${status}</span><button class="refresh-prices" type="button">Refresh prices</button></div><p class="market-note">Live market reference prices. Protocol fees and pool balances are read from the chain.</p>`;
+  }).join('')+`</div><div class="market-status"><span>${status}</span><button class="refresh-prices" type="button">Refresh prices</button></div><p class="market-note">Live market reference prices. Protocol fees and pool balances are read from the chain.</p>`;
   strip.querySelector('.refresh-prices').onclick=()=>refresh(true);
  }
  async function refresh(force=false){

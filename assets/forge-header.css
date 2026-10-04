@@ -1,0 +1,56 @@
+/* One header rhythm for Fuel Forge and MORE Forge, independent of chain colours. */
+#app.forge-refresh .topbar,body.more-forge-site .site-header{display:flex;align-items:center;justify-content:space-between;height:104px;min-height:104px;padding:0;gap:20px}
+#app.forge-refresh .brand-wordmark-art,body.more-forge-site .more-brand img{display:block;width:246px;height:76px;object-fit:contain;object-position:left}
+body.more-forge-site .more-brand{width:246px;flex-shrink:0}
+#app.forge-refresh .top-actions,body.more-forge-site .header-actions{display:flex;align-items:center;gap:12px;flex-wrap:nowrap;width:auto}
+body.more-forge-site .header-links{display:contents}
+#app.forge-refresh .top-actions>a,#app.forge-refresh .top-actions #connect,#app.forge-refresh .forge-chain-select>summary,body.more-forge-site .header-links>a,body.more-forge-site #connect-wallet,body.more-forge-site .more-chain-select>summary{box-sizing:border-box;display:inline-flex;align-items:center;justify-content:center;gap:9px;height:42px;min-height:42px;padding:0 14px;margin:0;border-radius:10px;font:650 13px/1.25 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;white-space:nowrap}
+#app.forge-refresh .top-actions .more-forge-link,body.more-forge-site .header-links .fuel-forge-link{padding:4px 10px}
+#app.forge-refresh .more-forge-link img,body.more-forge-site .fuel-forge-link img{width:110px;height:32px;object-fit:contain}
+#app.forge-refresh .price-ribbon,body.more-forge-site .market-strip{display:block;box-sizing:border-box;min-height:98px;padding:16px 0 18px;margin-top:0;margin-bottom:0}
+#app.forge-refresh .market-reference-grid,body.more-forge-site .market-reference-grid{display:flex;align-items:center;flex-wrap:wrap;gap:8px 20px}
+#app.forge-refresh .market-reference-grid>a,body.more-forge-site .market-reference-grid>a{display:inline-flex;align-items:center;gap:7px;background:transparent;border:0;border-radius:0;margin:0;padding:5px 0;font-size:12px;line-height:18px;font-weight:500}
+#app.forge-refresh .market-reference-grid>a span,body.more-forge-site .market-reference-grid>a span{margin:0;font-weight:750;font-variant-numeric:tabular-nums}
+body.more-forge-site .market-reference-grid b{margin:0;font-weight:500}
+#app.forge-refresh .price-ribbon>small,body.more-forge-site .market-status{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:3px 0 0;font-size:9px;line-height:14px}
+body.more-forge-site .refresh-prices{font:inherit;line-height:inherit;padding:0;margin:0}
+#app.forge-refresh .price-ribbon .market-caption,body.more-forge-site .market-note{margin:5px 0 0;font-size:10px;line-height:16px}
+body.more-forge-site .preview-notice[hidden]{display:none!important}
+body.more-forge-site .tabs{margin:0;padding:5px;gap:5px;border-radius:13px}
+body.more-forge-site .tabs button{height:44px;min-height:44px;padding:13px 8px;font-size:12px;line-height:normal;gap:10px}
+@media(max-width:1050px){
+ #app.forge-refresh .topbar,body.more-forge-site .site-header{height:auto;min-height:104px;padding:14px 0;flex-wrap:wrap;gap:12px}
+ #app.forge-refresh .top-actions,body.more-forge-site .header-actions{flex-wrap:wrap;gap:8px;max-width:100%}
+}
+@media(max-width:760px){
+ #app.forge-refresh .topbar,body.more-forge-site .site-header{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 8px;padding:14px 0;align-items:center}
+ #app.forge-refresh .topbar>.brand,body.more-forge-site .site-header>.brand{grid-column:1/span 2;grid-row:1;width:190px}
+ #app.forge-refresh .brand-wordmark-art,body.more-forge-site .more-brand img{width:190px;height:52px}
+ #app.forge-refresh .top-actions,body.more-forge-site .header-actions{display:contents}
+ #app.forge-refresh .top-actions>a,body.more-forge-site .header-links>a{grid-row:2;min-width:0;padding:0 8px;font-size:11px;height:36px;min-height:36px}
+ #app.forge-refresh .top-actions #connect,body.more-forge-site #connect-wallet{grid-column:3;grid-row:1;justify-self:end;font-size:11px;height:36px;min-height:36px;padding:0 10px}
+ #app.forge-refresh .forge-chain-select,body.more-forge-site .more-chain-select{grid-column:1/span 2;grid-row:3;justify-self:start}
+ #app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{font-size:11px;height:36px;min-height:36px;padding:0 10px}
+ #app.forge-refresh .more-forge-link img,body.more-forge-site .fuel-forge-link img{width:92px;height:28px;max-width:100%}
+ #app.forge-refresh .price-ribbon,body.more-forge-site .market-strip{min-height:0;padding:16px 0 18px}
+ #app.forge-refresh .market-reference-grid,body.more-forge-site .market-reference-grid{gap:4px 14px}
+ #app.forge-refresh .market-reference-grid>a,body.more-forge-site .market-reference-grid>a{font-size:11px}
+ body.more-forge-site .tabs{padding:4px;gap:2px}
+ body.more-forge-site .tabs button{height:55px;min-height:55px;padding:9px 3px;gap:5px;font-size:10px;line-height:15px}
+}
+@media(max-width:380px){
+ #app.forge-refresh .topbar>.brand,body.more-forge-site .site-header>.brand{width:155px}
+ #app.forge-refresh .brand-wordmark-art,body.more-forge-site .more-brand img{width:155px}
+ #app.forge-refresh .top-actions #connect,body.more-forge-site #connect-wallet{font-size:10px;padding:0 8px}
+}
+
+@media(min-width:761px){
+ #app.forge-refresh .price-ribbon .market-reference-grid,body.more-forge-site .market-strip .market-reference-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));width:min(850px,100%);gap:8px 20px}
+ #app.forge-refresh .top-actions>a:not(.more-forge-link),body.more-forge-site .header-links>a:not(.fuel-forge-link){width:112px}
+}
+@media(max-width:760px){
+ #app.forge-refresh .site-tabs,body.more-forge-site .tabs{margin-top:0;margin-bottom:0}
+ #app.forge-refresh .price-ribbon>small,body.more-forge-site .market-status{min-height:28px;align-content:start;align-items:start}
+}
+#app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{width:178px}
+@media(max-width:760px){#app.forge-refresh .forge-chain-select>summary,body.more-forge-site .more-chain-select>summary{width:158px}}

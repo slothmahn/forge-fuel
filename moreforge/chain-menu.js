@@ -10,7 +10,7 @@
   const fuel=document.querySelector('.fuel-forge-link');
   fuel.dataset.chain=select.value;
   fuel.href=select.value==='pls'?'https://thefuelforge.com/pulsechain/?chain=369':'https://thefuelforge.com/?chain=4663';
-  fuel.setAttribute('aria-label','Fuel Forge'+(select.value==='rh'?' on Robinhood Chain':select.value==='pls'?' on PulseChain':'')+' (opens in a new tab)');
+  fuel.setAttribute('aria-label','Fuel Forge'+(select.value==='rh'?' on Robinhood Chain':select.value==='pls'?' on PulseChain':''));
   document.querySelector('#chain-name').textContent=select.selectedOptions[0].textContent.replace(' · future','');
   for(const button of choices){if(button.dataset.chain===select.value)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');}
  }
