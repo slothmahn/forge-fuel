@@ -25,30 +25,26 @@ export function positionState(p,now){
  const progress=Math.min(100,Math.max(0,Number(elapsed*100n/(end-p.created))));
  return{closed,mature,principal,power,end,grace,phase,status,countdown,progress};
 }
-function stages(phase){
- const current={locked:0,grace:1,decay:2,expired:3,closed:3}[phase];
- return ['Locked','7-day grace','7-day decay'].map((label,i)=>`<span class="${i<current?'completed':i===current?'current':'upcoming'}" ${i===current?'aria-current="step"':''}><i aria-hidden="true">${i<current?'✓':i+1}</i>${label}</span>`).join('');
-}
 export function positionMarkup(p,now){
- const state=positionState(p,now),{closed,mature,principal,power,end,grace,phase,status,countdown,progress}=state;
+ const state=positionState(p,now),{closed,mature,principal,power,end,grace,phase,status,progress}=state;
+ if(closed)return `<article class="position-card" data-position-id="${p.id}" data-phase="closed"><div class="position-heading"><h4>MORE NFT #${p.id}</h4><span class="position-state">Ended</span></div><p class="position-note">Closed ${dateMarkup(p.closed)}</p><p class="position-note">Earned rewards remain available on the Rewards tab.</p></article>`;
  const duration=Number((p.maturity-p.created)/DAY);
- return `<article class="position-card" data-position-id="${p.id}" data-phase="${phase}"><div class="position-heading"><div><p class="eyebrow">MORE FORGE POSITION</p><h4>MORE NFT #${p.id}</h4></div><span class="position-state">${status}</span></div>
- <div class="position-stats"><div><span>Principal now</span><div data-live-principal>${amount(principal)}</div></div><div><span>Power now</span><div data-live-power>${amount(power,'power')}</div></div></div>
- <dl class="position-dates"><div><dt>Original principal</dt><dd>${amount(p.principal)}</dd></div><div><dt>Lock duration</dt><dd>${duration.toLocaleString()} days</dd></div><div><dt>Maturity</dt><dd>${dateMarkup(p.maturity)}</dd></div><div><dt>Full withdrawal through</dt><dd>${dateMarkup(grace)}</dd></div><div><dt>Decay ends</dt><dd>${dateMarkup(end)}</dd></div>${closed?`<div><dt>Ended at</dt><dd>${dateMarkup(p.closed)}</dd></div>`:''}</dl>
- <div class="position-timeline"><div><span>Position timeline</span><strong data-live-progress>${progress}%</strong></div><div class="position-timeline-track"><span style="width:${progress}%"></span></div><div class="position-stages">${stages(phase)}</div><p class="position-countdown">${countdown}</p></div>
- ${closed?'<p class="position-note">This position has ended. Earned rewards remain claimable in the claims panel.</p>':`<div class="button-row"><button type="button" class="primary-button" data-withdraw="${p.id}" data-ready="${mature}" ${mature?'':'disabled'}>${principal===0n?'Close expired position':mature?'Review withdrawal':'Locked until maturity'}</button><button type="button" class="review-cancel" data-transfer="${p.id}">Transfer NFT</button></div><p class="position-note">Transferring this NFT transfers its principal and all unclaimed reward rights. Full principal is available for 7 days after maturity, then declines to zero over the next 7 days. Closing or finalizing requires a transaction.</p>`}</article>`;
+ return `<article class="position-card" data-position-id="${p.id}" data-phase="${phase}"><div class="position-heading"><div><p class="eyebrow">FORGE POSITION</p><h4>NFT #${p.id}</h4></div><span class="position-state">${status}</span></div>
+ <div class="position-stats"><div><span>Principal now</span><div data-live-principal>${amount(principal)}</div></div><div><span>Power now</span><div data-live-power>${amount(power,'power')}</div></div><div><span>Matures</span>${dateMarkup(p.maturity)}</div><div><span>Decay ends</span>${dateMarkup(end)}</div></div>
+ <div class="position-timeline"><div><span>Position timeline</span><strong data-live-progress>${progress}%</strong></div><div class="position-timeline-track"><span style="width:${progress}%"></span></div></div>
+ <div class="button-row"><button type="button" class="primary-button" data-withdraw="${p.id}" data-ready="${mature}" ${mature?'':'disabled'}>${principal===0n?'Close expired position':mature?'Review withdrawal':'Locked until maturity'}</button><button type="button" class="review-cancel" data-transfer="${p.id}">Transfer NFT</button></div>
+ <details class="position-withdrawal-details"><summary>Withdrawal details</summary><dl class="position-dates"><div><dt>Original principal</dt><dd>${amount(p.principal)}</dd></div><div><dt>Lock duration</dt><dd>${duration.toLocaleString()} days</dd></div><div><dt>Full withdrawal through</dt><dd>${dateMarkup(grace)}</dd></div></dl><p class="position-note">Full principal is available for 7 days after maturity, then declines to zero over the next 7 days. The amount returned uses the transaction’s block time. Closing requires a transaction. Transferring this NFT transfers its principal and unclaimed reward rights.</p></details></article>`;
 }
 // Update estimates in place so the live clock never replaces a focused action.
 export function updatePositionCard(card,p,now,busy=false){
  const state=positionState(p,now);
  card.dataset.phase=state.phase;
  card.querySelector('.position-state').textContent=state.status;
+ if(state.closed)return;
  card.querySelector('[data-live-principal]').innerHTML=amount(state.principal);
  card.querySelector('[data-live-power]').innerHTML=amount(state.power,'power');
  card.querySelector('[data-live-progress]').textContent=state.progress+'%';
  card.querySelector('.position-timeline-track>span').style.width=state.progress+'%';
- card.querySelector('.position-stages').innerHTML=stages(state.phase);
- card.querySelector('.position-countdown').textContent=state.countdown;
  const button=card.querySelector('[data-withdraw]');
  if(button){button.dataset.ready=String(state.mature);button.disabled=busy||!state.mature;button.textContent=state.principal===0n?'Close expired position':state.mature?'Review withdrawal':'Locked until maturity';}
 }
