@@ -1,3 +1,5 @@
 .forge-refresh .claim-card #claim-summary{background:none;border:0;border-radius:0;margin:22px 0 26px;padding:0;display:grid;gap:10px;min-width:0}
 .claim-reward-total{display:block;font-size:clamp(28px,3vw,42px);font-weight:750;line-height:1.25;letter-spacing:-.025em;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
 .claim-reward-usd{display:block;color:var(--ff-accent,#b4ff38);font-size:20px;font-weight:700;line-height:1.4}
+
+.forge-refresh .claim-card .claim-cycle-info{margin:14px 0 0;color:var(--ff-muted,#b6c1b4);max-width:58ch;line-height:1.6;font-size:14px}

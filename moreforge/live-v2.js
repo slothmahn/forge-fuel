@@ -157,7 +157,7 @@ async function preview(){
   if(id!==previewId||x!==ctx)return;
   x.preview={...v,fee};amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
   const p=x.feePolicy;
-  text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value.${p.bounds?' Minimum '+display(BigInt(p.min))+' '+x.n.unit+'; maximum '+display(BigInt(p.max))+' '+x.n.unit+'.':''} Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
+  text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value. Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
   if(x.forgeReady&&x.dataLoaded){
    const existingPower=x.positions.reduce((sum,p)=>sum+powerAt(p,x.now),0n);
