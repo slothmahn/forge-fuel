@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {claimTotalsMarkup} from '../../assets/claim-totals.js';
+const format=(amount,decimals)=>String(Number(amount)/10**decimals);
+const base={connected:true,complete:true,nativeAmount:1514000000000000n,bitcoinAmount:0n,nativeSymbol:'ETH',bitcoinSymbol:'cbBTC',format,usd:4.10};
+const single=claimTotalsMarkup(base);
+assert(single.includes('0.001514 ETH'));assert(single.includes('$4.10'));assert(!single.includes('cbBTC'));assert(!single.includes('claims available'));
+const both=claimTotalsMarkup({...base,bitcoinAmount:1000n,usd:12.1});assert(both.includes('+ 0.00001 cbBTC'));assert(both.includes('$12.10'));
+assert(claimTotalsMarkup({...base,nativeAmount:0n,bitcoinAmount:0n,usd:0}).includes('$0.00'));
+assert(claimTotalsMarkup({...base,usd:null}).includes('USD reference unavailable'));
+assert(claimTotalsMarkup({...base,complete:false}).includes('Checking rewards'));assert(!claimTotalsMarkup({...base,complete:false}).includes('$'));
+assert(claimTotalsMarkup({...base,connected:false}).includes('Connect wallet'));
+console.log('Claim totals display both assets accurately, omit zero assets, and distinguish loading, zero rewards, and unavailable USD.');
