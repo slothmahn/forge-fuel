@@ -6,8 +6,8 @@ export const routes={
   pls:{chainId:369,unit:'PLS',wrapped:'0xA1077a294dDE1B09bB078844df40758a5D0f9a27',more:'0xbEEf3bB9dA340EbdF0f5bae2E85368140d7D85D0',router:'0x165C3410fC91EF562C50559f7d2289fEbed552d9',pair:'0x3D3B080A1Ec1AFc121a27AE4cBad17A14E80f7B5'}
 };
 const keyType='tuple(address currency0,address currency1,uint24 fee,int24 tickSpacing,address hooks)';
-const quoterAbi=[`function quoteExactInputSingle(tuple(${keyType} poolKey,bool zeroForOne,uint128 exactAmount,bytes hookData)) returns(uint256 amountOut,uint256 gasEstimate)`];
-const v2=new Interface(['function getAmountsOut(uint256,address[]) view returns(uint256[])','function swapExactETHForTokens(uint256,address[],address,uint256) payable returns(uint256[])']);
+const quoterAbi=[`function quoteExactOutputSingle(tuple(${keyType} poolKey,bool zeroForOne,uint128 exactAmount,bytes hookData)) returns(uint256 amountIn,uint256 gasEstimate)`,`function quoteExactInputSingle(tuple(${keyType} poolKey,bool zeroForOne,uint128 exactAmount,bytes hookData)) returns(uint256 amountOut,uint256 gasEstimate)`];
+const v2=new Interface(['function getAmountsIn(uint256,address[]) view returns(uint256[])','function getAmountsOut(uint256,address[]) view returns(uint256[])','function swapExactETHForTokens(uint256,address[],address,uint256) payable returns(uint256[])']);
 const universal=new Interface(['function execute(bytes,bytes[],uint256) payable']);
 const abi=AbiCoder.defaultAbiCoder();
 function route(key){const r=routes[key];if(!r)throw Error('Buying MORE is available on Robinhood and PulseChain.');return r;}
@@ -17,6 +17,14 @@ export async function quotePurchase(key,reader,amount){
   const r=route(key);if(amount<=0n||key==='rh'&&amount>=2n**128n)throw Error('Enter a valid purchase amount.');
   if(key==='pls'){const router=new Contract(r.router,v2,reader);const amounts=await router.getAmountsOut(amount,[r.wrapped,r.more]);if(amounts[1]<=0n)throw Error('No MORE liquidity available.');return amounts[1];}
   const q=new Contract(r.quoter,quoterAbi,reader);const [out]=await q.quoteExactInputSingle.staticCall([poolKey(r),true,amount,'0x']);if(out<=0n)throw Error('No MORE liquidity available.');return out;
+}
+// Reverse quotes estimate cost; execution retains the reviewed exact-input swap.
+export async function quotePurchaseForOutput(key,reader,output){
+  const r=route(key);if(output<=0n||key==='rh'&&output>=2n**128n)throw Error('Enter a valid MORE amount.');
+  let amount;
+  if(key==='pls'){const router=new Contract(r.router,v2,reader);const amounts=await router.getAmountsIn(output,[r.wrapped,r.more]);amount=amounts[0];}
+  else{const q=new Contract(r.quoter,quoterAbi,reader);[amount]=await q.quoteExactOutputSingle.staticCall([poolKey(r),true,output,'0x']);}
+  if(amount<=0n)throw Error('No MORE liquidity available.');return amount;
 }
 export function purchaseTransaction(key,amount,min,recipient,deadline){
   const r=route(key);if(amount<=0n||min<=0n||!isAddress(recipient)||/^0x0{40}$/i.test(recipient)||!Number.isSafeInteger(deadline)||deadline<=0)throw Error('Invalid purchase.');

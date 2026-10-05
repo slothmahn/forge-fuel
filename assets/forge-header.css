@@ -120,3 +120,6 @@ body.more-forge-site #burn-overview>div{background:linear-gradient(110deg,#2b1d1
 #app.forge-refresh :is(#pools,#burns) :is(.pool-card h3,.burn-card-heading h3),body.more-forge-site :is(#pool-cards,#burn-cards) :is(.pool-card h3,.burn-heading h3){font-size:20px;line-height:1.25}
 
 body.fuel-pulsechain #app.forge-refresh #burns .burn-overview>div{background:linear-gradient(125deg,#211728,#181320);border-color:#ffffff26}
+
+/* USD references must not inherit the balance headline's tight tracking. */
+#app.forge-refresh #burns .burn-metrics [data-burn-usd],body.more-forge-site #burn-cards .usd-reference{display:block;font-size:12px;letter-spacing:normal;word-spacing:normal;line-height:1.6;margin-top:6px}

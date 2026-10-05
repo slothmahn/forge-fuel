@@ -1,7 +1,7 @@
 // Fit long decimal inputs without changing the value the user will submit.
 const canvas=document.createElement('canvas'),measure=canvas.getContext('2d');
 export function fitAmountInputs(){
- for(const input of document.querySelectorAll('.amount-field input, #buy-amount')){
+ for(const input of document.querySelectorAll('.amount-field input, #buy-amount, #buy-output')){
   if(!input.clientWidth)continue;
   input.style.removeProperty('font-size');
   const style=getComputedStyle(input),base=parseFloat(style.fontSize),space=input.clientWidth-parseFloat(style.paddingLeft)-parseFloat(style.paddingRight)-4;

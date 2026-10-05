@@ -72,3 +72,7 @@
 @media(min-width:960px){#panel-buy{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,520px);gap:32px 64px;max-width:1100px;margin:0 auto;align-items:start}#panel-buy[hidden]{display:none}#panel-buy .buy-grid{display:contents}#panel-buy .buy-hero{grid-column:1;grid-row:1;text-align:left;justify-content:flex-start;margin:24px 0 0}#panel-buy .buy-hero p{margin-left:0;margin-right:0}.buy-brand{align-items:flex-start;gap:20px}.buy-brand img{width:100px;height:100px}#panel-buy .buy-swap{grid-column:2;grid-row:1 / span 2}#panel-buy .buy-guide{grid-column:1;grid-row:2}}
 @media(max-width:600px){#panel-buy .buy-hero{margin-bottom:24px}.buy-brand{gap:10px}.buy-brand img{width:64px;height:64px}#panel-buy .buy-hero h2{font-size:36px;margin:14px 0}#panel-buy .buy-hero>div>p{font-size:13px;max-width:310px}#panel-buy .buy-swap{border-radius:21px}.buy-swap-heading h3{font-size:22px}#panel-buy .buy-card-kicker{font-size:8px;letter-spacing:.12em}}
 @media(max-width:360px){#panel-buy .buy-hero h2{font-size:31px}.buy-swap-heading h3{font-size:20px}.buy-settings summary{padding:8px;font-size:10px}}
+
+#panel-buy #buy-output{width:100%;padding:0;background:none;border:0;box-shadow:none;border-radius:0;font-family:inherit;font-weight:600;letter-spacing:normal}
+#panel-buy #buy-output:focus{outline:0}
+#panel-buy .buy-receive>label{color:#e5b682}
