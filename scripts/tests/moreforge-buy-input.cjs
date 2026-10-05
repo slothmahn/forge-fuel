@@ -25,7 +25,7 @@ const {chromium}=require('/Users/codylane/.cache/codex-runtimes/codex-primary-ru
   for(const input of ['.003','0.003']){
    await page.locator('#buy-amount').fill(input);
    await page.waitForFunction(()=>document.querySelector('#buy-status').textContent.startsWith('Quote ready'));
-   assert.match(await page.locator('#buy-output').innerText(),/^≈ 3\s*$/);
+   assert.equal(await page.locator('#buy-output').inputValue(),'3');
    assert.equal(await page.evaluate(()=>fixture.calls.at(-1).toString()),'3000000000000000');
    assert.equal(await page.evaluate(()=>fixture.tx.value.toString()),'3000000000000000');
    assert(!(await page.locator('#buy-submit').isDisabled()));
@@ -36,7 +36,7 @@ const {chromium}=require('/Users/codylane/.cache/codex-runtimes/codex-primary-ru
  }
  for(const input of ['.','0','.0000000000000000001','-1','1e-3']){
   await page.locator('#buy-amount').fill(input);await page.waitForTimeout(500);
-  assert(await page.locator('#buy-submit').isDisabled());assert.equal(await page.locator('#buy-output').innerText(),'—');
+  assert(await page.locator('#buy-submit').isDisabled());assert.equal(await page.locator('#buy-output').inputValue(),'');
  }
  assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+1));
  console.log('PASS: mobile .003 and 0.003 estimates, exact spend and review on both chains; invalid/zero/excess precision blocked; no wallet transactions.');
