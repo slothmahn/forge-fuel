@@ -129,5 +129,18 @@ h1,h2,h3,.pool-value,.pool-usd,.wallet-strip strong{font-family:"Space Grotesk",
 
 .compact-stake[data-phase=ended] .progress-track span{background:#87929d}.compact-stake[data-phase=ended] .status{color:#a3adb9}
 
+/* Match the payout estimate hierarchy used by the live Forge pages. */
+.scenario-estimate{
+  border-color:color-mix(in srgb,var(--pink) 30%,transparent);
+  background:radial-gradient(ellipse at 100% 0,#62e6a711,transparent 70%),#16211c;
+}
+.scenario-estimate>h4,
+.scenario-estimate .term-columns>div>small:last-child,
+.scenario-estimate .term-total>strong{color:var(--pink)}
+.scenario-estimate .term-columns>div,
+.scenario-estimate .term-total{border-top-color:color-mix(in srgb,var(--pink) 22%,transparent)}
+.scenario-estimate .term-columns>div>strong{color:var(--text)}
+.scenario-estimate .term-columns>div>small:last-child{font-weight:700}
+
 /* One place for rewards and stake management. */
 .stake-filters{margin-bottom:18px;gap:8px}.stake-filters button{flex:1;font-size:11px;padding:10px 12px}.tabs button{flex:1 1 0}
