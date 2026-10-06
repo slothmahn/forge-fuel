@@ -1,0 +1,8 @@
+{
+  "sourceMarket": "https://dexscreener.com/avalanche/0x5ca009013f6b898d134b6798b336a4592f3b4af2",
+  "logos": {
+    "avax-token.webp": "https://cdn.dexscreener.com/cms/chain/avalanche.png",
+    "btcb-token.png": "https://coin-images.coingecko.com/coins/images/26115/large/BTC.b.png?1772210755"
+  },
+  "treatment": "Original files, no color filters"
+}

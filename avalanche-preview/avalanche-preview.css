@@ -198,3 +198,6 @@ body .forge-glow{background:radial-gradient(ellipse,#ff639d59,#f94d921a 45%,tran
 .avax-price-strip>p{flex-basis:100%;margin:0;font-size:9px;line-height:1.5;color:var(--muted)}
 .avax-price-strip::after{content:none}
 @media(max-width:760px){.avax-price-strip{gap:12px 20px}.avax-price-strip>a,.avax-price-strip>span,.avax-price-strip strong{font-size:11px}}
+
+/* Original token images in the orbit badges; retain their native colors. */
+.hero-art img.orbit-token-logo{width:22px;height:22px;object-fit:contain;display:block;flex-shrink:0;border-radius:50%;filter:none;transform:none}
