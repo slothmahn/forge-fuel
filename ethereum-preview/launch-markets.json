@@ -1,24 +1,27 @@
 {
   "chainId": 1,
-  "status": "design-preview",
+  "status": "design-preview-undeployed",
   "more": {
     "marketUrl": "https://dexscreener.com/ethereum/0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a",
     "poolId": "0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a",
     "dexVersion": "Uniswap V4",
-    "routeStatus": "pending-onchain-verification"
+    "routeStatus": "validated-on-mainnet-fork"
   },
   "wbtc": {
     "marketUrl": "https://dexscreener.com/ethereum/0x4585fe77225b41b697c938b018e2ac67ac5a20c0",
     "poolAddress": "0x4585fe77225b41b697c938b018e2ac67ac5a20c0",
     "dexVersion": "Uniswap V3",
-    "routeStatus": "pending-onchain-verification"
+    "routeStatus": "validated-on-mainnet-fork",
+    "fee": 500
   },
   "fuel": {
-    "status": "awaiting-contract-and-pool",
-    "expectedDate": "2026-10-05"
+    "status": "confirmed-on-mainnet",
+    "address": "0x465B7E1c2BcC86bc6C2d8AD786e7d1359C3E3547",
+    "poolAddress": "0x917529659D0c2aa333bdde99e6534375BA217399",
+    "fee": 10000,
+    "marketUrl": "https://dexscreener.com/ethereum/0x917529659d0c2aa333bdde99e6534375ba217399",
+    "routeStatus": "validated-on-mainnet-fork"
   },
-  "pamp": {
-    "status": "awaiting-contract-and-pool",
-    "tentativeDate": "2026-10-06"
-  }
+  "pampEnabled": false,
+  "bitcoinEligibility": "Foundry NFTs in their mint cycle only"
 }
