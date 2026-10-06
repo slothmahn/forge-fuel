@@ -1,5 +1,5 @@
 import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../assets/owner-transition.js?v=owner-transition-106';
-import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=99';
+import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=chain-switch-132';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=position-details-below-113';
