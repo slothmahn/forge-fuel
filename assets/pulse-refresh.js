@@ -2,7 +2,7 @@ import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
 import './chain-navigation.js?v=chain-switch-132';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=position-details-below-113';
+import './pulse-mainnet.js?v=whitepapers-133';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
@@ -208,7 +208,7 @@ if (app) {
 
 // The root asset base must not send tab links back to the Robinhood home page.
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
-const paperLink=document.querySelector('.top-actions .litepaper-link:not(.more-forge-link):not(.telegram-link)');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
+const paperLink=document.querySelector('.top-actions .litepaper-link:not(.more-forge-link):not(.telegram-link)');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.1.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
 
 
 integrateRewardNfts();

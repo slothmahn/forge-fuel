@@ -104,7 +104,7 @@ r=r.replace('BUILT AROUND FUEL.','A NEW CHAIN. THE SAME FORGE.').replace('◇ $P
 r+='\n'+r'''
 // The root asset base must not send tab links back to the Robinhood home page.
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
-const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
+const paperLink=document.querySelector('.litepaper-link');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.1.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
 
 '''
 (root/'assets/pulse-refresh.js').write_text(r)

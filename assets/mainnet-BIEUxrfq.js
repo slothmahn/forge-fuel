@@ -13,7 +13,7 @@ var e=Object.defineProperty,t=(t,n)=>{let r={};for(var i in t)e(r,i,{get:t[i],en
     <div id="app">
       <header class="topbar">
         <a class="brand" href="#top" aria-label="Fuel Forge home"><span class="brand-wordmark-wrap"><img class="brand-wordmark-art" src="./images/forge-wordmark-isolated.png" alt="Fuel Forge" width="2172" height="724" /></span></a>
-        <div class="top-actions"><a class="litepaper-link" href="./Fuel_Forge_White_Paper_Mainnet_V1.0.pdf" target="_blank" rel="noopener noreferrer" title="Read Fuel Forge Mainnet White Paper">White Paper ↗</a><span id="network-pill" class="pill">Robinhood testnet</span><button id="connect" class="button button-primary">Connect test wallet</button></div>
+        <div class="top-actions"><a class="litepaper-link" href="./Fuel_Forge_White_Paper_Mainnet_V1.1.pdf" target="_blank" rel="noopener noreferrer" title="Read Fuel Forge Mainnet White Paper">White Paper ↗</a><span id="network-pill" class="pill">Robinhood testnet</span><button id="connect" class="button button-primary">Connect test wallet</button></div>
       </header>
       <div id="wallet-connect-status" class="wallet-connect-status" role="status" hidden></div>
 
