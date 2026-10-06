@@ -2,7 +2,7 @@ import {BrowserProvider,Contract,getCreateAddress,formatEther} from '../moreforg
 import {feePlan} from './fee-plan.js';
 const config=await fetch('./launch-package.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('Launch package unavailable.');return r.json()});
 const $=s=>document.querySelector(s),same=(a,b)=>String(a).toLowerCase()===String(b).toLowerCase();
-const owner=config.deployerWallet, key='ethereum-fuel-launch:'+config.approvedBatchHash, wallets=[];
+const owner=config.deployerWallet, key='ethereum-fuel-smaller-launch:'+config.approvedBatchHash, wallets=[];
 let active=null,busy=false,ready=null,record={chainId:1,wallet:owner,helper:config.helper,transactions:[]};
 try{const saved=JSON.parse(localStorage.getItem(key)||'null');if(saved&&same(saved.wallet,owner)&&saved.chainId===1)record=saved;}catch{}
 $('#wallet-address').textContent='Deployer / drip manager / development: '+owner;
@@ -17,12 +17,12 @@ function reset(){ready=null;$('#first').disabled=true;$('#second').disabled=true
 $('#wallet-choice').onchange=()=>{active=null;reset();$('#status').textContent='Wallet changed. Connect and check again.'};
 function message(e){return e.shortMessage||e.message||String(e)}
 async function validate(){
- if(config.supersededBy)throw Error('The smaller package has been selected. Open '+config.supersededBy);
  if(!active)throw Error('Connect the deployment wallet first.');
  const provider=new BrowserProvider(active), network=await provider.getNetwork();if(network.chainId!==1n)throw Error('Switch your wallet to Ethereum Mainnet.');
  const signer=await provider.getSigner(),address=await signer.getAddress();if(!same(address,owner))throw Error('Connect the approved deployment wallet: '+owner);
  if(!same(getCreateAddress({from:owner,nonce:config.walletNonce}),config.helper))throw Error('Launch package address does not match its wallet nonce.');
  const helper=new Contract(config.helper,['function approvedBatchHash() view returns(bytes32)','function deployed() view returns(bool)'],provider);
+ if(!same(await provider.getCode(config.addresses.fuelOracle),config.reusedFuelOracleRuntime))throw Error('Existing FUEL oracle does not match the reviewed deployment.');
  const code=await provider.getCode(config.helper);let stage=1;
  if(code!=='0x'){if((await helper.approvedBatchHash()).toLowerCase()!==config.approvedBatchHash.toLowerCase())throw Error('An existing helper has a different launch package. Return to the chat.');stage=await helper.deployed()?3:2;}
  const nonce=await provider.getTransactionCount(owner,'pending');if(stage===1&&nonce!==config.walletNonce)throw Error('Wallet nonce changed. Return to the chat for refreshed launch addresses.');
@@ -30,7 +30,7 @@ async function validate(){
 }
 async function quotesReady(provider){
  // User approved October 6: deployment uses the entry quote. Burn guards remain on-chain.
- const fuel=new Contract(config.contracts[0].address,['function quoteFuelInEth(uint256) view returns(uint256)'],provider);
+ const fuel=new Contract(config.addresses.fuelOracle,['function quoteFuelInEth(uint256) view returns(uint256)'],provider);
  if(await fuel.quoteFuelInEth(1000000000000000000n)<=0n)throw Error('FUEL entry fee quote is unavailable.');
  const estimate=await provider.estimateGas({from:owner,to:config.helper,data:config.transactionTwo.data});
  if(estimate>BigInt(config.gasLimits.second))throw Error('Final deployment exceeds the reviewed gas limit. Return to the chat.');
@@ -48,13 +48,13 @@ async function check(){
  ready={...x,fees:{maxFeePerGas:f.maxFeePerGas,maxPriorityFeePerGas:f.maxPriorityFeePerGas}};
 }
 async function verify(provider){
- for(const r of config.contracts)if(await provider.getCode(r.address)==='0x')throw Error('A protocol contract is missing code: '+r.label);
- const by=k=>config.contracts.find(r=>r.label===k).address;
+ for(const r of config.contracts){const code=await provider.getCode(r.address);if(code==='0x')throw Error('A protocol contract is missing code: '+r.label);if(r.expectedRuntimeCode&&!same(code,r.expectedRuntimeCode))throw Error('Shared implementation or fixed copy differs: '+r.label);}
+ const by=k=>config.addresses[k];
  for(const k of ['fuelBurner','moreBurner']){
   const c=new Contract(by(k),['function manager() view returns(address)','function maxSwapEth() view returns(uint256)','function maxSlippageBps() view returns(uint256)','function dailyPoolBps() view returns(uint256)','function launchTime() view returns(uint256)'],provider);
   if(!same(await c.manager(),owner)||await c.maxSwapEth()!==1000000000000000000n||await c.maxSlippageBps()!==1000n||await c.dailyPoolBps()!==100n||await c.launchTime()!==BigInt(config.launchTime))throw Error('A burn engine setting differs from the approved package.');
  }
- for(let i=0;i<4;i++){const c=new Contract(config.contracts[i].address,['function minimumLiquidity() view returns(uint128)'],provider);if(await c.minimumLiquidity()!==1n)throw Error('Quote liquidity policy differs.');}
+ for(const label of ['fuelOracle','bitcoinOracle','moreAnchor','moreOracle']){const c=new Contract(by(label),['function minimumLiquidity() view returns(uint128)'],provider);if(await c.minimumLiquidity()!==1n)throw Error('Quote liquidity policy differs.');}
  const p=new Contract(by('position'),['function feeReceiver() view returns(address)','function launchTime() view returns(uint256)'],provider);if(!same(await p.feeReceiver(),by('feeRouter'))||await p.launchTime()!==BigInt(config.launchTime))throw Error('Stake wiring or timing differs.');
 }
 async function action(stage){if(busy)return;busy=true;const prepared=ready;reset();try{

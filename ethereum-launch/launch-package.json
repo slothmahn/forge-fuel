@@ -199,5 +199,6 @@
     "first": 4652000,
     "second": 16777216
   },
-  "historyReadinessRequired": true
+  "historyReadinessRequired": true,
+  "supersededBy": "https://thefuelforge.com/ethereum-launch-smaller/"
 }
