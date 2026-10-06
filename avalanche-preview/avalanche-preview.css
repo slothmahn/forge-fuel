@@ -187,6 +187,6 @@ body .hero-art img.forge-symbol{filter:hue-rotate(220deg) saturate(1.35)!importa
 .burn-total>small,.burn-flow>b,.burn-ready{color:var(--pink)}
 .burn-emblem,.foundry-estimate>img{filter:none}
 
-/* Avalanche hero mark: red metal and red glow. */
-body .hero-art img.forge-symbol{filter:grayscale(1) sepia(1) hue-rotate(315deg) saturate(8) brightness(.85) drop-shadow(0 0 12px #f52f4940)!important}
-body .forge-glow{background:radial-gradient(circle,#f52f4952,transparent 72%)}
+/* Preserve neutral metallic texture; shift the colored edge glow to AVAX red. */
+body .hero-art img.forge-symbol{filter:hue-rotate(210deg) saturate(3) drop-shadow(0 0 12px #e8414240)!important}
+body .forge-glow{background:radial-gradient(ellipse,#e8414259,#f52f491a 45%,transparent 72%)}
