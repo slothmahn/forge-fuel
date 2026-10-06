@@ -1,5 +1,5 @@
 import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
-import './chain-navigation.js?v=wallet-switch-99';
+import './chain-navigation.js?v=ethereum-live-130';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
 import './pulse-mainnet.js?v=position-details-below-113';
