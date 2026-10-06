@@ -185,7 +185,7 @@ body .hero-art img.forge-symbol{filter:hue-rotate(220deg) saturate(1.35)!importa
 /* Apply the AVAX palette to inherited readiness indicators and token artwork. */
 .burn-card:nth-child(1),.burn-card:nth-child(2){background:radial-gradient(ellipse at 100% 0%,color-mix(in srgb,var(--accent) 14%,transparent),transparent 65%),linear-gradient(135deg,#190d14,#0e090d)}
 .burn-total>small,.burn-flow>b,.burn-ready{color:var(--pink)}
-.burn-emblem,.foundry-estimate>img{filter:hue-rotate(205deg) saturate(.85)}
+.burn-emblem,.foundry-estimate>img{filter:none}
 
 /* Avalanche hero mark: red metal and red glow. */
 body .hero-art img.forge-symbol{filter:grayscale(1) sepia(1) hue-rotate(315deg) saturate(8) brightness(.85) drop-shadow(0 0 12px #f52f4940)!important}
