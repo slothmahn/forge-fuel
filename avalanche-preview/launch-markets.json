@@ -1,0 +1,15 @@
+{
+  "chainId": 43114,
+  "status": "design-preview",
+  "fuel": {
+    "status": "awaiting-official-market-link"
+  },
+  "more": {
+    "status": "awaiting-route-confirmation"
+  },
+  "bitcoin": {
+    "status": "awaiting-token-and-route-confirmation"
+  },
+  "pampEnabled": false,
+  "deployedContracts": {}
+}
