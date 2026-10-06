@@ -140,7 +140,7 @@ const chainMenu = $('.chain-menu');
 document.addEventListener('click', event => { if (!chainMenu.contains(event.target)) chainMenu.open = false; });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && chainMenu.open) { chainMenu.open = false; chainMenu.querySelector('summary').focus(); } });
 
-function updateFoundryPreview() { window.ethereumQuote?.(); }
+function updateFoundryPreview() { const count=Number($('#foundry-count').value)||1;$('#foundry-form button[type=submit]').textContent=`Mint ${fmt(count,0)} Foundry NFT${count===1?'':'s'}`;window.ethereumQuote?.(); }
 $('#foundry-count').addEventListener('input',()=>{cleanInput($('#foundry-count'),true);updateFoundryPreview();});
 $('#foundry-count').addEventListener('blur',()=>{ $('#foundry-count').value=Math.max(1,Math.min(32,Math.floor(Number($('#foundry-count').value)||1)));updateFoundryPreview();});
 function switchBuildProduct(product) {

@@ -62,6 +62,7 @@ async function load(){
  for(const d of $$('dialog[open]'))d.close();clearReferences(document);pending();updateLinks();buy.update();disable();
  const n=networks[key],old=legacy[key],m=manifests[key];
  text('#hero-native','$'+(n?.unit||'ETH'));text('#hero-bitcoin','$'+(n?.btc||'BTC'));
+ $('#hero-native-logo').src=key==='pls'?'assets/pulsechain-token.svg':'assets/ethereum-token.svg';$('#hero-bitcoin-logo').src=key==='rh'?'../assets/token-logos/cbbtc.svg':'../assets/token-logos/wbtc.png';
  window.dispatchEvent(new Event('more-chain-change'));
  if(!n||!old||!m){status('This chain is planned for a future deployment.');await preview();return;}
  const r=new JsonRpcProvider(n.rpc,n.id,{staticNetwork:true});
