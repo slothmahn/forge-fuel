@@ -74,7 +74,7 @@ $('.builder-grid').insertBefore(scenario,$('.power-card'));
 $('.builder-grid').classList.add('wide-forge-layout');
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 2700, sampleBtcUsd = 83000;
-  const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd},{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}];
+  const balances = foundry ? [{days:288,balance:.032,unit:'wBTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'ETH',usd:sampleEthUsd},{days:28,balance:1.2,unit:'ETH',usd:sampleEthUsd},{days:88,balance:2.4,unit:'ETH',usd:sampleEthUsd}];
   const rows = balances.map(p=>({...p,payout:p.balance*.9975*share}));
   payoutRows.innerHTML=rows.map(p=>`<div><b>${p.days} Day</b><div><strong>≈ ${fmt(p.payout,p.unit==='ETH'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*p.usd)} USD</small></div></div>`).join('');
   $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
@@ -122,7 +122,7 @@ $('#forge-form').addEventListener('submit', event => {
   event.preventDefault(); clampFuel(); $('#term').value = formValues().term; updatePreview();
   const { principal, burn, term } = formValues();
   if (principal <= 0) { notify('Enter some principal FUEL to preview a position.'); $('#principal').focus(); return; }
-  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The entry fee is 100% of the quoted principal value, with no minimum or maximum. Token contracts and routes are pending. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
+  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The entry fee is 100% of the quoted principal value, with no minimum or maximum. Regular stakes earn ETH rewards. WBTC requires a separate Foundry NFT. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
 });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
@@ -137,11 +137,11 @@ const pools = [
   {days:8, name:'ETH reward pool', balance:.84, unit:'ETH', elapsed:62, left:'3d 1h left', share:1.25},
   {days:28, name:'ETH reward pool', balance:1.2, unit:'ETH', elapsed:43, left:'15d 23h left', share:.84},
   {days:88, name:'ETH reward pool', balance:2.4, unit:'ETH', elapsed:26, left:'65d 3h left', share:.62},
-  {days:288, name:'Bitcoin reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:.8}
+  {days:288, name:'Foundry WBTC reward pool', balance:.032, unit:'wBTC', elapsed:18, left:'236d 4h left', share:100/13}
 ];
 $('#pool-grid').innerHTML = pools.map(p => {
   const rate=p.unit==='ETH'?2700:83000, payout=p.balance*.9975*p.share/100;
-  return `<article class="card pool-card"><div class="pool-top"><span>CYCLE 1</span><span class="pool-live">PREVIEW · ETHEREUM</span></div><h3>${p.days}-Day ${p.unit==='ETH'?'Pool':'Bitcoin Pool'}</h3><div class="pool-value">${fmt(p.balance,8)} <small>${p.unit}</small></div><div class="pool-usd">≈ $${fmt(p.balance*rate,2)} USD reference</div><div class="pool-row"><span>Closes</span><strong>${p.left}</strong></div><div class="pool-row"><span>Your estimated share</span><strong>${p.share.toFixed(2)}%</strong></div><div class="pool-row"><span>Estimated payout</span><strong>${fmt(payout,p.unit==='ETH'?6:8)} ${p.unit}<small>≈ $${fmt(payout*rate,2)} USD reference</small></strong></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-foot">${p.elapsed.toFixed(2)}% of cycle elapsed · estimate updates when refreshed</div></article>`;
+  return `<article class="card pool-card"><div class="pool-top"><span>CYCLE 1</span><span class="pool-live">PREVIEW · ETHEREUM</span></div><h3>${p.days}-Day ${p.unit==='ETH'?'Pool':'Foundry WBTC Pool'}</h3><div class="pool-value">${fmt(p.balance,8)} <small>${p.unit}</small></div><div class="pool-usd">≈ $${fmt(p.balance*rate,2)} USD reference</div><div class="pool-row"><span>Closes</span><strong>${p.left}</strong></div><div class="pool-row"><span>Your estimated share</span><strong>${p.share.toFixed(2)}%</strong></div><div class="pool-row"><span>Estimated payout</span><strong>${fmt(payout,p.unit==='ETH'?6:8)} ${p.unit}<small>≈ $${fmt(payout*rate,2)} USD reference</small></strong></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-foot">${p.elapsed.toFixed(2)}% of cycle elapsed · estimate updates when refreshed</div></article>`;
 }).join('');
 const burns = [
   {symbol:'FUEL',image:'fuel-token.jpg',share:15,drip:1,balance:.28,total:82400000},
@@ -192,3 +192,16 @@ if (CSS.supports('offset-path', 'path("M 0 0 L 1 1")')) {
 const chainMenu = $('.chain-menu');
 document.addEventListener('click', event => { if (!chainMenu.contains(event.target)) chainMenu.open = false; });
 document.addEventListener('keydown', event => { if (event.key === 'Escape' && chainMenu.open) { chainMenu.open = false; chainMenu.querySelector('summary').focus(); } });
+
+function updateFoundryPreview() {
+  const count=Math.max(1,Math.min(32,Math.floor(Number($('#foundry-count').value)||1)));
+  const fee=count*.05, share=count/(12+count), pool=.032+fee*.99*2700/83000, reward=pool*.9975*share;
+  $('#foundry-burn').textContent=`${fmt(count*100000000,0)} FUEL`;
+  $('#foundry-fee').textContent=`${fmt(fee,6)} ETH · ≈ $${fmt(fee*2700)} USD reference`;
+  $('#foundry-share').textContent=`${fmt(share*100)}% · ${count} of ${12+count} NFTs`;
+  $('#foundry-reward').textContent=`${fmt(reward,8)} WBTC · ≈ $${fmt(reward*83000)} USD reference`;
+}
+$('#foundry-count').addEventListener('input',()=>{cleanInput($('#foundry-count'),true);updateFoundryPreview();});
+$('#foundry-count').addEventListener('blur',()=>{ $('#foundry-count').value=Math.max(1,Math.min(32,Math.floor(Number($('#foundry-count').value)||1)));updateFoundryPreview();});
+$('#foundry-form').addEventListener('submit',event=>{event.preventDefault();updateFoundryPreview();showModal('Foundry mint preview',`${$('#foundry-burn').textContent} permanently burned.\n${$('#foundry-fee').textContent} (illustrative fee).\n\nEach Foundry NFT earns an equal WBTC share in its mint cycle only. 99% of its ETH mint fee buys WBTC and 1% goes to development. This is sample data, not a quote; no wallet request is made.`);});
+updateFoundryPreview();
