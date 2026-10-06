@@ -1,5 +1,5 @@
 import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
-import './chain-navigation.js?v=ethereum-live-130';
+import './chain-navigation.js?v=avalanche-live-15';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
 import './mainnet-white-paper-v1.js?v=priority-loading-122';
 // Some mobile browsers apply a saved position or URL fragment after load.

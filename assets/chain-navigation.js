@@ -1,7 +1,7 @@
 import {switchWalletChain} from './wallet-chain-switch.js?v=99';
 import {findWalletProvider} from './wallet-session.js?v=wallet-session-95';
 // Shared navigation for the two live chain experiences.
-const chains = [{id:4663n,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://robinhoodchain.blockscout.com',path:'/'},{id:369n,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com',path:'/pulsechain/'},{id:1n,name:'Ethereum Mainnet',unit:'ETH',rpc:'https://ethereum-rpc.publicnode.com',explorer:'https://etherscan.io',path:'/ethereum/'}];
+const chains = [{id:4663n,name:'Robinhood Chain',unit:'ETH',rpc:'https://rpc.mainnet.chain.robinhood.com/',explorer:'https://robinhoodchain.blockscout.com',path:'/'},{id:369n,name:'PulseChain',unit:'PLS',rpc:'https://rpc.pulsechain.com',explorer:'https://scan.pulsechain.com',path:'/pulsechain/'},{id:1n,name:'Ethereum Mainnet',unit:'ETH',rpc:'https://ethereum-rpc.publicnode.com',explorer:'https://etherscan.io',path:'/ethereum/'},{id:43114n,name:'Avalanche',unit:'AVAX',rpc:'https://api.avax.network/ext/bc/C/rpc',explorer:'https://snowtrace.io',path:'/avalanche/'}];
 const current = location.pathname.startsWith('/pulsechain/') ? 369n : 4663n;
 function routeChain(value) {
   if(window.forgeManualChainSwitch)return true;
