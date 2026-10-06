@@ -1,6 +1,6 @@
 import {loadFuelMarketPrices} from '../assets/fuel-market-prices.js';
 // Same shared loader as the live Fuel Forge sites. Market prices never set fees.
-const pairs={fuel:'0x2431dfc276af9c5c3bb5a091d2be19cf518e2467',bitcoin:'0x5ca009013f6b898d134b6798b336a4592f3b4af2'};
+const pairs={more:'0xce876Ac86E818F8e92ddf422829Dec671a7e7d55',fuel:'0x2431dfc276af9c5c3bb5a091d2be19cf518e2467',bitcoin:'0x5ca009013f6b898d134b6798b336a4592f3b4af2'};
 const price=n=>n>0?'$'+new Intl.NumberFormat('en-US',{minimumFractionDigits:n>=1?2:0,maximumFractionDigits:n>=1?2:10}).format(n):'Unavailable';
 let pending;
 function refresh(){if(pending)return pending;pending=loadFuelMarketPrices({chain:'avalanche',pairs,onUpdate(quotes,state){

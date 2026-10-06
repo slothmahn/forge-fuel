@@ -12,7 +12,15 @@
     "status": "token and pool checked on chain; execution adapter pending"
   },
   "more": {
-    "status": "awaiting-route-confirmation"
+    "token": "0xb2722d5f1b8F3E19bf026c62C47C1C7BC1CDB04E",
+    "pool": "0xce876Ac86E818F8e92ddf422829Dec671a7e7d55",
+    "decimals": 18,
+    "dex": "Uniswap V3",
+    "fee": 10000,
+    "factory": "0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD",
+    "router": "0xbb00FF08d01D300023C629E8fFfFcb65A5a578cE",
+    "marketUrl": "https://dexscreener.com/avalanche/0xce876Ac86E818F8e92ddf422829Dec671a7e7d55",
+    "status": "Token/pool/factory checked on chain; integrated route tests running"
   },
   "bitcoin": {
     "token": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
