@@ -1,0 +1,5 @@
+/* Preserve the original token artwork; only the surrounding badge follows the chain theme. */
+#app.forge-refresh .ff-token{display:inline-flex;align-items:center;gap:9px}
+#app.forge-refresh .ff-art .ff-token img.orbit-token-logo,
+.hero-art .orbit-tag img.orbit-token-logo{position:static;width:24px;height:24px;min-width:24px;object-fit:contain;transform:none;filter:none!important;opacity:1;flex:0 0 24px;border-radius:0;animation:none}
+@media(max-width:760px){#app.forge-refresh .ff-art .ff-token img.orbit-token-logo,.hero-art .orbit-tag img.orbit-token-logo{width:20px;height:20px;min-width:20px;flex-basis:20px}}
