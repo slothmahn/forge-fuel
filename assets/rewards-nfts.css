@@ -1,0 +1,15 @@
+#app.forge-refresh .reward-wallet-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px;align-items:start}
+#app.forge-refresh .reward-wallet-layout>.claim-card{min-width:0;margin:0;max-width:none;width:100%}
+#app.forge-refresh .reward-wallet-nfts.nft-layout{display:flex;flex-direction:column;gap:24px;padding:0;min-width:0}
+#app.forge-refresh .reward-wallet-nfts>.section{margin:0;padding:24px;width:100%;min-width:0;border:1px solid var(--ff-line,#ffffff20);border-radius:20px;background:var(--ff-panel,#ffffff03)}
+#app.forge-refresh .reward-wallet-nfts .section-heading{display:block;margin-bottom:20px}
+#app.forge-refresh .reward-wallet-nfts .section-heading>p{margin-top:10px;line-height:1.6}
+#app.forge-refresh .reward-wallet-nfts .section-heading h2{font-size:24px}
+#app.forge-refresh .reward-wallet-nfts .foundry-collection-card{display:block;background:none;border:0;padding:0}
+#app.forge-refresh .reward-wallet-nfts .foundry-collection-art{display:none}
+#app.forge-refresh .reward-wallet-nfts .foundry-collection-side{min-width:0}
+#app.forge-refresh .reward-wallet-nfts .compact-asset-list{max-height:480px;overflow:auto}
+#app.forge-refresh .reward-wallet-nfts .asset-actions{flex-wrap:wrap}
+#app.forge-refresh .reward-wallet-nfts .transfer-field{min-width:0;flex:1 1 100%}
+#app.forge-refresh .reward-wallet-nfts .transfer-field input{width:100%;min-width:0}
+@media(max-width:900px){#app.forge-refresh .reward-wallet-layout{grid-template-columns:1fr}#app.forge-refresh .reward-wallet-nfts>.section{padding:20px}}

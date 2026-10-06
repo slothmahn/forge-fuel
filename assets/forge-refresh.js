@@ -1,3 +1,4 @@
+import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
 import './chain-navigation.js?v=wallet-switch-99';
 // Presentation entry. Wallet, public reads, and transactions live in the application module below.
 import './mainnet-white-paper-v1.js?v=priority-loading-122';
@@ -182,3 +183,5 @@ if (app) {
     else { window.addEventListener('hashchange', scroll, {once:true}); location.hash = 'start'; }
   });
 }
+
+integrateRewardNfts();

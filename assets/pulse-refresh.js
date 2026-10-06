@@ -1,3 +1,4 @@
+import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
 import './chain-navigation.js?v=wallet-switch-99';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
@@ -209,3 +210,5 @@ if (app) {
 for(const anchor of document.querySelectorAll('a[href^="#"]'))anchor.href=location.pathname+location.search+anchor.getAttribute('href');
 const paperLink=document.querySelector('.top-actions .litepaper-link:not(.more-forge-link):not(.telegram-link)');if(paperLink){paperLink.textContent='White Paper ↗';paperLink.href='./Fuel_Forge_White_Paper_PulseChain_V1.0.pdf';paperLink.title='Read the Fuel Forge PulseChain White Paper';}
 
+
+integrateRewardNfts();
