@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow"><meta name="theme-color" content="#090b0d"><title>Fuel Forge · Avalanche design preview</title>
-<link rel="stylesheet" href="avalanche-preview.css?v=avalanche-metal-red-glow-10">
+<link rel="stylesheet" href="avalanche-preview.css?v=avalanche-price-strip-11">
 </head>
 <body>
 <div class="ambient" aria-hidden="true"></div>
@@ -13,7 +13,7 @@
 </header>
 <main class="wrap">
   <div class="preview-notice"><span class="notice-label">DESIGN PREVIEW</span><span>Avalanche preview · Sample balances. Contracts are not deployed. FUEL and BTC.b markets selected. Swap routes and final launch settings are being tested.</span></div>
-  <div class="market-readiness" aria-label="Avalanche market readiness"><a href="https://dexscreener.com/avalanche/0x2431dfc276af9c5c3bb5a091d2be19cf518e2467" target="_blank" rel="noopener">FUEL <small>View market ↗</small></a><span>MORE <small>Route pending</small></span><a href="https://dexscreener.com/avalanche/0x5ca009013f6b898d134b6798b336a4592f3b4af2" target="_blank" rel="noopener">BTC.b <small>View market ↗</small></a></div>
+  <div class="market-readiness avax-price-strip" aria-label="Avalanche market references"><a href="https://dexscreener.com/avalanche/0x2431dfc276af9c5c3bb5a091d2be19cf518e2467" target="_blank" rel="noopener">FUEL <strong id="avax-fuel-price">Loading…</strong></a><span>MORE <strong>Route pending</strong></span><span>AVAX <strong id="avax-native-price">Loading…</strong></span><a href="https://dexscreener.com/avalanche/0x5ca009013f6b898d134b6798b336a4592f3b4af2" target="_blank" rel="noopener">BTC.b <strong id="avax-bitcoin-price">Loading…</strong></a><p id="avax-price-status">Refreshing market references… These prices do not set on-chain fees.</p><p class="sample-price-note">Balances and payout estimates below remain illustrative preview data.</p></div>
   <nav class="tabs" role="tablist" aria-label="Dashboard">
     <button role="tab" aria-selected="true" aria-controls="panel-build" id="tab-build" data-tab="build"><svg viewBox="0 0 24 24"><path d="m14 3-9 11h6l-1 7 9-12h-6z"/></svg><span>Build</span></button>
     <button role="tab" aria-selected="false" aria-controls="panel-pools" id="tab-pools" tabindex="-1" data-tab="pools"><svg viewBox="0 0 24 24"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v5H4zM14 15h6v5h-6z"/></svg><span class="desktop-text">Payout Pools</span><span class="mobile-text">Pools</span></button>
@@ -49,6 +49,7 @@
 </main>
 <dialog id="preview-dialog"><button class="dialog-close" aria-label="Close preview">×</button><span class="eyebrow">DESIGN PREVIEW</span><h2 id="dialog-title">Your position</h2><p id="dialog-body"></p><button class="primary-button dialog-done">Back to the Forge</button></dialog>
 <div class="toast" role="status" id="toast" hidden><span></span><button aria-label="Dismiss notification">×</button></div>
-<script src="avalanche-preview.js?v=avalanche-metal-red-glow-10"></script>
+<script src="avalanche-preview.js?v=avalanche-price-strip-11"></script>
+<script type="module" src="avalanche-markets.js?v=avalanche-price-strip-11"></script>
 </body>
 </html>
