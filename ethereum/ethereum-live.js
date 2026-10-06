@@ -28,8 +28,8 @@ async function connect(){
  injected.on?.('accountsChanged',resetWallet);injected.on?.('chainChanged',resetWallet);
  text('#wallet-label',`${account.slice(0,6)}…${account.slice(-4)}`); await refresh();
 }
-function resetWallet(){account=null;signer=null;fuelBalance=0n;DEMO_BALANCE=0;text('#wallet-label','Connect wallet');refresh();}
-async function action(fn){if(busy)return;busy=true;document.body.classList.add('transaction-pending');try{if(!signer)await connect();if(!ready)throw Error("Refresh live contract data before continuing.");if(BigInt(await injected.request({method:'eth_chainId'}))!==1n)throw Error('Switch your wallet to Ethereum Mainnet.');await fn();await refresh();}catch(e){message(errorText(e));}finally{busy=false;document.body.classList.remove('transaction-pending');}}
+function resetWallet(){ready=false;account=null;signer=null;state.claims=[];drawClaims();drawPositions(ended);drawFoundry();fuelBalance=0n;DEMO_BALANCE=0;text('#wallet-label','Connect wallet');refresh();}
+async function action(fn){if(busy)return;busy=true;document.body.classList.add('transaction-pending');try{if(!signer)await connect();if(!ready||refreshing)throw Error("Wait for live data to finish loading, then try again.");if(BigInt(await injected.request({method:'eth_chainId'}))!==1n)throw Error('Switch your wallet to Ethereum Mainnet.');await fn();await refresh();}catch(e){message(errorText(e));}finally{busy=false;document.body.classList.remove('transaction-pending');}}
 async function send(contract,method,args=[],value=0n){if(BigInt(await injected.request({method:"eth_chainId"}))!==1n)throw Error("Switch to Ethereum Mainnet.");const accounts=await injected.request({method:"eth_accounts"});if(!same(accounts[0],account))throw Error("Wallet changed. Reconnect before continuing.");const c=contract.connect(signer);await c[method].staticCall(...args,{value});message('Confirm the transaction in your wallet.');const tx=await c[method](...args,{value});message(`Submitted ${tx.hash.slice(0,12)}… Waiting for confirmation.`);const receipt=await tx.wait();if(receipt.status!==1)throw Error('The transaction did not succeed.');message('Transaction confirmed.');return receipt;}
 async function approve(spender,needed){if(await fuel.allowance(account,spender)<needed){message('Approve the exact FUEL amount in your wallet first.');await send(fuel,'approve',[spender,needed]);}}
 $('#wallet-button').onclick=()=>action(async()=>{});
@@ -41,7 +41,7 @@ $('#claim-all').onclick=()=>action(async()=>{if(!state.claims.length)throw Error
 async function chunks(count,fn){const out=[];for(let first=1;first<count;first+=20){out.push(...await Promise.all(Array.from({length:Math.min(20,count-first)},(_,i)=>fn(BigInt(first+i)))));}return out;}
 async function refresh(){if(refreshing)return;refreshing=true;try{
  const block=await read.getBlock('latest');state.now=block.timestamp;
- const [code,epoch,receiver]=await Promise.all([read.getCode(A.position),position.launchTime(),position.feeReceiver()]);if(code==='0x'||Number(epoch)!==config.launchTime||!same(receiver,A.feeRouter))throw Error('Ethereum deployment settings do not match this website.');ready=true;
+ const [code,epoch,receiver]=await Promise.all([read.getCode(A.position),position.launchTime(),position.feeReceiver()]);if(code==='0x'||Number(epoch)!==config.launchTime||!same(receiver,A.feeRouter))throw Error('Ethereum deployment settings do not match this website.');
  const [pn,fn]=await Promise.all([position.nextTokenId(),foundry.nextTokenId()]);
  state.positions=await chunks(Number(pn),async id=>{const p=await position.positions(id);const owner=await position.rewardOwner(id);return {id,p,owner};});
  state.foundry=await chunks(Number(fn),async id=>({id,owner:await foundry.ownerOf(id),cycle:await foundry.tokenCycle(id)}));
@@ -55,7 +55,7 @@ async function refresh(){if(refreshing)return;refreshing=true;try{
  for(const pool of state.pools){for(let cycle=1n;cycle<pool.cycle;cycle++){const ids=pool.days===288?state.foundry.filter(p=>same(p.owner,account)&&p.cycle===cycle):state.positions.filter(p=>same(p.owner,account));const claims=await Promise.all(ids.map(async p=>({id:p.id,cycle,contract:pool.contract,days:pool.days,value:await pool.contract.claimable(cycle,p.id)})));state.claims.push(...claims.filter(c=>c.value>0n));}}
  }else{for(const sel of ['#wallet-address','#wallet-pls','#wallet-fuel','#wallet-btc'])text(sel,sel==='#wallet-address'?'Not connected':'—');}
  drawPools();drawPositions(ended);drawFoundry();drawClaims();await drawBurns(block.number);window.updatePreview();window.ethereumQuote();
- $('.preview-notice span:last-child').textContent=`Live Ethereum data · Updated ${new Date(state.now*1000).toLocaleTimeString()} · Wallet confirmations required for transactions.`;
+ ready=true;$('.preview-notice span:last-child').textContent=`Live Ethereum data · Updated ${new Date(state.now*1000).toLocaleTimeString()} · Wallet confirmations required for transactions.`;
  }catch(e){ready=false;$('.preview-notice span:last-child').textContent=`Live data unavailable: ${errorText(e)}. Refresh to retry.`;message(errorText(e));}finally{refreshing=false;}}
 function drawPools(){const eth=state.pools.filter(p=>p.days!==288).reduce((s,p)=>s+num(p.balance),0),bitcoin=state.pools.find(p=>p.days===288);
  $('#live-pool-totals').innerHTML=`<div><span>IN CURRENT FORGE CYCLES</span><strong>${f(eth,8)} ETH</strong><b>${usd(eth,state.ethUsd)}</b></div><div><span>BITCOIN CURRENT CYCLE</span><strong>${amount(bitcoin.balance,8)} wBTC</strong><b>${usd(num(bitcoin.balance,8),state.btcUsd)}</b><small>Foundry NFTs in this mint cycle</small></div>`;
