@@ -2,14 +2,30 @@
   "chainId": 43114,
   "status": "design-preview",
   "fuel": {
-    "status": "awaiting-official-market-link"
+    "token": "0x06A22D45e7bf93d56B6f940b9Cc6c401EDF43d71",
+    "pool": "0x2431DFC276Af9c5c3BB5a091D2bE19Cf518e2467",
+    "decimals": 18,
+    "dex": "Uniswap",
+    "fee": 10000,
+    "factory": "0x740b1c1de25031C31FF4fC9A62f554A55cdC1baD",
+    "marketUrl": "https://dexscreener.com/avalanche/0x2431dfc276af9c5c3bb5a091d2be19cf518e2467",
+    "status": "token and pool checked on chain; execution adapter pending"
   },
   "more": {
     "status": "awaiting-route-confirmation"
   },
   "bitcoin": {
-    "status": "awaiting-token-and-route-confirmation"
+    "token": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
+    "pool": "0x5ca009013f6b898d134b6798b336a4592f3b4af2",
+    "symbol": "BTC.b",
+    "decimals": 8,
+    "dex": "Pharaoh",
+    "fee": 800,
+    "factory": "0xAE6E5c62328ade73ceefD42228528b70c8157D0d",
+    "marketUrl": "https://dexscreener.com/avalanche/0x5ca009013f6b898d134b6798b336a4592f3b4af2",
+    "status": "token and pool checked on chain; Pharaoh ABI/router adapter pending"
   },
   "pampEnabled": false,
-  "deployedContracts": {}
+  "deployedContracts": {},
+  "wrappedNative": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7"
 }

@@ -74,7 +74,7 @@ $('.builder-grid').insertBefore(scenario,$('.power-card'));
 $('.builder-grid').classList.add('wide-forge-layout');
 function updateEstimates(share, term, foundry = false) {
   const sampleEthUsd = 25, sampleBtcUsd = 83000;
-  const balances = foundry ? [{days:288,balance:.032,unit:'BTC',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'AVAX',usd:sampleEthUsd},{days:28,balance:1.2,unit:'AVAX',usd:sampleEthUsd},{days:88,balance:2.4,unit:'AVAX',usd:sampleEthUsd}];
+  const balances = foundry ? [{days:288,balance:.032,unit:'BTC.b',usd:sampleBtcUsd}] : [{days:8,balance:.84,unit:'AVAX',usd:sampleEthUsd},{days:28,balance:1.2,unit:'AVAX',usd:sampleEthUsd},{days:88,balance:2.4,unit:'AVAX',usd:sampleEthUsd}];
   const rows = balances.map(p=>({...p,payout:p.balance*.9975*share}));
   payoutRows.innerHTML=rows.map(p=>`<div><b>${p.days} Day</b><div><strong>≈ ${fmt(p.payout,p.unit==='AVAX'?6:8)} ${p.unit}</strong><small>≈ $${fmt(p.payout*p.usd)} USD</small></div></div>`).join('');
   $('.demo-share>p').textContent=foundry?'Sample cycle has 12 existing NFTs. Share includes your selected quantity. Uses sample funding after the 0.25% settlement incentive, excluding your mint funding. Future mints change the share. Each NFT earns in its mint cycle only.':'Uses sample existing power and sample pool funding after the 0.25% settlement incentive. Actual shares use power at each deadline and change as positions enter, end or decay. Your position must remain eligible. USD uses illustrative prices, not live quotes.';
@@ -122,7 +122,7 @@ $('#forge-form').addEventListener('submit', event => {
   event.preventDefault(); clampFuel(); $('#term').value = formValues().term; updatePreview();
   const { principal, burn, term } = formValues();
   if (principal <= 0) { notify('Enter some principal FUEL to preview a position.'); $('#principal').focus(); return; }
-  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The entry fee is 100% of the quoted principal value, with no minimum or maximum. Regular stakes earn AVAX rewards. BTC requires a separate Foundry NFT. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
+  showModal('Your Forge position', `${fmt(principal)} FUEL locked for ${fmt(term)} days.\n${fmt(burn)} extra FUEL permanently burned.\n\nThis is a design preview. The entry fee is 100% of the quoted principal value, with no minimum or maximum. Regular stakes earn AVAX rewards. BTC.b requires a separate Foundry NFT. This example uses the existing Forge power mechanics for design purposes. No wallet request has been made.`);
 });
 $('#wallet-button').addEventListener('click', () => {
   walletVisible = !walletVisible;
@@ -137,11 +137,11 @@ const pools = [
   {days:8, name:'AVAX reward pool', balance:.84, unit:'AVAX', elapsed:62, left:'3d 1h left', share:1.25},
   {days:28, name:'AVAX reward pool', balance:1.2, unit:'AVAX', elapsed:43, left:'15d 23h left', share:.84},
   {days:88, name:'AVAX reward pool', balance:2.4, unit:'AVAX', elapsed:26, left:'65d 3h left', share:.62},
-  {days:288, name:'Foundry BTC reward pool', balance:.032, unit:'BTC', elapsed:18, left:'236d 4h left', share:100/13}
+  {days:288, name:'Foundry BTC.b reward pool', balance:.032, unit:'BTC.b', elapsed:18, left:'236d 4h left', share:100/13}
 ];
 $('#pool-grid').innerHTML = pools.map(p => {
   const rate=p.unit==='AVAX'?25:83000, payout=p.balance*.9975*p.share/100;
-  return `<article class="card pool-card"><div class="pool-top"><span>CYCLE 1</span><span class="pool-live">PREVIEW · AVALANCHE</span></div><h3>${p.days}-Day ${p.unit==='AVAX'?'Pool':'Foundry BTC Pool'}</h3><div class="pool-value">${fmt(p.balance,8)} <small>${p.unit}</small></div><div class="pool-usd">≈ $${fmt(p.balance*rate,2)} USD reference</div><div class="pool-row"><span>Closes</span><strong>${p.left}</strong></div><div class="pool-row"><span>Your estimated share</span><strong>${p.share.toFixed(2)}%</strong></div><div class="pool-row"><span>Estimated payout</span><strong>${fmt(payout,p.unit==='AVAX'?6:8)} ${p.unit}<small>≈ $${fmt(payout*rate,2)} USD reference</small></strong></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-foot">${p.elapsed.toFixed(2)}% of cycle elapsed · estimate updates when refreshed</div></article>`;
+  return `<article class="card pool-card"><div class="pool-top"><span>CYCLE 1</span><span class="pool-live">PREVIEW · AVALANCHE</span></div><h3>${p.days}-Day ${p.unit==='AVAX'?'Pool':'Foundry BTC.b Pool'}</h3><div class="pool-value">${fmt(p.balance,8)} <small>${p.unit}</small></div><div class="pool-usd">≈ $${fmt(p.balance*rate,2)} USD reference</div><div class="pool-row"><span>Closes</span><strong>${p.left}</strong></div><div class="pool-row"><span>Your estimated share</span><strong>${p.share.toFixed(2)}%</strong></div><div class="pool-row"><span>Estimated payout</span><strong>${fmt(payout,p.unit==='AVAX'?6:8)} ${p.unit}<small>≈ $${fmt(payout*rate,2)} USD reference</small></strong></div><div class="progress-track" role="progressbar" aria-label="${p.days}-day sample cycle" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${p.elapsed}"><span style="width:${p.elapsed}%"></span></div><div class="pool-foot">${p.elapsed.toFixed(2)}% of cycle elapsed · estimate updates when refreshed</div></article>`;
 }).join('');
 const burns = [
   {symbol:'FUEL',image:'fuel-token.jpg',share:15,drip:1,balance:.28,total:82400000},
@@ -199,11 +199,11 @@ function updateFoundryPreview() {
   $('#foundry-burn').textContent=`${fmt(count*100000000,0)} FUEL`;
   $('#foundry-fee').textContent=`${fmt(fee,6)} AVAX · ≈ $${fmt(fee*25)} USD reference`;
   $('#foundry-share').textContent=`${fmt(share*100)}% · ${count} of ${12+count} NFTs`;
-  $('#foundry-reward').textContent=`${fmt(reward,8)} BTC · ≈ $${fmt(reward*83000)} USD reference`;
+  $('#foundry-reward').textContent=`${fmt(reward,8)} BTC.b · ≈ $${fmt(reward*83000)} USD reference`;
 }
 $('#foundry-count').addEventListener('input',()=>{cleanInput($('#foundry-count'),true);updateFoundryPreview();});
 $('#foundry-count').addEventListener('blur',()=>{ $('#foundry-count').value=Math.max(1,Math.min(32,Math.floor(Number($('#foundry-count').value)||1)));updateFoundryPreview();});
-$('#foundry-form').addEventListener('submit',event=>{event.preventDefault();updateFoundryPreview();showModal('Foundry mint preview',`${$('#foundry-burn').textContent} permanently burned.\n${$('#foundry-fee').textContent} (illustrative fee).\n\nEach Foundry NFT earns an equal BTC share in its mint cycle only. 99% of its AVAX mint fee buys BTC and 1% goes to development. This is sample data, not a quote; no wallet request is made.`);});
+$('#foundry-form').addEventListener('submit',event=>{event.preventDefault();updateFoundryPreview();showModal('Foundry mint preview',`${$('#foundry-burn').textContent} permanently burned.\n${$('#foundry-fee').textContent} (illustrative fee).\n\nEach Foundry NFT earns an equal BTC.b share in its mint cycle only. 99% of its AVAX mint fee buys BTC.b and 1% goes to development. This is sample data, not a quote; no wallet request is made.`);});
 updateFoundryPreview();
 
 function switchBuildProduct(product) {
