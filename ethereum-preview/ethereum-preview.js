@@ -25,7 +25,7 @@ function switchTab(name, updateHash = true) {
   if (name === 'nfts') name = 'rewards';
   if (!['build', 'pools', 'rewards', 'burns'].includes(name)) name = 'build';
   $$('[data-tab]').forEach(button => { const selected = button.dataset.tab === name; button.setAttribute('aria-selected', String(selected)); button.tabIndex = selected ? 0 : -1; });
-  $$('[role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== `panel-${name}`; });
+  $$('[id^="panel-"][role="tabpanel"]').forEach(panel => { panel.hidden = panel.id !== `panel-${name}`; });
   $$('.chain-options a').forEach(link => { const url = new URL(link.getAttribute('href'), location.href); url.hash = name === 'build' ? 'start' : name; link.href = url.href; });
   $('.hero').hidden = name !== 'build';
   $('.wallet-strip').hidden = name !== 'build';
@@ -205,3 +205,20 @@ $('#foundry-count').addEventListener('input',()=>{cleanInput($('#foundry-count')
 $('#foundry-count').addEventListener('blur',()=>{ $('#foundry-count').value=Math.max(1,Math.min(32,Math.floor(Number($('#foundry-count').value)||1)));updateFoundryPreview();});
 $('#foundry-form').addEventListener('submit',event=>{event.preventDefault();updateFoundryPreview();showModal('Foundry mint preview',`${$('#foundry-burn').textContent} permanently burned.\n${$('#foundry-fee').textContent} (illustrative fee).\n\nEach Foundry NFT earns an equal WBTC share in its mint cycle only. 99% of its ETH mint fee buys WBTC and 1% goes to development. This is sample data, not a quote; no wallet request is made.`);});
 updateFoundryPreview();
+
+function switchBuildProduct(product) {
+  mode=product==='foundry'?'foundry':'forge';
+  $('#forge-build').hidden=mode!=='forge';
+  $('#foundry-mint').hidden=mode!=='foundry';
+  $$('[data-build-product]').forEach(button=>{const selected=button.dataset.buildProduct===mode;button.setAttribute('aria-selected',String(selected));button.tabIndex=selected?0:-1;});
+}
+$$('[data-build-product]').forEach(button=>{
+  button.addEventListener('click',()=>switchBuildProduct(button.dataset.buildProduct));
+  button.addEventListener('keydown',event=>{
+    if(!['ArrowLeft','ArrowRight','Home','End'].includes(event.key))return;
+    event.preventDefault();const buttons=$$('[data-build-product]');
+    const selected=event.key==='Home'?buttons[0]:event.key==='End'?buttons[1]:buttons[button===buttons[0]?1:0];
+    switchBuildProduct(selected.dataset.buildProduct);selected.focus();
+  });
+});
+switchBuildProduct(new URLSearchParams(location.search).get('product'));
