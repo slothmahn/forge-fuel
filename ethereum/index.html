@@ -5,8 +5,9 @@
 <meta name="theme-color" content="#090b0d"><title>Fuel Forge · Ethereum Mainnet</title>
 <link rel="stylesheet" href="ethereum-preview.css?v=ethereum-foundry-menu-128">
 <link rel="stylesheet" href="../assets/orbit-token-logos.css?v=original-orbit-129">
+<link rel="stylesheet" href="../assets/payout-pool-parity.css?v=payout-parity-134">
 </head>
-<body>
+<body data-forge-chain="ethereum">
 <div class="ambient" aria-hidden="true"></div>
 <header class="site-header wrap">
   <a class="brand" href="#build" aria-label="Fuel Forge home"><img src="../images/forge-wordmark-underlined.png" alt="Fuel Forge"></a>
@@ -14,7 +15,7 @@
 </header>
 <main class="wrap">
   <div class="preview-notice"><span class="notice-label">ETHEREUM MAINNET</span><span>Loading Ethereum contracts…</span></div>
-  <div class="market-readiness" aria-label="Ethereum launch markets"><a href="https://dexscreener.com/ethereum/0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a" target="_blank" rel="noopener noreferrer">MORE <span id="price-more">—</span></a><a href="https://dexscreener.com/ethereum/0x4585fe77225b41b697c938b018e2ac67ac5a20c0" target="_blank" rel="noopener noreferrer">wBTC <span id="price-btc">—</span></a><a href="https://dexscreener.com/ethereum/0x917529659d0c2aa333bdde99e6534375ba217399" target="_blank" rel="noopener noreferrer">FUEL <span id="price-fuel">—</span></a><span>ETH <span id="price-eth">—</span></span></div>
+  <div class="market-readiness" aria-label="Ethereum market references"><a href="https://dexscreener.com/ethereum/0x917529659d0c2aa333bdde99e6534375ba217399" target="_blank" rel="noopener noreferrer">FUEL <span id="price-fuel">—</span></a><a href="https://dexscreener.com/ethereum/0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a" target="_blank" rel="noopener noreferrer">MORE <span id="price-more">—</span></a><span>ETH <span id="price-eth">—</span></span><a href="https://dexscreener.com/ethereum/0x4585fe77225b41b697c938b018e2ac67ac5a20c0" target="_blank" rel="noopener noreferrer">wBTC <span id="price-btc">—</span></a><p id="price-status">Refreshing market references…</p><p class="market-price-note">Market prices are reference information. Mint fees use a live on-chain FUEL quote.</p></div>
   <nav class="tabs" role="tablist" aria-label="Dashboard">
     <button role="tab" aria-selected="true" aria-controls="panel-build" id="tab-build" data-tab="build"><svg viewBox="0 0 24 24"><path d="m14 3-9 11h6l-1 7 9-12h-6z"/></svg><span>Build</span></button>
     <button role="tab" aria-selected="false" aria-controls="panel-pools" id="tab-pools" tabindex="-1" data-tab="pools"><svg viewBox="0 0 24 24"><path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v5H4zM14 15h6v5h-6z"/></svg><span class="desktop-text">Payout Pools</span><span class="mobile-text">Pools</span></button>
@@ -43,7 +44,7 @@
   </section>
 
 
-  <section id="panel-pools" role="tabpanel" aria-labelledby="tab-pools" hidden><div class="section-heading"><div><p class="eyebrow">FOLLOW THE CYCLES</p><h2>Payout Pools</h2></div><p class="section-guidance">See what each live cycle is collecting, when it closes, and whether it is ready to settle. USD prices are market references.</p></div><div class="pool-overview" id="live-pool-totals"></div><div class="pool-grid" id="pool-grid"></div><div class="settle-bar"><p>Settlement pays a 0.25% caller incentive. Closed, funded cycles show a settlement button below.</p><button id="refresh-all">Refresh data</button></div></section>
+  <section id="panel-pools" role="tabpanel" aria-labelledby="tab-pools" hidden><div class="section-heading"><div><p class="eyebrow">FOLLOW THE CYCLES</p><h2>Payout Pools</h2></div><p class="section-guidance">See what each live cycle is collecting, when it closes, and whether it is ready to settle. USD prices are market references.</p></div><div class="pool-overview" id="live-pool-totals"></div><div class="pool-grid" id="pool-grid"></div><div class="settle-bar"><div><strong>Closed cycles ready to process</strong><p id="settlement-status">Checking cycles…</p></div><div class="claim-actions"><button id="refresh-all">Refresh data</button><button class="primary-button" id="settle-available" disabled>Settle available cycles</button></div></div><p class="section-note">Estimated payouts use the current pool allocation less the 0.25% settlement incentive. Final payouts use the on-chain cycle snapshot. Settlement requires a wallet transaction after the deadline.</p></section>
   <section id="panel-rewards" role="tabpanel" aria-labelledby="tab-rewards" hidden><div class="section-heading"><div><p class="eyebrow">YOUR REWARDS</p><h2>Claim Your Rewards</h2></div></div><div class="rewards-pair"><div class="card claim-card"><p class="eyebrow">AVAILABLE NOW</p><h3>Ready to Claim</h3><p>When a cycle closes and is settled, its rewards become available here.</p><div class="claim-amount" id="claim-eth">— ETH</div><div class="claim-amount" id="claim-btc">— wBTC</div><p class="section-note">ETH from Forge stakes · WBTC from Foundry NFTs</p><strong class="claim-usd">— USD reference</strong><div class="claim-actions"><button id="refresh-rewards">Refresh rewards</button><button class="primary-button" id="claim-all" disabled>Claim available rewards</button></div></div><div class="card"><div class="list-heading"><h3>Your Stakes · ETH rewards</h3></div><div class="segmented stake-filters" aria-label="Position status"><button id="active-filter" aria-pressed="true">Active · 0</button><button id="ended-filter" aria-pressed="false">Ended · 0</button></div><div id="reward-positions"></div><div class="foundry-wallet"><h3>Your Foundry NFTs · WBTC</h3><div id="foundry-owned">Connect your wallet to see your NFTs.</div></div></div></div></section>
   <section id="panel-burns" role="tabpanel" aria-labelledby="tab-burns" hidden><div class="section-heading"><div><p class="eyebrow">FOLLOW THE FEES</p><h2>Follow the Burn Pools</h2></div><p class="section-guidance">Forge fees feed the FUEL and MORE burn pools. See the amount ready to execute and the caller reward for each.</p></div><div class="burn-overview"><div class="burn-total"><span>ETH IN BURN POOLS</span><strong id="burn-total">— ETH</strong><small id="burn-total-usd">— USD reference</small></div><div class="burn-flow"><span>Position fee</span><b>→</b><span>8/28/88-day rewards · Foundry WBTC · burns</span><b>→</b><span>10-minute burn intervals</span></div></div><div class="burn-grid" id="burn-grid"></div><p class="section-note">FUEL receives 15% and MORE receives 10% of entry fees. Only the daily drip percentage remains adjustable.</p></section>
   <footer><span>FUEL FORGE <i>/</i> ETHEREUM MAINNET</span><span>Live on Ethereum · Cycles use exact 24-hour days.</span></footer>
@@ -51,7 +52,7 @@
 <dialog id="preview-dialog"><button class="dialog-close" aria-label="Close preview">×</button><span class="eyebrow">ETHEREUM MAINNET</span><h2 id="dialog-title">Your position</h2><p id="dialog-body"></p><button class="primary-button dialog-done">Back to the Forge</button></dialog>
 <div class="toast" role="status" id="toast" hidden><span></span><button aria-label="Dismiss notification">×</button></div>
 <script src="ethereum-ui.js?v=ethereum-live-130"></script>
-<script type="module" src="ethereum-live.js?v=chain-switch-132"></script>
+<script type="module" src="ethereum-live.js?v=payout-parity-134"></script>
 <script type="module" src="../assets/chain-switch-menu.js?v=chain-switch-132"></script>
 </body>
 </html>

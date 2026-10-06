@@ -1,0 +1,34 @@
+body[data-forge-chain=ethereum]{--payout-start:#1f2328;--payout-end:#191d22;--payout-progress-start:#c3d3e2}
+body[data-forge-chain=avalanche]{--payout-start:#251019;--payout-end:#160d13;--payout-progress-start:#ffa3c5}
+/* PulseChain payout geometry, shared by the live Ethereum and Avalanche sites. */
+.wrap{width:calc(100% - 80px);max-width:1440px}
+#panel-pools{padding-top:30px;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:normal}
+#panel-pools .section-heading{min-height:0;gap:22px;align-items:flex-end;margin:0 0 22px}
+#panel-pools .section-heading h2{font-family:inherit;font-size:30px;line-height:1.2;font-weight:750;letter-spacing:-.045em;margin:0 0 7px}
+#panel-pools .section-heading>p{flex:0 1 580px;max-width:580px;font-size:14px;line-height:1.7;margin:0}
+#panel-pools .eyebrow{font-size:9px;line-height:normal;letter-spacing:.15em;margin:0 0 12px}
+#panel-pools .pool-overview{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin:0 0 18px}
+#panel-pools .pool-overview>div{min-width:0;min-height:131px;border:1px solid #ffffff26;border-radius:13px;padding:20px;background:var(--summary-surface)}
+#panel-pools .pool-overview span{font-size:9px;line-height:normal;letter-spacing:.1em;font-weight:700;margin:0 0 8px}
+#panel-pools .pool-overview strong{font-family:"Space Grotesk",sans-serif;font-size:25px;font-weight:700;letter-spacing:-.04em;line-height:normal;overflow-wrap:anywhere}
+#panel-pools .pool-overview small{display:block;font-family:"Space Grotesk",sans-serif;font-size:11px;line-height:normal;letter-spacing:normal;font-weight:700;color:var(--pink);margin:6px 0 0}
+#panel-pools .pool-overview p{font-size:11px;color:var(--muted);margin:6px 0 0;line-height:normal}
+#panel-pools .pool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+#panel-pools .pool-card{padding:27px;border:1px solid #ffffff26;border-radius:17px;background:linear-gradient(125deg,var(--payout-start),var(--payout-end) 80%);box-shadow:none}
+#panel-pools .pool-top{font-size:9px;line-height:normal;font-weight:700;letter-spacing:.08em}
+#panel-pools .pool-card h3{font-family:inherit;font-size:20px;line-height:25px;font-weight:700;margin:20px 0 12px}
+#panel-pools .pool-value{font-family:"Space Grotesk",sans-serif;font-size:35px;font-weight:750;line-height:1.25;letter-spacing:-.04em;margin:0 0 2px}
+#panel-pools .pool-value small{font-family:"DM Sans",sans-serif;font-size:14px;line-height:normal;font-weight:600;letter-spacing:normal;color:var(--accent)}
+#panel-pools .pool-usd{font-family:"Space Grotesk",sans-serif;font-size:12px;line-height:normal;letter-spacing:normal;font-weight:700;color:var(--accent);margin:0 0 22px}
+#panel-pools .pool-row{font-size:13px;line-height:1.5;padding:12px 0;gap:20px;border-top:1px solid #ffffff18}
+#panel-pools .pool-row strong{font-size:13px;font-weight:700}
+#panel-pools .pool-row small{font-family:"Space Grotesk",sans-serif;font-size:11px;line-height:1.5;margin-top:2px;letter-spacing:normal}
+#panel-pools .progress-track{height:7px;margin:13px 0 8px;background:#ffffff0c}
+#panel-pools .progress-track>span{background:linear-gradient(90deg,var(--payout-progress-start),var(--accent))}
+#panel-pools .pool-foot{font-size:10px;line-height:normal}
+#panel-pools .settle-bar{border-radius:13px;padding:20px;background:linear-gradient(125deg,var(--payout-start),var(--payout-end) 80%);border-color:#ffffff26}
+#panel-pools .section-note{font-size:11px;line-height:1.6}
+@media(max-width:1050px){.wrap{width:calc(100% - 48px)}}
+@media(max-width:760px){.wrap{width:calc(100% - 32px)}#panel-pools .section-heading{flex-direction:column;align-items:flex-start;gap:8px}#panel-pools .section-heading h2{font-size:27px}#panel-pools .section-heading>p{flex:auto;max-width:100%;font-size:13px}#panel-pools .pool-overview,#panel-pools .pool-grid{grid-template-columns:1fr}#panel-pools .pool-card{padding:23px}#panel-pools .pool-value{font-size:30px}#panel-pools .pool-row{gap:12px}#panel-pools .settle-bar{align-items:flex-start;flex-direction:column}}
+
+.market-readiness::after{content:none;display:none}.market-readiness a,.market-readiness>span{font-size:13px}.market-readiness a span,.market-readiness>span span{color:var(--pink);font-weight:750}.market-readiness>p{display:block;font-size:9px;line-height:1.6;margin:8px 0 0;color:var(--muted)}#panel-pools .pool-overview .bitcoin-reference{color:var(--payout-progress-start)}
