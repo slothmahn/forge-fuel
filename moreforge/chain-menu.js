@@ -9,8 +9,9 @@
  function sync(){
   const fuel=document.querySelector('.fuel-forge-link');
   fuel.dataset.chain=select.value;
+  fuel.querySelector('img').src=select.value==='avax'?'../images/forge-wordmark-underlined.png':'assets/fuel-forge-wordmark.png';
   fuel.href=select.value==='avax'?'https://thefuelforge.com/avalanche/':select.value==='eth'?'https://thefuelforge.com/ethereum/':select.value==='pls'?'https://thefuelforge.com/pulsechain/?chain=369':'https://thefuelforge.com/?chain=4663';
-  fuel.setAttribute('aria-label','Fuel Forge'+(select.value==='rh'?' on Robinhood Chain':select.value==='pls'?' on PulseChain':''));
+  fuel.setAttribute('aria-label','Fuel Forge'+(select.value==='rh'?' on Robinhood Chain':select.value==='pls'?' on PulseChain':select.value==='avax'?' on Avalanche':select.value==='eth'?' on Ethereum':''));
   document.querySelector('#chain-name').textContent=select.selectedOptions[0].textContent.replace(' · future','');
   for(const button of choices){if(button.dataset.chain===select.value)button.setAttribute('aria-current','true');else button.removeAttribute('aria-current');}
  }
