@@ -32,7 +32,7 @@ function canEnter(x=ctx){return Boolean(x?.forgeReady&&x.dataLoaded&&x.m.entries
 function disable(){
  for(const e of $$('button,select,input'))e.disabled=busy;
  const x=ctx;
- $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview||Boolean(x?.preview?.entryError);
+ $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview||Boolean(x?.preview?.entryError)||Boolean(x?.m.noPamp&&!x?.preview?.entryChecked);
  $('#review-confirm').disabled=busy||!canEnter();
  if(x?.preview&&account&&x.preview.total>x.balance)$('#build-submit').disabled=true;
  text('#build-submit',!x?.forgeReady?(manifests[$('#chain').value]?.status==='deployed'?'Checking chain…':'Launch pending'):!x.dataLoaded?'Loading position data…':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
@@ -163,7 +163,7 @@ async function preview(){
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
   if(id!==previewId||x!==ctx)return;
-  x.preview={...v,fee};if(x.m.noPamp){try{await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});}catch(e){x.preview.entryError=error(e);text('#build-status',error(e));}if(id!==previewId||x!==ctx)return;}amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
+  x.preview={...v,fee,entryChecked:!x.m.noPamp};if(x.m.noPamp){try{await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});x.preview.entryChecked=true;}catch(e){x.preview.entryError=error(e);text('#build-status',error(e));}if(id!==previewId||x!==ctx)return;}amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value. Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
