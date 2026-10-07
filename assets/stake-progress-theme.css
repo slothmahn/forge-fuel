@@ -1,0 +1,8 @@
+/* Stake timelines follow the site's palette rather than a hard-coded green. */
+body{--stake-progress-start:#c3ff46;--stake-progress-end:#9add48}
+body.fuel-pulsechain{--stake-progress-start:#ff62c5;--stake-progress-end:#a46be8}
+body[data-forge-chain="ethereum"]{--stake-progress-start:#62e6a7;--stake-progress-end:#9bcfc0}
+body[data-forge-chain="avalanche"]{--stake-progress-start:#f32650;--stake-progress-end:#ff4081}
+body.more-forge-site{--stake-progress-start:#ff7745;--stake-progress-end:#ffcf54}
+body :is(.compact-asset-card,.compact-stake)[data-phase] :is(.position-progress-fill,.position-timeline-track>span,.progress-track>span){background:linear-gradient(100deg,var(--stake-progress-start),var(--stake-progress-end))!important}
+body :is(.compact-asset-card,.compact-stake):is([data-phase="ended"],[data-phase="closed"],[data-phase="expired"]) :is(.position-progress-fill,.position-timeline-track>span,.progress-track>span){background:color-mix(in srgb,var(--stake-progress-end) 25%,#87929d)!important}
