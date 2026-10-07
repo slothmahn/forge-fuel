@@ -5,20 +5,13 @@ const fmt = (n, places = 2) => new Intl.NumberFormat('en-US', { maximumFractionD
 let DEMO_BALANCE = 0;
 let mode = 'forge';
 let walletVisible = true;
-let toastTimer;
 const modal = $('#preview-dialog');
 function showModal(title, body) {
   $('#dialog-title').textContent = title;
   $('#dialog-body').textContent = body;
   if (!modal.open) modal.showModal();
 }
-function notify(message) {
-  clearTimeout(toastTimer);
-  $('#toast span').textContent = message;
-  $('#toast').hidden = false;
-  toastTimer = setTimeout(() => { $('#toast').hidden = true; }, 5000);
-}
-$('.toast button').addEventListener('click', () => { $('#toast').hidden = true; clearTimeout(toastTimer); });
+function notify(message) { window.forgeTransactionNotice(message); }
 $$('.dialog-close, .dialog-done').forEach(button => button.addEventListener('click', () => modal.close()));
 modal.addEventListener('click', event => { if (event.target === modal) { const r = modal.getBoundingClientRect(); if (event.clientX < r.left || event.clientX > r.right || event.clientY < r.top || event.clientY > r.bottom) modal.close(); } });
 function switchTab(name, updateHash = true) {

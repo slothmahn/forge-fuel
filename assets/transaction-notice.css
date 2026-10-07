@@ -1,0 +1,9 @@
+/* Same full-width activity layout and controls as Robinhood/PulseChain. */
+body .transaction-notice{position:sticky;bottom:15px;left:auto;transform:none;z-index:10;width:100%;max-width:100%;margin:70px 0 30px;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #78c9ae66;border-radius:12px;background:linear-gradient(110deg,#203e33,#263a3d);color:#f3f5f7;box-shadow:0 12px 32px #0009;font:600 13px/1.6 Inter,-apple-system,sans-serif;overflow-wrap:anywhere}
+body[data-forge-chain="avalanche"] .transaction-notice{background:linear-gradient(110deg,#4b1e32,#361724);border-color:#ff408166;color:#fff2f7}
+body .transaction-notice>span{min-width:0}
+body .transaction-notice a{text-decoration:underline;text-underline-offset:3px;font-weight:700}
+body .transaction-notice button{width:30px;height:30px;flex:0 0 auto;padding:0;border:0;border-radius:7px;background:#ffffff12;color:inherit;font-size:23px;font-weight:500;line-height:1}
+body .transaction-notice button:hover{background:#ffffff24}
+body .transaction-notice button:focus-visible,body .transaction-notice a:focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+@media(max-width:600px){body .transaction-notice{bottom:16px;font-size:13px;margin-top:35px}}
