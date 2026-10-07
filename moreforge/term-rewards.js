@@ -1,8 +1,8 @@
 // Fuel Forge's illustrative term scenario, extended to all four MORE pools.
 // Repeat existing funding only; include this entry's routed funding once.
-export function estimateTermRewards({days,power,existingPower,fee,pools,bitcoinEntry}) {
+export function estimateTermRewards({days,power,existingPower,fee,pools,bitcoinEntry,allocations=[2688n,2268n,1764n,1680n]}) {
  if(!Number.isInteger(days)||days<8||days>1000||power<=0n||existingPower<0n||fee<0n)throw Error('Invalid reward scenario inputs');
- const allocations=[2688n,2268n,1764n,1680n],durations=[8,28,88,288];
+ const durations=[8,28,88,288];
  const payout=balance=>(balance-balance*25n/10000n)*power/(existingPower+power);
  return pools.map(p=>{
   const cycles=Math.floor(days/durations[p.i]);

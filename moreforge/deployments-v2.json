@@ -127,5 +127,77 @@
         "bitcoinVault"
       ]
     }
+  },
+  "avax": {
+    "version": 2,
+    "status": "deployed",
+    "entriesEnabled": true,
+    "chainId": 43114,
+    "owner": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+    "more": "0xb2722d5f1b8F3E19bf026c62C47C1C7BC1CDB04E",
+    "bitcoinToken": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
+    "position": "0x8f062f28C211dDAAaB74147C26CA4EAfeeB1EDD8",
+    "helper": "0xFDa241804d3d28367dA7e39cBe2eFe44fae26787",
+    "contracts": {
+      "vaultImplementation": "0x05f840C57790E18704F6c32A700D8168D775B15c",
+      "adapterImplementation": "0xF045101192da20258a2A591d97697EBE3EeF1b4C",
+      "spotImplementation": "0x37f07F11Cfb68c5fD9b823afAe9621d651373218",
+      "mainQuote": "0x1bC90c32245b9caFA9F584780d036A7E30cD5E20",
+      "fuelQuote": "0xb90D96398eCA3cEb8F8A2dA4F98ba2B52B9f9070",
+      "bitcoinQuote": "0x4cDFAC37B26cf42229CD8Fd3366c47F4317Ce366",
+      "feeQuote": "0x2C384F26bd007D08e7F98B4b9cb6702440439b49",
+      "vault8": "0x8323Bd1657a2E7b3D14f7D4decc71201C720180a",
+      "vault28": "0xffBBc4FEDD4251F96562041A5f2ee89b295e2Ce6",
+      "vault88": "0xE017d43b63385B5890696B4F273743b4F8433D13",
+      "bitcoinVault": "0xF1a355f1a8D6b2E97a3327D11c9cadDC346dbCf6",
+      "fuelBurner": "0x271860f2C14f05F54C92E64c76C2A578E0c02cce",
+      "moreBurner": "0x7D3F6C3bFB6d7eB7ec5E3f4A8AdE25e534cE6407",
+      "feeRouter": "0xAcf1C69836780d140C146e9527859d6b0015D6C6",
+      "position": "0x8f062f28C211dDAAaB74147C26CA4EAfeeB1EDD8",
+      "fuelAdapter": "0xDEd0112755213C89A38881becd50Be768562C4A3",
+      "moreAdapter": "0x1e4ed1E5B2E60d95129566C4eb9bD2263c9F87c1",
+      "bitcoinAdapter": "0x731878C58b349715e278546a100A9C7c1989C7BA",
+      "settlementBatcher": "0xFDa241804d3d28367dA7e39cBe2eFe44fae26787",
+      "dripController": "0xD8CFeea9036BB68FcF097c74FF1155F21c0ee579",
+      "executionQuote3": "0x4cDFAC37B26cf42229CD8Fd3366c47F4317Ce366"
+    },
+    "vaults": [
+      "0x8323Bd1657a2E7b3D14f7D4decc71201C720180a",
+      "0xffBBc4FEDD4251F96562041A5f2ee89b295e2Ce6",
+      "0xE017d43b63385B5890696B4F273743b4F8433D13",
+      "0xF1a355f1a8D6b2E97a3327D11c9cadDC346dbCf6"
+    ],
+    "burners": [
+      "0x271860f2C14f05F54C92E64c76C2A578E0c02cce",
+      "0x7D3F6C3bFB6d7eB7ec5E3f4A8AdE25e534cE6407"
+    ],
+    "launchTime": 1791306000,
+    "siteOpeningTime": 1,
+    "deploymentBlock": 96923342,
+    "feeBps": 10000,
+    "feeBoundsEnabled": false,
+    "minFeeWei": "0",
+    "maxFeeWei": "0",
+    "noPamp": true,
+    "rewardAllocations": [
+      2848,
+      2403,
+      1869,
+      1780
+    ],
+    "ownershipTransition": {
+      "controller": "0xD8CFeea9036BB68FcF097c74FF1155F21c0ee579",
+      "manager": "0x02A0d741FBaebC03A8f0d1A85670bf1CA8C15fA9",
+      "codeHash": "0x412dae2e9bebc9b4ef316a4336ee89dd028da9d6605aed53e271db81d7828aad",
+      "burners": [
+        "fuelBurner",
+        "moreBurner"
+      ],
+      "renounce": [
+        "position",
+        "bitcoinVault"
+      ]
+    },
+    "swapCapWei": "10000000000000000000"
   }
 }

@@ -172,5 +172,18 @@
       "0xb6ba5f93f9621b3d20d847e416e03d4f73d483adc0a519056a438f55785abffd",
       "0xa98c38e34ef064a03786742a19733f751510e3614693ad4efcc0673db2711ffc"
     ]
+  },
+  "avax": {
+    "chainId": 43114,
+    "more": "0xb2722d5f1b8F3E19bf026c62C47C1C7BC1CDB04E",
+    "bitcoinToken": "0x152b9d0FdC40C096757F570A51E494bd4b943E50",
+    "position": "0x0000000000000000000000000000000000000000",
+    "helper": "0x0000000000000000000000000000000000000000",
+    "vaults": [],
+    "burners": [],
+    "contracts": {
+      "mainQuote": "0x1bC90c32245b9caFA9F584780d036A7E30cD5E20",
+      "feeQuote": "0x2C384F26bd007D08e7F98B4b9cb6702440439b49"
+    }
   }
 }

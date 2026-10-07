@@ -46,7 +46,7 @@ export function validateManifest(m,legacy){
  if(m.chainId!==legacy.chainId)throw Error('V2 deployment chain mismatch.');
  if(m.more?.toLowerCase()!==legacy.more.toLowerCase()||m.bitcoinToken?.toLowerCase()!==legacy.bitcoinToken.toLowerCase())throw Error('V2 token identity mismatch.');
  const addresses=[m.position,m.helper,m.more,m.bitcoinToken,m.owner,m.contracts?.feeQuote,m.contracts?.feeRouter,m.contracts?.mainQuote,...(m.vaults||[]),...(m.burners||[])];
- if(m.vaults?.length!==4||m.burners?.length!==3||addresses.some(a=>!isAddress(a)||/^0x0{40}$/i.test(a)))throw Error('Incomplete V2 deployment manifest.');
+ if(m.vaults?.length!==4||m.burners?.length!==(m.noPamp?2:3)||addresses.some(a=>!isAddress(a)||/^0x0{40}$/i.test(a)))throw Error('Incomplete V2 deployment manifest.');
  const old=new Set([legacy.position,legacy.helper,...legacy.vaults,...legacy.burners].map(a=>a.toLowerCase()));
  if([m.position,m.helper,...m.vaults,...m.burners].some(a=>old.has(a.toLowerCase())))throw Error('V1 contracts cannot be used by the V2 interface.');
  if(!Number.isSafeInteger(m.launchTime)||m.launchTime<=0||m.launchTime%86400!==17*3600)throw Error('Invalid fixed-UTC cycle anchor.');

@@ -1,20 +1,21 @@
+import {checkBitcoinFunding} from './entry-funding.js?v=avax-live-144';
 import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../assets/owner-transition.js?v=owner-transition-106';
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=chain-switch-132';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
-import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=2';
+import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=avax-live-144';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=position-details-below-113';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
-import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
+import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=avax-live-144';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-precision-91';
+import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=avax-live-144';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-loading-142';
-import {installBuy} from './buy-ui-v2.js?v=two-way-123';
+import {installBuy} from './buy-ui-v2.js?v=avax-live-144';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js?v=burn-layout-79';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const networks={rh:{id:4663,rpc:'https://rpc.mainnet.chain.robinhood.com/',unit:'ETH',btc:'cbBTC',explorer:'https://explorer.robinhood.com'},pls:{id:369,rpc:'https://rpc.pulsechain.com',unit:'PLS',btc:'wBTC',explorer:'https://scan.pulsechain.com'}};
+const networks={rh:{id:4663,rpc:'https://rpc.mainnet.chain.robinhood.com/',unit:'ETH',btc:'cbBTC',explorer:'https://explorer.robinhood.com'},avax:{id:43114,rpc:'https://api.avax.network/ext/bc/C/rpc',unit:'AVAX',btc:'BTC.b',name:'Avalanche C-Chain',explorer:'https://snowtrace.io'},pls:{id:369,rpc:'https://rpc.pulsechain.com',unit:'PLS',btc:'wBTC',explorer:'https://scan.pulsechain.com'}};
 const erc20=['function balanceOf(address) view returns(uint256)','function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)'];
 const vaultAbi=['function positions() view returns(address)','function launchTime() view returns(uint256)','function cycleDuration() view returns(uint256)','function rewardToken() view returns(address)','function owner() view returns(address)','function cycleAt(uint256) view returns(uint256)','function deadline(uint256) view returns(uint256)','function cycleBalance(uint256) view returns(uint256)','function nativeCycleBalance(uint256) view returns(uint256)','function cycles(uint256) view returns(uint256 cursor,uint256 upperTokenId,uint256 totalPower,uint256 participantPool,uint256 claimed,uint256 callerPaid,bool started,bool settled)','function claimable(uint256,uint256) view returns(uint256)','function referenceQuote() view returns(address)'];
 const helperAbi=['function vaults(uint256) view returns(address)','function bitcoin() view returns(address)','function settle((uint8 pool,uint256 cycleId,uint256 maxPositions)[])','function claim((uint8 pool,uint256 cycleId,uint256 tokenId)[])'];
@@ -31,7 +32,7 @@ function canEnter(x=ctx){return Boolean(x?.forgeReady&&x.dataLoaded&&x.m.entries
 function disable(){
  for(const e of $$('button,select,input'))e.disabled=busy;
  const x=ctx;
- $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview;
+ $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview||Boolean(x?.preview?.entryError);
  $('#review-confirm').disabled=busy||!canEnter();
  if(x?.preview&&account&&x.preview.total>x.balance)$('#build-submit').disabled=true;
  text('#build-submit',!x?.forgeReady?(manifests[$('#chain').value]?.status==='deployed'?'Checking chain…':'Launch pending'):!x.dataLoaded?'Loading position data…':!canEnter()?'New entries paused':!account?'Connect wallet to create position':'Review your position ↗');
@@ -62,7 +63,7 @@ async function load(){
  for(const d of $$('dialog[open]'))d.close();clearReferences(document);pending();updateLinks();buy.update();disable();
  const n=networks[key],old=legacy[key],m=manifests[key];
  text('#hero-native','$'+(n?.unit||'ETH'));text('#hero-bitcoin','$'+(n?.btc||'BTC'));
- $('#hero-native-logo').src=key==='pls'?'assets/pulsechain-token.svg':'assets/ethereum-token.svg';$('#hero-bitcoin-logo').src=key==='rh'?'../assets/token-logos/cbbtc.svg':'../assets/token-logos/wbtc.png';
+ $('#hero-native-logo').src=key==='avax'?'../avalanche-preview/assets/avax-token.webp':key==='pls'?'assets/pulsechain-token.svg':'assets/ethereum-token.svg';$('#hero-bitcoin-logo').src=key==='avax'?'../avalanche-preview/assets/btcb-token.png':key==='rh'?'../assets/token-logos/cbbtc.svg':'../assets/token-logos/wbtc.png';
  window.dispatchEvent(new Event('more-chain-change'));
  if(!n||!old||!m){status('This chain is planned for a future deployment.');await preview();return;}
  const r=new JsonRpcProvider(n.rpc,n.id,{staticNetwork:true});
@@ -88,7 +89,7 @@ async function verify(x){
  const {m,r,position:p}=x;
  await verifyDripController(r,m);
  const router=new Contract(m.contracts.feeRouter,['function eightDayVault() view returns(address)','function twentyEightDayVault() view returns(address)','function eightyEightDayVault() view returns(address)','function bitcoinVault() view returns(address)','function fuelBurner() view returns(address)','function moreBurner() view returns(address)','function pampBurner() view returns(address)','function development() view returns(address)'],r);
- const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner','pampBurner','development'];
+ const fields=['eightDayVault','twentyEightDayVault','eightyEightDayVault','bitcoinVault','fuelBurner','moreBurner',...(!m.noPamp?['pampBurner']:[]),'development'];
  const [codes,name,owner,more,oracle,receiver,day,helperBtc,vaultChecks,helperVaults,rewardToken,actual]=await Promise.all([
   Promise.all([m.position,m.helper,...m.vaults,...m.burners].map(a=>r.getCode(a))),p.name(),p.owner(),p.more(),p.priceOracle(),p.feeReceiver(),p.dayDuration(),x.helper.bitcoin(),
   Promise.all(x.vaults.map(async(v,i)=>{const [pos,anchor,duration]=await Promise.all([v.positions(),v.launchTime(),v.cycleDuration()]);return same(pos,m.position)&&Number(anchor)===m.launchTime&&Number(duration)===[8,28,88,288][i]*86400;})),
@@ -146,7 +147,7 @@ async function readChain(x){
 async function preview(){
  fitAmountInputs();const id=++previewId,x=ctx;
  if(x)x.preview=null;disable();let v;
- try{v=valid();}catch(err){text('#build-status',error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost','#power-principal','#power-burned','#term-bonus','#detail-principal','#detail-burned','#detail-term','#detail-grace','#detail-expiry']){text(s,'—');$(s).removeAttribute('title');}$('.more-power-ring').style.setProperty('--power-angle','0deg');$('#term-payouts').innerHTML='';text('#term-native-total','Check your inputs');text('#term-bitcoin-total','');text('#build-burn-max','—');text('#current-preview-share','Check inputs');$('#current-payouts').innerHTML='';clearReferences($('#panel-build'));return;}
+ try{v=valid();}catch(err){const empty=/^0*(?:\.0*)?$/.test($('#amount').value.trim())&&/^0*(?:\.0*)?$/.test($('#boost').value.trim());text('#build-status',empty?'Enter a MORE amount to preview your position.':error(err));for(const s of ['#power','#multiplier','#native-fee','#total-cost','#power-principal','#power-burned','#term-bonus','#detail-principal','#detail-burned','#detail-term','#detail-grace','#detail-expiry']){text(s,'—');$(s).removeAttribute('title');}$('.more-power-ring').style.setProperty('--power-angle','0deg');$('#term-payouts').innerHTML='';text('#term-native-total',empty?'Enter an amount to see estimated rewards':'Check your inputs');text('#term-bitcoin-total','');text('#build-burn-max','—');text('#current-preview-share',empty?'—':'Check inputs');$('#current-payouts').innerHTML='';clearReferences($('#panel-build'));return;}
  text('#build-burn-max',displayAmount(v.principal*3n,18,4));
  text('#term-estimate-title',`Estimated rewards over your ${v.days.toLocaleString()}-day term`);
  const now=x?.now||Math.floor(Date.now()/1000),maturity=BigInt(now)+BigInt(v.days)*DAY;
@@ -162,7 +163,7 @@ async function preview(){
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
   if(id!==previewId||x!==ctx)return;
-  x.preview={...v,fee};amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
+  x.preview={...v,fee};if(x.m.noPamp){try{await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});}catch(e){x.preview.entryError=error(e);text('#build-status',error(e));}if(id!==previewId||x!==ctx)return;}amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value. Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});
@@ -172,17 +173,17 @@ async function preview(){
    let bitcoinEntry=0n;
    // A failed Bitcoin quote must remain unavailable, never become a zero reward.
    if(bitcoinCycles>0||powerAt({created:BigInt(x.now),maturity,power:v.power,closed:0n},x.pools[3].deadline)>0n){
-    try{bitcoinEntry=(await new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(fee*1680n/10000n))[0];}
+    try{bitcoinEntry=(await new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(fee*BigInt(x.m.rewardAllocations?.[3]||1680)/10000n))[0];}
     catch{bitcoinEntry=null;}
    }
    if(id!==previewId||x!==ctx)return;
-   const estimates=estimateTermRewards({days:v.days,power:v.power,existingPower,fee,pools:x.pools,bitcoinEntry});
+   const estimates=estimateTermRewards({days:v.days,power:v.power,existingPower,fee,pools:x.pools,bitcoinEntry,allocations:x.m.rewardAllocations?.map(BigInt)});
    const totalPower=existingPower+v.power;
    text('#current-preview-share',`${(Number(v.power*1000000n/totalPower)/10000).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:4})}%`);
    const proposed={created:BigInt(x.now),maturity,power:v.power,closed:0n};
    $('#current-payouts').innerHTML=x.pools.map(p=>{
     const own=powerAt(proposed,p.deadline),total=x.positions.reduce((sum,z)=>sum+powerAt(z,p.deadline),0n)+own;
-    const bitcoin=p.i===3,entry=bitcoin?bitcoinEntry:fee*[2688n,2268n,1764n][p.i]/10000n;
+    const bitcoin=p.i===3,entry=bitcoin?bitcoinEntry:fee*BigInt((x.m.rewardAllocations||[2688,2268,1764])[p.i])/10000n;
     const balance=p.balance+(bitcoin?(p.btcQuote||0n):0n);
     const payout=estimateCurrentReward({balance,entry,power:own,existingPower:total-own});
     const symbol=bitcoin?x.n.btc:x.n.unit;
@@ -234,7 +235,7 @@ async function renderBurns(x,a,current){
   if(!current())return;
   const focused=document.activeElement,setting=focused?.dataset?.burnSetting,draft=setting?focused.value:null;
   const opened=[...$('#burn-cards').querySelectorAll('details[open]')].map(d=>d.closest('[data-burn-address]').dataset.burnAddress);
-  const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
+  $('#burn-cards').classList.toggle('has-two',rows.length===2);const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
   for(const address of opened){const details=$(`[data-burn-address="${address}"] details`);if(details)details.open=true;}
   if(setting){const input=$(`[data-burn-setting="${setting}"]`);if(input){input.value=draft;input.focus({preventScroll:true});}}
   $$('[data-execute]').forEach(b=>b.onclick=()=>action('Executing burn',s=>new Contract(x.m.burners[Number(b.dataset.execute)],burnAbi,s).execute()));
@@ -292,7 +293,7 @@ async function action(label,fn){
 $('#build-form').onsubmit=async event=>{
  event.preventDefault();const x=ctx;if(!canEnter(x)||!account){text('#build-status','entries are not open yet.');return;}
  try{const v=valid(),who=account,fee=await x.position.requiredFee(v.principal);if(ctx!==x||account!==who)return;if(v.total>x.balance)throw Error('Not enough MORE for principal and optional burn.');
- review={...v,fee,x,account:who};const maturity=BigInt(x.now)+BigInt(v.days)*DAY;
+ if(x.m.noPamp)await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});review={...v,fee,x,account:who};const maturity=BigInt(x.now)+BigInt(v.days)*DAY;
  text('#review-title','Review your MORE position');text('#review-body',`Lock ${units(v.principal)} MORE for ${v.days} days.\nPermanently burn ${units(v.burned)} extra MORE.\nProtocol fee: ${units(fee)} ${x.n.unit}, plus gas.\n\nEstimated maturity: ${date(maturity)}. Withdraw by ${date(maturity+7n*DAY)} for full principal. It declines to zero over the next 7 days. Dates are finalized by your entry’s block.\n\nYour optional burn is never returned. Bitcoin is bought during this entry. Approval and entry are separate confirmations.`);$('#review').showModal();
  }catch(err){status(error(err));}
 };
@@ -302,6 +303,7 @@ $('#review-confirm').onclick=async()=>{
  await action('Creating MORE position',async signer=>{
   const x=v.x,who=await signer.getAddress(),position=new Contract(x.m.position,positionAbi,signer),token=new Contract(x.m.more,erc20,signer);
   if(!same(who,v.account)||await position.entriesPaused())throw Error('Wallet changed or entries paused. Review again.');
+  if(x.m.noPamp)await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),await position.requiredFee(v.principal),{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});
   if(await token.allowance(who,x.m.position)<v.total){status('Approve exactly '+units(v.total)+' MORE for principal plus optional burn');const approval=await token.approve(x.m.position,v.total);const receipt=await approval.wait();if(receipt.status!==1)throw Error('Approval failed.');}
   const [accounts,chain,fee,paused,balance]=await Promise.all([provider.request({method:'eth_accounts'}),provider.request({method:'eth_chainId'}),position.requiredFee(v.principal),position.entriesPaused(),token.balanceOf(who)]);
   if(ctx!==x||!same(accounts[0],who)||Number(BigInt(chain))!==x.n.id)throw Error('Wallet or chain changed during approval. Review again.');
@@ -331,7 +333,7 @@ $('#max-term').onclick=()=>{$('#term').value='1000';preview();};$$('[data-term]'
 $('#chain').onchange=async()=>{
  const previous=ctx?.key||'rh',next=$('#chain').value;if(busy){$('#chain').value=previous;window.dispatchEvent(new Event('more-chain-selection-reset'));return;}
  busy=true;disable();
- try{const found=await findWalletProvider(true);if(found&&networks[next]){provider=found.provider;account=found.accounts[0];rememberWalletProvider(provider);await switchWalletChain(provider,{...networks[next],name:next==='pls'?'PulseChain':'Robinhood Chain'});}
+ try{const found=await findWalletProvider(true);if(found&&networks[next]){provider=found.provider;account=found.accounts[0];rememberWalletProvider(provider);await switchWalletChain(provider,{...networks[next],name:networks[next].name||(next==='pls'?'PulseChain':'Robinhood Chain')});}
  }catch(err){$('#chain').value=previous;window.dispatchEvent(new Event('more-chain-selection-reset'));status(Number(err?.code)===4001?'Chain switch cancelled. Your wallet stays on the current chain.':error(err));busy=false;disable();return;}
  busy=false;await load();
 };window.addEventListener('more-market-prices',event=>{if(event.detail.key===$('#chain').value){quotes=event.detail.quotes;refreshReferences(document,quotes);}});
