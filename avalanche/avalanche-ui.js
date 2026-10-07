@@ -159,3 +159,5 @@ $$('[data-build-product]').forEach(button=>{
   });
 });
 switchBuildProduct(new URLSearchParams(location.search).get('product'));
+
+updateFoundryPreview();

@@ -1,0 +1,65 @@
+/* Shared control geometry; each protocol keeps its palette and economics. */
+:where(.forge-refresh,.more-forge-site,body[data-forge-chain]) :is(button,input,select,summary){font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+body[data-forge-chain] .tabs{padding:5px;gap:5px;border-radius:13px}
+body[data-forge-chain] .tabs button{font-size:14px;min-height:50px;border-radius:9px;gap:10px}
+body[data-forge-chain] .build-switch button{padding:8px 16px;min-height:33px;line-height:15px}
+body[data-forge-chain] .term-presets button{min-height:27px;line-height:15px}
+body[data-forge-chain] :is(.primary-button,.claim-actions button,.action-button){min-height:43px;font-size:12px;border-radius:9px;padding:12px 16px;line-height:17px}
+body[data-forge-chain] .form-card>.primary-button{width:100%}
+body[data-forge-chain] .foundry-builder .amount-field{height:54px;border-radius:9px}
+body[data-forge-chain] .foundry-builder .amount-field select{height:54px;min-height:54px;font-size:17px;font-weight:600;border-radius:9px;background:var(--surface);color:var(--text)}
+body[data-forge-chain] .foundry-builder select option{background:var(--surface);color:var(--text)}
+body[data-forge-chain] .foundry-estimate>img{width:min(100%,310px)}
+body[data-forge-chain] .stake-filters button{min-height:42px;border-radius:7px;padding:10px 16px;font-size:10px;letter-spacing:.05em}
+body[data-forge-chain] .pool-card h3{font-weight:700}
+body[data-forge-chain] #panel-burns .section-heading{margin-bottom:28px}
+body[data-forge-chain] #panel-burns .section-heading h2{font-size:34px}
+body[data-forge-chain] #panel-burns .eyebrow{font-size:11px}
+body[data-forge-chain] .burn-card{padding:28px;border-radius:17px}
+body[data-forge-chain] .burn-card-top{padding-bottom:24px}
+body[data-forge-chain] .burn-emblem{width:58px;height:58px;flex-basis:58px}
+body[data-forge-chain] .burn-card h3{font-size:22px}
+body[data-forge-chain] .burn-settings{font-size:10px}
+body[data-forge-chain] .burn-metrics>div{padding:18px 0;gap:12px;font-size:13px}
+body[data-forge-chain] .burn-metrics>div:first-child{padding:22px 0 24px}
+body[data-forge-chain] .burn-metrics>div:first-child>strong{font-size:32px}
+body[data-forge-chain] .burn-metrics>div>strong{font-size:15px;line-height:1.45}
+body[data-forge-chain] .burn-card-actions .burn-execute-button{min-height:46px;font-size:13px}
+:where(.forge-refresh,.more-forge-site,body[data-forge-chain]) :is(a,button,summary,input,select):focus-visible{outline-width:2px;outline-offset:3px}
+body[data-forge-chain] .amount-field button:disabled{opacity:.45;cursor:not-allowed}
+body[data-forge-chain] :is(.foundry-wallet,.stake-wallet) details>summary{cursor:pointer;font-size:12px;line-height:1.6}
+body[data-forge-chain] .foundry-wallet .action-button{min-height:43px}
+body[data-forge-chain] dialog{width:min(560px,calc(100% - 32px));max-height:calc(100dvh - 32px);overflow:auto;border-radius:16px}
+@media(max-width:760px){
+ body[data-forge-chain] .tabs{padding:4px;gap:2px;border-radius:11px;top:5px}
+ body[data-forge-chain] .tabs button{font-size:11px;min-height:56px;padding:9px 2px;line-height:1.3;gap:5px}
+ body[data-forge-chain] .amount-field{height:56px}
+ body[data-forge-chain] .amount-field input{font-size:18px}
+ body[data-forge-chain] .build-switch{width:100%}
+ body[data-forge-chain] .build-switch button{flex:1}
+ body[data-forge-chain] #panel-burns .section-heading h2{font-size:29px}
+ body[data-forge-chain] .burn-card{padding:23px}
+ body[data-forge-chain] .burn-card h3{font-size:21px}
+ body[data-forge-chain] .burn-metrics>div>strong{font-size:14px}
+ body[data-forge-chain] .burn-metrics strong small{font-size:11px}
+ body[data-forge-chain] .pool-value{font-size:32px}
+ body[data-forge-chain] .burn-card-actions{flex-direction:row}
+}
+body[data-forge-chain] .site-header{gap:20px}
+body[data-forge-chain] .site-header :is(.header-link,.protocol-link,.network,.wallet-button){height:42px;min-height:42px;border-radius:10px;font-size:13px;line-height:1.25;font-weight:650}
+body[data-forge-chain] :is(.header-link,.protocol-link){display:inline-flex;align-items:center;justify-content:center}
+body[data-forge-chain] .site-header .network{width:178px}
+body[data-forge-chain] .section-heading>p{margin:0}
+body[data-forge-chain] .compact-stake summary{list-style:none}
+body[data-forge-chain] .compact-stake summary::-webkit-details-marker{display:none}
+body[data-forge-chain] .stake-hint{font-size:12px;line-height:1.5}
+body[data-forge-chain] .transfer-field{display:flex;flex-direction:column;gap:6px;flex:1 1 100%;min-width:0;font-size:11px;color:var(--muted)}
+body[data-forge-chain] .transfer-field input{width:100%;min-width:0;border:1px solid var(--line-strong);border-radius:8px;padding:10px 12px;background:var(--surface);color:var(--text);font-size:12px}
+body[data-forge-chain] .foundry-wallet .claim-actions{padding:16px}
+@media(min-width:761px){body[data-forge-chain] .header-link{width:112px}}
+@media(max-width:1050px){body[data-forge-chain] .site-header{height:auto;min-height:104px;padding:14px 0;flex-wrap:wrap;gap:12px}body[data-forge-chain] .header-actions{flex-wrap:wrap;gap:8px;max-width:100%}}
+@media(max-width:760px){body[data-forge-chain] .site-header{gap:10px 8px}body[data-forge-chain] .site-header :is(.header-link,.protocol-link,.network,.wallet-button){height:36px;min-height:36px;font-size:11px}body[data-forge-chain] .site-header .network{width:158px}body[data-forge-chain] .header-link{width:auto}}
+body[data-forge-chain] .burn-owner-controls{margin-top:18px;border-top:1px solid var(--line-strong);padding-top:14px;font-size:12px}
+body[data-forge-chain] .burn-owner-controls summary{cursor:pointer;margin-bottom:12px;color:var(--muted)}
+body[data-forge-chain] .burn-owner-controls label{display:flex;flex-direction:column;gap:8px;margin:12px 0;color:var(--muted)}
+body[data-forge-chain] .burn-owner-controls input{padding:10px 12px;border-radius:8px;border:1px solid var(--line-strong);background:var(--surface);color:var(--text)}

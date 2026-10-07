@@ -32,6 +32,8 @@ function canEnter(x=ctx){return Boolean(x?.forgeReady&&x.dataLoaded&&x.m.entries
 function disable(){
  for(const e of $$('button,select,input'))e.disabled=busy;
  const x=ctx;
+ $('#max-amount').disabled=busy||!account||!x?.dataLoaded;
+ $('#max-boost').disabled=busy||!account||!x?.dataLoaded;
  $('#build-submit').disabled=busy||!canEnter()||!account||!x?.preview||Boolean(x?.preview?.entryError)||Boolean(x?.m.noPamp&&!x?.preview?.entryChecked);
  $('#review-confirm').disabled=busy||!canEnter();
  if(x?.preview&&account&&x.preview.total>x.balance)$('#build-submit').disabled=true;
