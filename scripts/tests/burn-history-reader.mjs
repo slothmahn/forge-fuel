@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {createBurnHistoryReader} from '../../assets/burn-history-reader.js';
+let fork='a',calls=[],fail=false;
+const events=[{block:101,amount:10n},{block:180,amount:20n},{block:205,amount:30n}];
+const provider={getBlock:async n=>({hash:fork+n}),getLogs:async q=>{calls.push(q);if(fail)throw Error('RPC unavailable');return events.filter(e=>e.block>=q.fromBlock&&e.block<=q.toBlock).map(e=>({amount:e.amount}));}};
+const contract={target:'0xABC',interface:{getEvent:()=>({topicHash:'event'}),parseLog:l=>({args:{tokensBurned:l.amount}})}};
+const reader=createBurnHistoryReader(provider,100,{windowSize:25,confirmations:10});
+assert.equal(reader.peek('0xabc'),null);
+assert.equal(await reader.load(contract,200),30n);
+calls=[];assert.equal(await reader.load(contract,210),60n);assert(calls.every(q=>q.fromBlock>=191));
+fork='b';calls=[];assert.equal(await reader.load(contract,210),60n);assert(calls.some(q=>q.fromBlock===100));
+fail=true;await assert.rejects(reader.load(contract,220));assert.equal(reader.peek('0xABC'),60n);
+fail=false;assert.equal(await reader.load(contract,220),60n);
+calls=[];const a=reader.load(contract,220),b=reader.load(contract,220);assert.equal(a,b);await a;
+console.log('Burn history: incremental reads, reorganization recovery, retained totals, retries, and concurrent deduplication passed.');
