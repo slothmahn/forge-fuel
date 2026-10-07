@@ -1,21 +1,21 @@
-import {checkBitcoinFunding} from './entry-funding.js?v=avax-live-144';
+import {checkBitcoinFunding} from './entry-funding.js?v=multichain-live-145';
 import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../assets/owner-transition.js?v=owner-transition-106';
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=chain-switch-132';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
-import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=avax-live-144';
+import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=multichain-live-145';
 import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=position-details-below-113';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
-import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=avax-live-144';
+import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=multichain-live-145';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
-import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=avax-live-144';
+import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=multichain-live-145';
 import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-loading-142';
-import {installBuy} from './buy-ui-v2.js?v=avax-live-144';
+import {installBuy} from './buy-ui-v2.js?v=multichain-live-145';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
 import {referenceMarkup,setReference,refreshReferences,clearReferences} from './usd-reference.js?v=burn-layout-79';
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
-const networks={rh:{id:4663,rpc:'https://rpc.mainnet.chain.robinhood.com/',unit:'ETH',btc:'cbBTC',explorer:'https://explorer.robinhood.com'},avax:{id:43114,rpc:'https://api.avax.network/ext/bc/C/rpc',unit:'AVAX',btc:'BTC.b',name:'Avalanche C-Chain',explorer:'https://snowtrace.io'},pls:{id:369,rpc:'https://rpc.pulsechain.com',unit:'PLS',btc:'wBTC',explorer:'https://scan.pulsechain.com'}};
+const networks={eth:{id:1,rpc:'https://ethereum-rpc.publicnode.com',unit:'ETH',btc:'wBTC',name:'Ethereum Mainnet',explorer:'https://etherscan.io'},rh:{id:4663,rpc:'https://rpc.mainnet.chain.robinhood.com/',unit:'ETH',btc:'cbBTC',explorer:'https://explorer.robinhood.com'},avax:{id:43114,rpc:'https://api.avax.network/ext/bc/C/rpc',unit:'AVAX',btc:'BTC.b',name:'Avalanche C-Chain',explorer:'https://snowtrace.io'},pls:{id:369,rpc:'https://rpc.pulsechain.com',unit:'PLS',btc:'wBTC',explorer:'https://scan.pulsechain.com'}};
 const erc20=['function balanceOf(address) view returns(uint256)','function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)'];
 const vaultAbi=['function positions() view returns(address)','function launchTime() view returns(uint256)','function cycleDuration() view returns(uint256)','function rewardToken() view returns(address)','function owner() view returns(address)','function cycleAt(uint256) view returns(uint256)','function deadline(uint256) view returns(uint256)','function cycleBalance(uint256) view returns(uint256)','function nativeCycleBalance(uint256) view returns(uint256)','function cycles(uint256) view returns(uint256 cursor,uint256 upperTokenId,uint256 totalPower,uint256 participantPool,uint256 claimed,uint256 callerPaid,bool started,bool settled)','function claimable(uint256,uint256) view returns(uint256)','function referenceQuote() view returns(address)'];
 const helperAbi=['function vaults(uint256) view returns(address)','function bitcoin() view returns(address)','function settle((uint8 pool,uint256 cycleId,uint256 maxPositions)[])','function claim((uint8 pool,uint256 cycleId,uint256 tokenId)[])'];
@@ -163,7 +163,7 @@ async function preview(){
  try{
   const fee=x.forgeReady?await x.position.requiredFee(v.principal):feeForValue(await new Contract(x.old.contracts.feeQuote,['function quoteMoreInNative(uint256) view returns(uint256)'],x.r).quoteMoreInNative(v.principal),x.feePolicy);
   if(id!==previewId||x!==ctx)return;
-  x.preview={...v,fee,entryChecked:!x.m.noPamp};if(x.m.noPamp){try{await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});x.preview.entryChecked=true;}catch(e){x.preview.entryError=error(e);text('#build-status',error(e));}if(id!==previewId||x!==ctx)return;}amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
+  const entryPreview={...v,fee,entryChecked:!x.m.noPamp};x.preview=entryPreview;if(x.m.noPamp){try{await checkBitcoinFunding(new Contract(x.m.contracts.executionQuote3,['function quote(uint256) view returns(uint256,uint256)'],x.r),fee,{bitcoinBps:x.m.rewardAllocations[3],cap:x.m.swapCapWei});entryPreview.entryChecked=true;}catch(e){entryPreview.entryError=error(e);if(id===previewId&&x===ctx)text('#build-status',error(e));}if(id!==previewId||x!==ctx)return;}amountText($('#native-fee'),fee,x.n.unit,x.key==='pls'?2:6);text('#fee-label',x.forgeReady?'Position fee':'Estimated position fee');$('#total-cost').innerHTML=`<span>${displayAmount(v.total,18,4)} MORE</span><span>+ ${displayAmount(fee,18,x.key==='pls'?2:6)} ${x.n.unit}</span>`;$('#total-cost').title='Exact amounts: '+units(v.total)+' MORE + '+units(fee)+' '+x.n.unit+'; gas excluded';
   const p=x.feePolicy;
   text('#fee-policy',`${Number(p.bps)/100}% of the quoted locked-principal value. Optional burns and lock duration do not increase this fee.${x.forgeReady?'':' Final policy is verified at launch.'}`);
   setReference($('#fee-usd'),{NATIVE:fee});setReference($('#total-usd'),{MORE:v.total,NATIVE:fee});

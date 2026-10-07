@@ -5,7 +5,7 @@
   rh:{chain:'robinhood',native:'ETH',btc:'cbBTC',pairs:{FUEL:'0xff40c99525ffa6b6cf79ecbe370ef7c887d68f69',MORE:'0xd77dcda732a762ec8b04ee44a1c7370602759d2372037a5008135ab9f60305ef',PAMP:'0xc774a953079b7411f313a2d23ecacafb19682b6e',BTC:'0xd30e44aae604b42a63f6f9a8109fd0408f35b9fb'}},
   pls:{chain:'pulsechain',native:'PLS',btc:'wBTC',pairs:{FUEL:'0x0bB20331f424e59612668f3294A23CAa83CC06ef',MORE:'0x3D3B080A1Ec1AFc121a27AE4cBad17A14E80f7B5',PAMP:'0x5A6ed52a40983BDE815Cffe445F2175E80456F6B',BTC:'0x8c52470a05eEB2fCe4905688Ec59bFDd32E71D07'}},
   avax:{chain:'avalanche',native:'AVAX',btc:'BTC.b',pairs:{FUEL:'0x2431dfc276af9c5c3bb5a091d2be19cf518e2467',MORE:'0xce876ac86e818f8e92ddf422829dec671a7e7d55',BTC:'0x5ca009013f6b898d134b6798b336a4592f3b4af2'}},
-  eth:{chain:'ethereum',native:'ETH',btc:'wBTC',pairs:{MORE:'0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a',BTC:'0x4585fe77225b41b697c938b018e2ac67ac5a20c0'}}
+  eth:{chain:'ethereum',native:'ETH',btc:'wBTC',pairs:{FUEL:'0x917529659d0c2aa333bdde99e6534375ba217399',MORE:'0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a',BTC:'0x4585fe77225b41b697c938b018e2ac67ac5a20c0'}}
  };
  const strip=document.createElement('div');strip.className='market-strip';strip.setAttribute('aria-label','Chain token market prices');document.querySelector('.preview-notice').after(strip);
  let requestId=0;const cache={};
@@ -36,8 +36,9 @@
    }finally{clearTimeout(timer);}
   }));
   const quotes={};for(const result of results)if(result.status==='fulfilled'){const q=result.value;quotes[q.symbol]=q.usd;if(q.symbol==='BTC')quotes.NATIVE=q.usd/q.native;}
-  const complete=results.every(r=>r.status==='fulfilled');
-  const status=`DexScreener · checked ${new Date().toLocaleTimeString()}${complete?'':' · some prices unavailable'}`;
+  if(key==='eth'&&!quotes.MORE&&quotes.NATIVE){try{const [{Contract,JsonRpcProvider},deployment]=await Promise.all([import('./vendor/ethers-6.15.0.js'),fetch('deployments-v2.json',{cache:'no-store'}).then(r=>r.json())]);const oracle=deployment.eth?.contracts?.mainQuote;if(oracle){const [out]=await new Contract(oracle,['function quote(uint256) view returns(uint256,uint256)'],new JsonRpcProvider('https://ethereum-rpc.publicnode.com',1,{staticNetwork:true})).quote(10n**18n);const usd=quotes.NATIVE/(Number(out)/1e18);if(Number.isFinite(usd)&&usd>0)quotes.MORE=usd;}}catch{}}
+  const complete=Object.keys(network.pairs).every(symbol=>quotes[symbol]>0);
+  const status=`Market references · checked ${new Date().toLocaleTimeString()}${complete?'':' · some prices unavailable'}`;
   cache[key]={time:Date.now(),quotes,status};if(id===requestId&&document.querySelector('#chain').value===key)render(key,quotes,status);
  }
  window.addEventListener('more-chain-change',()=>refresh());

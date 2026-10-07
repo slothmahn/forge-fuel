@@ -1,7 +1,7 @@
 import {fitAmountInputs} from './input-sizing.js?v=two-way-123';
 import {displayAmount,amountText} from './amounts.js?v=more-forge-polish-33';
 import {Contract,parseUnits,formatUnits} from './vendor/ethers-6.15.0.js';
-import {quotePurchase,quotePurchaseForOutput,minimumReceived,purchaseTransaction,receivedMore} from './swaps.js?v=avax-live-144';
+import {quotePurchase,quotePurchaseForOutput,minimumReceived,purchaseTransaction,receivedMore} from './swaps.js?v=multichain-live-145';
 import {setReference,refreshReferences,clearReferences} from './usd-reference.js';
 
 export function installBuy({context,account,isBusy,marketPrices,action,tab,status}){
@@ -38,11 +38,11 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
     }).finally(()=>{state.pending=null;disable();});
     return state.pending;
   }
-  function marketMessage(x=context()){return x?.ready?'Enter an amount to see your purchase.':x?.loadFailed?'Purchase data unavailable. Refresh the page to retry.':['rh','pls','avax'].includes($('#chain').value)?'Loading live purchase quotes…':'Purchases are not available on this chain yet.';}
+  function marketMessage(x=context()){return x?.ready?'Enter an amount to see your purchase.':x?.loadFailed?'Purchase data unavailable. Refresh the page to retry.':['rh','pls','avax','eth'].includes($('#chain').value)?'Loading live purchase quotes…':'Purchases are not available on this chain yet.';}
   function update(){const x=context(),id=(x?.key||'')+':'+(account()||'').toLowerCase(),state=marketMessage(x);
     if(id!==identity){identity=id;balanceState=null;$('#buy-balance-refresh').hidden=true;$('#buy-balance').removeAttribute('title');clear(state);$('#buy-result').hidden=true;}
     if(state!==availability){availability=state;clear(state);}
-    const unit=x?.n.unit||($('#chain').value==='pls'?'PLS':'ETH');text('#buy-native-unit',unit);$('#buy-native-logo').src=unit==='AVAX'?'../avalanche-preview/assets/avax-token.webp':unit==='PLS'?'assets/pulsechain-token.svg':'assets/ethereum-token.svg';if(!account()){text('#buy-balance','Connect wallet to see your balance');$('#buy-balance').removeAttribute('title');}else if(x)readBalance().catch(()=>{});else text('#buy-balance','Loading '+unit+' balance…');text('#buy-unit-label','You pay');text('#buy-route',unit+' → MORE · '+(x?.key==='avax'?'Uniswap V3':x?.key==='pls'?'PulseX V2':'Uniswap V4'));$('#buy-form').dataset.chain=x?.key||$('#chain').value;text('#buy-chain',x?.key==='avax'?'Avalanche · MORE / WAVAX':x?.key==='pls'?'PulseChain · MORE / WPLS':'Robinhood · MORE / WETH');
+    const unit=x?.n.unit||($('#chain').value==='pls'?'PLS':'ETH');text('#buy-native-unit',unit);$('#buy-native-logo').src=unit==='AVAX'?'../avalanche-preview/assets/avax-token.webp':unit==='PLS'?'assets/pulsechain-token.svg':'assets/ethereum-token.svg';if(!account()){text('#buy-balance','Connect wallet to see your balance');$('#buy-balance').removeAttribute('title');}else if(x)readBalance().catch(()=>{});else text('#buy-balance','Loading '+unit+' balance…');text('#buy-unit-label','You pay');text('#buy-route',unit+' → MORE · '+(x?.key==='avax'?'Uniswap V3':x?.key==='pls'?'PulseX V2':'Uniswap V4'));$('#buy-form').dataset.chain=x?.key||$('#chain').value;text('#buy-chain',x?.key==='eth'?'Ethereum · MORE / ETH':x?.key==='avax'?'Avalanche · MORE / WAVAX':x?.key==='pls'?'PulseChain · MORE / WPLS':'Robinhood · MORE / WETH');
     disable();
   }
   async function preview(){fitAmountInputs();clearTimeout(timer);clear('Getting a live swap quote…');const x=context(),id=request,wallet=(account()||'').toLowerCase();if(!x?.ready){text('#buy-status',marketMessage(x));return;}
@@ -65,7 +65,7 @@ export function installBuy({context,account,isBusy,marketPrices,action,tab,statu
   $('#buy-connect').onclick=()=>$('#connect-wallet').click();
   $('#buy-balance-refresh').onclick=()=>readBalance(true).catch(()=>{});
   $('#buy-half').onclick=async()=>{const x=context(),wallet=account();if(!x||!wallet)return;try{const balance=await readBalance(true);if(context()!==x||account()!==wallet)return;side='pay';$('#buy-amount').value=units(balance/2n);await preview();}catch(e){text('#buy-status',err(e));}};
-  $('#buy-form').onsubmit=async e=>{e.preventDefault();if(!valid()){await preview();text('#buy-status','Quote refreshed. Review your purchase again.');return;}review={...quote};const q=review,x=q.context;text('#buy-review-body',`Spend ${units(q.amount)} ${x.n.unit} to buy an estimated ${units(q.out)} MORE on ${x.key==='avax'?'Avalanche':x.key==='rh'?'Robinhood':'PulseChain'}. Minimum received: ${units(q.min)} MORE (${q.bps/100}% slippage). Estimated gas: ${display(q.gasCost)} ${x.n.unit}. MORE goes to ${account()}. This purchase does not create a Forge position or burn any MORE. A later position requires a separate protocol fee and wallet confirmation. Entry availability is shown on Build power.`);$('#buy-review').showModal();};
+  $('#buy-form').onsubmit=async e=>{e.preventDefault();if(!valid()){await preview();text('#buy-status','Quote refreshed. Review your purchase again.');return;}review={...quote};const q=review,x=q.context;text('#buy-review-body',`Spend ${units(q.amount)} ${x.n.unit} to buy an estimated ${units(q.out)} MORE on ${x.key==='eth'?'Ethereum':x.key==='avax'?'Avalanche':x.key==='rh'?'Robinhood':'PulseChain'}. Minimum received: ${units(q.min)} MORE (${q.bps/100}% slippage). Estimated gas: ${display(q.gasCost)} ${x.n.unit}. MORE goes to ${account()}. This purchase does not create a Forge position or burn any MORE. A later position requires a separate protocol fee and wallet confirmation. Entry availability is shown on Build power.`);$('#buy-review').showModal();};
   $('#buy-cancel').onclick=$('#buy-close').onclick=()=>{$('#buy-review').close();review=null;};
   $('#buy-confirm').onclick=async()=>{const q=review;if(!q)return;$('#buy-review').close();review=null;
     if(!valid(q)){clear('Quote expired or wallet changed. Refresh and review your purchase again.');return;}

@@ -185,5 +185,18 @@
       "mainQuote": "0x1bC90c32245b9caFA9F584780d036A7E30cD5E20",
       "feeQuote": "0x2C384F26bd007D08e7F98B4b9cb6702440439b49"
     }
+  },
+  "eth": {
+    "chainId": 1,
+    "more": "0xbEEf3bB9dA340EbdF0f5bae2E85368140d7D85D0",
+    "bitcoinToken": "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    "position": "0x0000000000000000000000000000000000000000",
+    "helper": "0x0000000000000000000000000000000000000000",
+    "vaults": [],
+    "burners": [],
+    "contracts": {
+      "mainQuote": "0x2111b6Fbf91FcA2c2A3758d04F074BCFdD5F4606",
+      "feeQuote": "0x66FD29BE8f7C2F404E498B34E9E789418665ecF4"
+    }
   }
 }
