@@ -1,1 +1,9 @@
 .hero-token .native-symbol,.hero-token .bitcoin-symbol{display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;width:20px;height:20px}.hero-token img{display:block;width:20px;height:20px;object-fit:contain;filter:none;border-radius:50%}.section-heading h2{font-size:30px;line-height:1.2}.pool-card,.burn-card{border-radius:17px}@media(max-width:760px){.section-heading h2{font-size:27px}}
+
+/* Keep the burn action and explorer link together, as on Fuel Forge. */
+#burn-cards .burn-card .burn-actions{flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:nowrap;gap:12px;padding-top:24px}
+#burn-cards .burn-card .burn-actions .primary-button{appearance:none;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:auto;min-height:46px;margin:0;padding:8px 16px;border:1px solid #ffffff25;border-radius:9px;background:#ffffff08;color:var(--text,#f4eae1);font-family:inherit;font-size:13px;font-weight:700;line-height:1.4;cursor:pointer;box-shadow:none}
+#burn-cards .burn-card .burn-actions .primary-button:hover:not(:disabled){background:#ffffff12;border-color:var(--burn-accent)}
+#burn-cards .burn-card .burn-actions .primary-button:focus-visible{outline:2px solid var(--burn-accent);outline-offset:3px}
+#burn-cards .burn-card .burn-actions .primary-button:disabled{opacity:.5;cursor:not-allowed}
+#burn-cards .burn-card .burn-actions a{flex:0 1 auto;min-width:0;text-align:right;color:var(--muted,#dac5af);font-size:12px;line-height:1.5;text-decoration:underline;text-underline-offset:4px}
