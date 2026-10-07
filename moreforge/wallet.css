@@ -247,9 +247,9 @@
 .fuel-forge-link img{display:block;width:110px;height:36px;object-fit:contain;filter:none}
 .fuel-forge-link .fuel-link-label{display:none}
 .fuel-forge-link[data-chain="pls"] img{filter:hue-rotate(175deg) saturate(1.05)}
-.fuel-forge-link[data-chain="eth"] img{display:none}
+.fuel-forge-link[data-chain="eth"] img{display:block;filter:grayscale(1) brightness(1.2)}
 .fuel-forge-link[data-chain="avax"] img{display:block;filter:hue-rotate(245deg) saturate(1.2)}
-.fuel-forge-link[data-chain="eth"] .fuel-link-label{display:inline}
+.fuel-forge-link[data-chain="eth"] .fuel-link-label{display:none}
 .fuel-forge-link[data-chain="avax"] .fuel-link-label{display:none}
 @media(max-width:600px){.fuel-forge-link img{width:92px;height:28px}}
 @media(max-width:380px){.site-header .header-links .fuel-forge-link{padding:0 6px}.fuel-forge-link img{width:80px;height:28px}}
