@@ -1,0 +1,5 @@
+.stake-sort-control{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:16px 0 12px;font:600 12px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ff-muted,var(--muted,#b3b9bd))}
+.stake-sort-control select{appearance:auto;color-scheme:dark;width:auto;max-width:100%;min-height:38px;padding:8px 32px 8px 12px;border:1px solid var(--chain-menu-line,#ffffff30);border-radius:9px;background:var(--chain-menu-bg,#14181d);color:var(--chain-menu-text,#f3f5f7);font:600 12px/1.5 Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer}
+.stake-sort-control select:focus-visible{outline:2px solid var(--chain-menu-accent,#a9ff34);outline-offset:3px}
+.stake-sort-control option{background:var(--chain-menu-bg,#14181d);color:var(--chain-menu-text,#f3f5f7)}
+@media(max-width:760px){.stake-sort-control{gap:8px}.stake-sort-control select{flex:1;min-width:0}}

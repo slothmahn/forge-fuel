@@ -3,7 +3,7 @@ import {expectedOwner,verifyDripController,burnControl,setBurnDrip} from '../ass
 import {switchWalletChain} from '../assets/wallet-chain-switch.js?v=chain-switch-132';
 import {findWalletProvider,rememberWalletProvider} from '../assets/wallet-session.js?v=wallet-session-95';
 import {estimateTermRewards,estimateCurrentReward} from './term-rewards.js?v=multichain-live-145';
-import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=position-details-below-113';
+import {positionMarkup,dateMarkup,updatePositionCard} from './position-ui.js?v=stake-sort-154';
 import {installFeeSettings} from './owner-fees.js?v=1';
 import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddress} from './vendor/ethers-6.15.0.js';
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=multichain-live-145';

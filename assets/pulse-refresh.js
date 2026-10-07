@@ -2,7 +2,7 @@ import {integrateRewardNfts} from './rewards-nfts.js?v=reward-nfts-128';
 import './chain-navigation.js?v=chain-menu-151';
 // Presentation-only entry. The deployed application's wallet, reads, and transactions
 // remain in the existing, unchanged module below.
-import './pulse-mainnet.js?v=default-term-138';
+import './pulse-mainnet.js?v=stake-sort-154';
 // Some mobile browsers apply a saved position or URL fragment after load.
 // Hold the initial view at the top until the visitor interacts, then release control.
 let initialScrollGuard = true;
