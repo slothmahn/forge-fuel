@@ -1,12 +1,12 @@
 {
   "eth": {
     "chain": "eth",
-    "block": 26137184,
+    "block": 26137411,
     "anchor": 1791306000,
     "helper": "0xE29C5925246ED5e062B89df8e4E1De1F8855412E",
     "gas": [
       "572025",
-      "14875827"
+      "10181979"
     ],
     "checks": [
       "immutable fee, open entries, owner renunciation, fixed caps and restricted burn ownership",
@@ -18,12 +18,12 @@
   },
   "avax": {
     "chain": "avax",
-    "block": 96919564,
+    "block": 96921467,
     "anchor": 1791306000,
     "helper": "0xfb2E2ECd53793B6064f26B55adbebA488567Bddc",
     "gas": [
       "572025",
-      "14813402"
+      "11193199"
     ],
     "checks": [
       "immutable fee, open entries, owner renunciation, fixed caps and restricted burn ownership",

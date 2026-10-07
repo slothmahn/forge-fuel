@@ -1,4 +1,59 @@
 {
- "eth":{"id":1,"unit":"ETH","btc":"wBTC","rpc":"https://ethereum-rpc.publicnode.com","native":"0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2","tokens":["0x465B7E1c2BcC86bc6C2d8AD786e7d1359C3E3547","0xbEEf3bB9dA340EbdF0f5bae2E85368140d7D85D0","0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"],"pools":["0x917529659D0c2aa333bdde99e6534375BA217399","0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a","0x4585FE77225b41b697C938B018E2Ac67Ac5a20c0"],"router":"0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45","moreRouter":"0x23617e59A5925b2A4Bf75d73ff6711cD0b29De85","stateView":"0x7fFE42C4a5DEeA5b0feC41C94C136Cf115597227","fees":[10000,0,500],"cap":"1000000000000000000","port":18801},
- "avax":{"id":43114,"unit":"AVAX","btc":"BTC.b","rpc":"https://api.avax.network/ext/bc/C/rpc","native":"0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7","tokens":["0x06A22D45e7bf93d56B6f940b9Cc6c401EDF43d71","0xb2722d5f1b8F3E19bf026c62C47C1C7BC1CDB04E","0x152b9d0FdC40C096757F570A51E494bd4b943E50"],"pools":["0x2431DFC276Af9c5c3BB5a091D2bE19Cf518e2467","0xce876Ac86E818F8e92ddf422829Dec671a7e7d55","0x5cA009013F6B898D134b6798B336A4592f3B4aF2"],"router":"0xbb00FF08d01D300023C629E8fFfFcb65A5a578cE","bitcoinRouter":"0xc8B8fCbDb5C019D7802fFb0b39603395D7d3915c","fees":[10000,10000,5],"cap":"10000000000000000000","port":18814}
+  "eth": {
+    "id": 1,
+    "unit": "ETH",
+    "btc": "wBTC",
+    "rpc": "https://ethereum-rpc.publicnode.com",
+    "native": "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    "tokens": [
+      "0x465B7E1c2BcC86bc6C2d8AD786e7d1359C3E3547",
+      "0xbEEf3bB9dA340EbdF0f5bae2E85368140d7D85D0",
+      "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599"
+    ],
+    "pools": [
+      "0x917529659D0c2aa333bdde99e6534375BA217399",
+      "0x745f836a293544db638a897e14b455f64c4147129a27b1959d910c49a326f94a",
+      "0x4585FE77225b41b697C938B018E2Ac67Ac5a20c0"
+    ],
+    "router": "0x68b3465833fb72A70ecDF485E0e4C7bD8665Fc45",
+    "moreRouter": "0x23617e59A5925b2A4Bf75d73ff6711cD0b29De85",
+    "stateView": "0x7fFE42C4a5DEeA5b0feC41C94C136Cf115597227",
+    "fees": [
+      10000,
+      0,
+      500
+    ],
+    "cap": "1000000000000000000",
+    "port": 18801,
+    "reuseAdapter": {
+      "address": "0xC30bd1553C61186e3d3F1dCC5C96EdAdD608EEb4",
+      "codeHash": "0x8172f05c293885d9a904fc358765e5c17cae783be6abc2e51fd7b2ab82754c8a"
+    }
+  },
+  "avax": {
+    "id": 43114,
+    "unit": "AVAX",
+    "btc": "BTC.b",
+    "rpc": "https://api.avax.network/ext/bc/C/rpc",
+    "native": "0xB31f66AA3C1e785363F0875A1B74E27b85FD66c7",
+    "tokens": [
+      "0x06A22D45e7bf93d56B6f940b9Cc6c401EDF43d71",
+      "0xb2722d5f1b8F3E19bf026c62C47C1C7BC1CDB04E",
+      "0x152b9d0FdC40C096757F570A51E494bd4b943E50"
+    ],
+    "pools": [
+      "0x2431DFC276Af9c5c3BB5a091D2bE19Cf518e2467",
+      "0xce876Ac86E818F8e92ddf422829Dec671a7e7d55",
+      "0x5cA009013F6B898D134b6798B336A4592f3B4aF2"
+    ],
+    "router": "0xbb00FF08d01D300023C629E8fFfFcb65A5a578cE",
+    "bitcoinRouter": "0xc8B8fCbDb5C019D7802fFb0b39603395D7d3915c",
+    "fees": [
+      10000,
+      10000,
+      5
+    ],
+    "cap": "10000000000000000000",
+    "port": 18814
+  }
 }
