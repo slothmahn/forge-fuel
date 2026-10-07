@@ -7,3 +7,14 @@
 .burn-card-actions a{color:var(--muted,#bbc0ca);font-size:12px;line-height:1.5;text-underline-offset:3px}
 body[data-forge-chain="avalanche"] .burn-card-actions .burn-execute-button{border-color:#ef467e40;background:#ef467e0c}
 body[data-forge-chain="ethereum"] .burn-card-actions .burn-execute-button{border-color:#79c8ae40;background:#79c8ae0c}
+/* Same metric order and readiness treatment as the live RH/PLS burn cards. */
+.burn-card-actions a{text-decoration:underline;text-underline-offset:4px}
+.burn-metrics strong .burn-interval-count{color:var(--muted);font-weight:400}
+.burn-metrics .burn-readiness{font-weight:600}
+.burn-metrics .burn-readiness.is-ready{display:inline-flex;align-items:center;justify-content:flex-end;gap:7px;color:var(--accent)}
+.burn-readiness.is-ready i{width:7px;height:7px;flex:0 0 7px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}
+@media(max-width:600px){
+ .burn-metrics>div:not(:first-child)>span{flex:0 1 auto;min-width:0}
+ .burn-metrics>div:not(:first-child)>strong{flex:0 1 auto;min-width:0}
+ .burn-card-actions .burn-execute-button{min-height:42px}
+}
