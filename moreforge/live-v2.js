@@ -8,7 +8,7 @@ import {BrowserProvider,JsonRpcProvider,Contract,parseUnits,formatUnits,isAddres
 import {inputs,amount,powerAt,remaining,feeForValue,validateManifest,readV2Positions,readV2Claims,positionAbi,DAY} from './v2-model.js?v=53';
 import {readPool} from './chain-data.js?v=more-forge-loading-47';
 import {poolMarkup,updatePoolProgress} from './pool-ui-v2.js?v=cycle-precision-91';
-import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=owner-transition-106';
+import {burnAbi,readBurn,burnMarkup,burnTotal,ownerSetting} from './burn-ui.js?v=burn-loading-142';
 import {installBuy} from './buy-ui-v2.js?v=two-way-123';
 import {displayAmount,amountText} from './amounts.js';
 import {installInputSizing,fitAmountInputs} from './input-sizing.js?v=more-forge-buy-63';
@@ -38,7 +38,7 @@ function disable(){
  $('#claim-open').disabled=busy||!account||!x?.dataLoaded||!x.claims.length;
  $('#claim-reset').hidden=true;$('#settle-due').disabled=busy||!account||!x?.dataLoaded||!x.due.length;
  $('#refresh-pools').disabled=busy||!x?.forgeReady;
- $$('[data-withdraw],[data-transfer],[data-execute],[data-save-burn]').forEach(b=>b.disabled=busy||!account||!x?.dataLoaded||b.dataset.ready==='false');
+ $$('[data-withdraw],[data-transfer],[data-execute],[data-save-burn]').forEach(b=>b.disabled=busy||!account||(b.dataset.execute!=null?!x?.forgeReady:!x?.dataLoaded)||b.dataset.ready==='false');
  $('#position-confirm').disabled=busy||!positionReview;
  buy.disable();ownerFees.render();
  const legacyOwner=manifests[$('#chain').value]?.owner;
@@ -118,6 +118,8 @@ async function readChain(x){
   x.now=block.timestamp;x.nowReadAt=Date.now();x.block=block.number;x.balance=balance;
   text('#balance-help',a?'Wallet balance: '+display(balance)+' MORE':'Connect wallet to see your MORE balance.');
   if(x.forgeReady){
+   // Burn balances, checks and history do not depend on positions, claims or payout pools.
+   renderBurns(x,a,current).catch(err=>{if(current()&&!x.burnRows)$('#burn-cards').textContent='Burn data unavailable: '+error(err);});
    const o={blockTag:block.number};
    // Pools start at the same block as policy reads, rather than waiting for them.
    const recordsPromise=Promise.all(x.vaults.map((v,i)=>readPool(v,i,x.now,o,async(v,amount,opts)=>{const q=await v.referenceQuote(opts);return(await new Contract(q,['function quote(uint256) view returns(uint256,uint256)'],x.r).quote(amount,opts))[0];}))).then(records=>{if(current()){Object.assign(x,{pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[])});paintPools(x,a,false);}return records;});
@@ -135,7 +137,7 @@ async function readChain(x){
    Object.assign(x,{owner,paused,positions,owned,claims,pools:records.map(r=>r.pool),due:records.flatMap(r=>r.due?[r.due]:[]),feePolicy:{bps,bounds,min,max},dataLoaded:true});
    paintPools(x,a);
    renderRewards(x);renderPositions(x);
-   renderBurns(x,a,current).catch(err=>{if(current())$('#burn-cards').textContent='Burn data unavailable: '+error(err);});
+
   }
   status(x.forgeReady?'MORE Forge · '+(a?'wallet connected':'connect wallet for your positions'):'Launch pending · live MORE purchases remain available');
   buy.update();await preview();if(current()){refreshReferences(document,quotes);disable();}
@@ -224,14 +226,41 @@ function renderPositions(x){
 }
 
 async function renderBurns(x,a,current){
- const rows=await Promise.all(x.burners.map((b,i)=>readBurn(b,x.r,x.m.burners[i],a||x.m.owner,x.now)));if(!current())return;
- const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
- $$('[data-execute]').forEach(b=>b.onclick=()=>action('Executing burn',s=>new Contract(x.m.burners[Number(b.dataset.execute)],burnAbi,s).execute()));
- $$('[data-save-burn]').forEach(b=>b.onclick=async()=>{const [i,field]=b.dataset.saveBurn.split('-');const mode=burnControl(rows[Number(i)].owner,a,x.m);if(!mode||mode==='drip'&&field!=='drip')return;try{const v=ownerSetting(field,$(`[data-burn-setting="${i}-${field}"]`).value);if(field==='drip'){await action('Updating daily drip',s=>setBurnDrip(s,x.m,x.m.burners[Number(i)],v));return;}await action('Updating burn settings',s=>new Contract(x.m.burners[Number(i)],burnAbi,s)[{cap:'setMaxSwapEth',drip:'setDailyPoolBps',slippage:'setMaxSlippageBps'}[field]](v));}catch(err){status(error(err));}});
+ if(x.burnRefresh?.account===a)return x.burnRefresh.promise;
+ const task={account:a,promise:null};x.burnRefresh=task;
+ task.promise=(async()=>{
+ const rows=x.burnRows?.slice()||x.burners.map(()=>null);
+ const paint=()=>{
+  if(!current())return;
+  const focused=document.activeElement,setting=focused?.dataset?.burnSetting,draft=setting?focused.value:null;
+  const opened=[...$('#burn-cards').querySelectorAll('details[open]')].map(d=>d.closest('[data-burn-address]').dataset.burnAddress);
+  const view=burnMarkup(x,rows,a);$('#burn-overview').innerHTML=view.overview;$('#burn-cards').innerHTML=view.cards;
+  for(const address of opened){const details=$(`[data-burn-address="${address}"] details`);if(details)details.open=true;}
+  if(setting){const input=$(`[data-burn-setting="${setting}"]`);if(input){input.value=draft;input.focus({preventScroll:true});}}
+  $$('[data-execute]').forEach(b=>b.onclick=()=>action('Executing burn',s=>new Contract(x.m.burners[Number(b.dataset.execute)],burnAbi,s).execute()));
+  $$('[data-save-burn]').forEach(b=>b.onclick=async()=>{const [i,field]=b.dataset.saveBurn.split('-');const mode=burnControl(rows[Number(i)].owner,a,x.m);if(!mode||mode==='drip'&&field!=='drip')return;try{const v=ownerSetting(field,$(`[data-burn-setting="${i}-${field}"]`).value);if(field==='drip'){await action('Updating daily drip',s=>setBurnDrip(s,x.m,x.m.burners[Number(i)],v));return;}await action('Updating burn settings',s=>new Contract(x.m.burners[Number(i)],burnAbi,s)[{cap:'setMaxSwapEth',drip:'setDailyPoolBps',slippage:'setMaxSlippageBps'}[field]](v));}catch(err){status(error(err));}});
+  refreshReferences(document,quotes);disable();
+ };
+ paint();
  let storage;try{storage=localStorage;}catch{}
- x.m.burners.forEach((address,i)=>burnTotal(x.r,address,x.n.id,Number(x.m.deploymentBlock),x.block,storage).then(value=>{if(!current())return;const e=$(`[data-burn-total="${i}"]`);if(e)e.innerHTML=display(value)+' '+['FUEL','MORE','PAMP'][i]+referenceMarkup({[['FUEL','MORE','PAMP'][i]]:value});refreshReferences(document,quotes);}).catch(()=>{}));
- refreshReferences(document,quotes);disable();
+ // Keep known totals through repaint; deduplicate history scans across refreshes.
+ x.burnTotals ||= {};x.burnHistory ||= {};x.burnErrors ||= {};x.burnHistoryErrors ||= {};
+ x.m.burners.forEach((address,i)=>{
+  if(x.burnHistory[i])return;
+  x.burnHistory[i]=burnTotal(x.r,address,x.n.id,Number(x.m.deploymentBlock),x.block,storage).then(value=>{
+   x.burnTotals[i]=value;delete x.burnHistoryErrors[i];if(!current())return;const e=$(`[data-burn-total="${i}"]`);
+   if(e)e.innerHTML=display(value)+' '+['FUEL','MORE','PAMP'][i]+referenceMarkup({[['FUEL','MORE','PAMP'][i]]:value});refreshReferences(document,quotes);
+  }).catch(()=>{x.burnHistoryErrors[i]=true;if(!current()||x.burnTotals[i]!=null)return;const e=$(`[data-burn-total="${i}"]`);if(e)e.textContent='History unavailable · refresh to retry';}).finally(()=>delete x.burnHistory[i]);
+ });
+ await Promise.allSettled(x.burners.map(async(b,i)=>{
+  const update=row=>{if(!current())return;rows[i]=row;delete x.burnErrors[i];x.burnRows=rows.slice();paint();};
+  try{update(await readBurn(b,x.r,x.m.burners[i],a||x.m.owner,x.now,update));}
+  catch(err){if(!current())return;x.burnErrors[i]=true;if(rows[i])rows[i]={...rows[i],ready:false,label:'Execution check unavailable',note:'Live burn check unavailable. Refresh to retry.'};x.burnRows=rows.slice();paint();}
+ }));
+ })().finally(()=>{if(x.burnRefresh===task)delete x.burnRefresh;});
+ return task.promise;
 }
+
 function addProvider(p,info={}){if(typeof p?.request!=='function')return;const old=discovered.find(x=>x.p===p);if(old)Object.assign(old.info,info);else discovered.push({p,info});}
 window.addEventListener('eip6963:announceProvider',e=>addProvider(e.detail?.provider,e.detail?.info));window.dispatchEvent(new Event('eip6963:requestProvider'));
 function changed(accounts){account=accounts[0]||null;review=null;positionReview=null;for(const d of $$('dialog[open]'))d.close();if(ctx){ctx.dataLoaded=false;ctx.balance=0n;}text('#connect-wallet',account?account.slice(0,6)+'…'+account.slice(-4):'Connect wallet');renderPositions(ctx);buy.update();disable();if(!busy)refresh();}

@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {Interface} from '../../moreforge/vendor/ethers-6.15.0.js';
+import {burnAbi,burnTotal,readBurn,burnMarkup} from '../../moreforge/burn-ui.js';
+const event=new Interface(burnAbi),encoded=event.encodeEventLog(event.getEvent('Executed'),['0x0000000000000000000000000000000000000001',1n,100n,1n,99n,500n]);
+const stored=new Map(),storage={getItem:k=>stored.get(k),setItem:(k,v)=>stored.set(k,v)};
+let calls=[];const provider={getLogs:async range=>{calls.push(range);return range.fromBlock<=100&&range.toBlock>=100?[encoded]:[]}};
+assert.equal(await burnTotal(provider,'burner',4663,1,3000000,storage),500n);assert.equal(calls.length,2,'One wide history query and one recent-tail query, not thousands of small queries');
+calls=[];assert.equal(await burnTotal(provider,'burner',4663,1,3000100,storage),500n);assert.equal(calls.length,2);assert.equal(calls[0].fromBlock,3000000-64+1,'Refresh only scans new confirmed blocks');
+let failures=0;await assert.rejects(burnTotal({getLogs:async()=>{failures++;throw Error('HTTP 429 rate limited')}},'other',4663,1,3000000,storage));assert.equal(failures,1,'Rate limit failures must not trigger recursive request storms');
+let split=0;assert.equal(await burnTotal({getLogs:async r=>{split++;if(r.toBlock-r.fromBlock>=1000)throw Error('block range exceeds maximum');return r.fromBlock<=100&&r.toBlock>=100?[encoded]:[]}},'third',369,1,4000,storage),500n);assert(split>2&&split<20,'Explicit range limits split adaptively');
+let release;const simulation=new Promise(resolve=>release=resolve),updates=[];
+const contract=Object.fromEntries(Object.entries({executableAmount:100n,maxSwapEth:200n,dailyPoolBps:100n,owner:'owner',currentInterval:2n,lastExecutedInterval:1n,maxSlippageBps:1000n,launchTime:100n,INTERVAL:600n}).map(([k,v])=>[k,async()=>v]));contract.execute={staticCall:()=>simulation};
+const reading=readBurn(contract,{getBalance:async()=>1000n},'burner','caller',1400,row=>updates.push(row));await new Promise(r=>setImmediate(r));assert.equal(updates[0].balance,1000n);assert.equal(updates[0].ready,false);assert.equal(updates[0].label,'Checking execution…','Balance renders before slow simulation finishes');release();assert.equal((await reading).ready,true);
+const x={n:{unit:'ETH',explorer:'https://example.com'},m:{burners:['a','b','c']},burnTotals:{0:500n}};
+const view=burnMarkup(x,[{...(await reading)},null,null],null);assert.match(view.overview,/Loading balances/);assert.match(view.cards,/Total FUEL burned/);assert.doesNotMatch(view.cards.split('Total FUEL burned')[1].split('</strong>')[0],/Loading burn history/,'Known totals survive card refresh');assert.match(view.cards,/Loading live burn balance/);
+console.log('PASS: wide history reads, delta cache, bounded range fallback, rate-limit handling, early balances and retained totals');
